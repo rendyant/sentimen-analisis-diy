@@ -1,0 +1,563 @@
+------ulasan_bapperida_diy-------
+no,id,Username,Rating,Stars,Date,Review Text
+1,Ci9DQUlRQUNvZENodHljRjlvT25KblRGUkNSVnBCTWsxdGJFTjNTbmxyVEhOTFZrRRAB,Ernawan Nurhidayat,5,⭐⭐⭐⭐⭐,3 months ago,Government building
+2,ChZDSUhNMG9nS0VJQ0FnSURFb05PZk53EAE,aghni susila,5,⭐⭐⭐⭐⭐,7 years ago,Closest to Malioboro street
+3,ChZDSUhNMG9nS0VJQ0FnSUNlLU9IcFRBEAE,Emy Kusparyati,5,⭐⭐⭐⭐⭐,3 years ago,My workplace in the center of Malioboro street
+4,ChdDSUhNMG9nS0VJQ0FnSUNlMzl5QTFBRRAB,Jesa Haryo,5,⭐⭐⭐⭐⭐,3 years ago,"accesible, inclusive support"
+5,ChdDSUhNMG9nS0VJQ0FnSURjanVxVzdnRRAB,Kozara,5,⭐⭐⭐⭐⭐,6 years ago,The Yogyakarta Special Region Development Planning Agency is a planning institution that prioritizes values to achieve quality regional development.
+6,ChZDSUhNMG9nS0VJQ0FnSURRMG9xU01nEAE,Intra,3,⭐⭐⭐,9 years ago,Office of the Governor of the Special Region of Yogyakarta
+7,ChdDSUhNMG9nS0VJQ0FnSUN3LVBlRjl3RRAB,MUNIER RUDI INDRATNO,4,⭐⭐⭐⭐,Edited 2 years ago,Geospatial data services and research and development
+8,ChdDSUhNMG9nS0VJQ0FnSURKdW9hMmxRRRAB,Irfan Tadjani,5,⭐⭐⭐⭐⭐,3 years ago,The service is friendly
+9,ChZDSUhNMG9nS0VJQ0FnSUNHdW9xZ0RREAE,dwi suci hartini,5,⭐⭐⭐⭐⭐,Edited 2 years ago,The DIY Bappeda office is located on the west side of the Kepatihan Complex.
+10,ChdDSUhNMG9nS0VJQ0FnSUNBMUluRzhRRRAB,Adi Tri Purnanto,5,⭐⭐⭐⭐⭐,9 years ago,The first office from the main gate of the DIY Governor's office
+11,ChZDSUhNMG9nS0VJQ0FnSUNib0wzcFVREAE,soejatno,4,⭐⭐⭐⭐,2 years ago,Government Office
+12,ChZDSUhNMG9nS0VJQ0FnSUN3OWZITEN3EAE,fauzan advantage,4,⭐⭐⭐⭐,9 years ago,Regional development must continue
+13,ChdDSUhNMG9nS0VJQ0FnSURReHVuRmdRRRAB,Hary L. Prabowo,4,⭐⭐⭐⭐,8 years ago,Development planning agency in the Special Region of Yogyakarta
+14,ChdDSUhNMG9nS0VJQ0FnSUNIaHRpZmp3RRAB,wahyu kuncoro,5,⭐⭐⭐⭐⭐,a year ago,Regional Development Planning Agency (BAPPEDA) of Yogyakarta
+15,ChdDSUhNMG9nS0VJQ0FnSURBdzhXQWtBRRAB,Mochamad Hapsakti Nurhindratno,4,⭐⭐⭐⭐,7 years ago,Regional Development Planning is great
+16,ChdDSUhNMG9nS0VJQ0FnSURRNWJXNHl3RRAB,Yanuar PP,5,⭐⭐⭐⭐⭐,8 years ago,The room is very clean
+17,ChZDSUhNMG9nS0VJQ0FnTURBbEx1WFlBEAE,Haim Albana,5,⭐⭐⭐⭐⭐,a year ago,Excellent
+18,ChRDSUhNMG9nS0VJQ0FnSURRLU1veRAB,DARMAWAN TIYANG JOGJA,5,⭐⭐⭐⭐⭐,8 years ago,Comfortable meeting place
+19,ChZDSUhNMG9nS0VJQ0FnTUNJalpHSGJ3EAE,Johans Khdani,5,⭐⭐⭐⭐⭐,a year ago,     
+20,ChZDSUhNMG9nS0VJQ0FnSURhbE1uUlFREAE,Lenovo Komp,5,⭐⭐⭐⭐⭐,5 years ago,Data services
+21,ChdDSUhNMG9nS0VJQ0FnSURXc1liTmd3RRAB,Dian Nurpita,5,⭐⭐⭐⭐⭐,4 years ago,Stop by
+22,ChdDSUhNMG9nS0VJQ0FnSUNnNHN1a3hnRRAB,asan iskandar,5,⭐⭐⭐⭐⭐,8 years ago,Cool
+23,Ci9DQUlRQUNvZENodHljRjlvT2pKaFpGSnlkbFZQVUcxNk5qbEJOazVJZDB4UWRuYxAB,Aku Wulan,2,⭐⭐,a week ago,"The doorman was unfriendly, he should have explained the entrance and exit properly, but instead it was like that"
+24,Ci9DQUlRQUNvZENodHljRjlvT25CTFpXeDNUVzlYVVdoUVZHVklPR2MwYmw5c01VRRAB,mbah jamin,5,⭐⭐⭐⭐⭐,a month ago,"Clean, tidy and also comfortable"
+25,Ci9DQUlRQUNvZENodHljRjlvT20xcWRtWlhRVVZSZUVWU1Rrb3dTRkUzWms5NWRGRRAB,Nunik Arzakiyah,5,⭐⭐⭐⭐⭐,a month ago,     
+26,ChdDSUhNMG9nS0VJQ0FnSUMxczhUWmhnRRAB,IAZA JOGJA,5,⭐⭐⭐⭐⭐,2 years ago,     
+27,ChdDSUhNMG9nS0VJQ0FnSUNzMTZTejlRRRAB,Arya Wirarachman,4,⭐⭐⭐⭐,6 years ago,     
+28,ChZDSUhNMG9nS0VJQ0FnSUNzZzQ3cmNREAE,amalia lativani,5,⭐⭐⭐⭐⭐,6 years ago,1 review      
+29,ChZDSUhNMG9nS0VJQ0FnSUNzdnJTVFpnEAE,Jeihan Rafli,5,⭐⭐⭐⭐⭐,6 years ago,     
+30,ChdDSUhNMG9nS0VJQ0FnSUNNbWNYTHh3RRAB,Rezki Badriza,5,⭐⭐⭐⭐⭐,6 years ago,1 review · 6 photos      
+31,ChZDSUhNMG9nS0VJQ0FnSURVXzVtWUVREAE,Rhury Alca,5,⭐⭐⭐⭐⭐,6 years ago,     
+32,ChZDSUhNMG9nS0VJQ0FnSUN3bUxyZUx3EAE,Linawaty Lina,4,⭐⭐⭐⭐,8 years ago,1 review · 1 photo      
+33,ChdDSUhNMG9nS0VJQ0FnSURBcFktT2h3RRAB,Aisya Nurika,2,⭐⭐,8 years ago,     
+34,ChZDSUhNMG9nS0VJQ0FnSUN3NmYtdVpnEAE,Roni Sutantyo,4,⭐⭐⭐⭐,9 years ago,     
+35,ChdDSUhNMG9nS0VJQ0FnSURRc3RXWDZBRRAB,indri rahmawati,3,⭐⭐⭐,9 years ago,     
+36,ChdDSUhNMG9nS0VJQ0FnSUNRejVlZjVnRRAB,ECE design13,4,⭐⭐⭐⭐,10 years ago,3 reviews · 5 photos      
+37,ChZDSUhNMG9nS0VJQ0FnSURBajZhTlZ3EAE,Ugiek 88,5,⭐⭐⭐⭐⭐,10 years ago,     
+--------ulasan_bkd_diy----------
+no,id,Username,Rating,Stars,Date,Review Text
+1,Ci9DQUlRQUNvZENodHljRjlvT25RNFYzVktkWFpHUjFOWVltVk5ZazFtTmxwR04zYxAB,AGUS TRI HARTANTO,4,⭐⭐⭐⭐,4 months ago,Downgrade...😔 …
+2,ChdDSUhNMG9nS0VJQ0FnSUNzemZhNnZBRRAB,Ummia Ummia,5,⭐⭐⭐⭐⭐,6 years ago,Love it
+3,Ci9DQUlRQUNvZENodHljRjlvT2t3eGVEbGlObGM1TVhvd2JuQkVOME54WWt0ZlYxRRAB,Andriyudha,5,⭐⭐⭐⭐⭐,6 months ago,"Honest Review:
+My experience processing my transfer to the Yogyakarta Regional Government (PEMDA) at the Yogyakarta Regional Personnel Agency (BKD) office was surprisingly …"
+4,Ci9DQUlRQUNvZENodHljRjlvT25GQllYaG1RbUUzTURGbFZGSjRRbEJOTldNMlltYxAB,arizka indah,5,⭐⭐⭐⭐⭐,6 months ago,"The information provided for civil servant (CPNS) registration at the Yogyakarta Regional Civil Service Agency (BKD) is very clear and easy to understand. Information is presented transparently through the website and social media, and …"
+5,Ci9DQUlRQUNvZENodHljRjlvT2pRNU4yVjVaSGRCVTA1UWEzSTNiVEJ5V0VwUmNVRRAB,Mardi Djogja,5,⭐⭐⭐⭐⭐,a month ago,Almost two decades here has made a big family that will never be forgotten... always miss the atmosphere
+6,Ci9DQUlRQUNvZENodHljRjlvT21saFFqRnhjR05oUzFScVNuTjZjVzVMWTJkckxYYxAB,Andri udi S,5,⭐⭐⭐⭐⭐,2 months ago,"new place, service is also good"
+7,ChZDSUhNMG9nS0VJQ0FnSURrdU8zNkRnEAE,Wawa,4,⭐⭐⭐⭐,7 years ago,"A popular destination for civil servant candidates (CPNS) in the Special Region of Yogyakarta. This government agency specializes in personnel matters, including civil servants and other government employees. For information on regional …"
+8,Ci9DQUlRQUNvZENodHljRjlvT2paaWRsUjZlVFZUWTBaQ00xUk1ZVFIzT0ZjeGRXYxAB,GARONG 81,5,⭐⭐⭐⭐⭐,9 months ago,"Taking participant numbers and providing exam participants with supplies. Comfortable, clean office space, polite staff, excellent service.. go full throttle BKD DIY.. (EDIQQ_ DKCPLGK)"
+9,Ci9DQUlRQUNvZENodHljRjlvT2tkelUySjZiVkZSYUZsaWRUZHphRkF0WlU5TlNGRRAB,Handhika Yd,5,⭐⭐⭐⭐⭐,3 months ago,The building is new... Just saw it..
+10,Ci9DQUlRQUNvZENodHljRjlvT2toS1NFOW1UWE5zV2pCUlIyYzRhbEowVGxSVE1uYxAB,QONA YA,5,⭐⭐⭐⭐⭐,a month ago,Thank you for the opportunity given
+11,Ci9DQUlRQUNvZENodHljRjlvT20xQ1JUTmpXRUYyUlc5dGRqbFdWRUY0U1hkaVdYYxAB,vaneiza nur aulia,5,⭐⭐⭐⭐⭐,a month ago,friendly and informative service
+12,ChdDSUhNMG9nS0VJQ0FnSURJb2Nhbi1BRRAB,Selvy Almita Wijaya,5,⭐⭐⭐⭐⭐,7 years ago,Is it still allowed to smoke in government buildings like this?? Not only visitors but also employees walk around holding cigarette butts
+13,ChdDSUhNMG9nS0VJQ0FnSUQtdzdfMjVBRRAB,adtyarnpdt,5,⭐⭐⭐⭐⭐,3 years ago,"For the time being the office has moved to Jalan Jend Sudirman No. 5, East Tugu, next to Shabu Auce"
+14,ChZDSUhNMG9nS0VJQ0FnSUNJajUtck9BEAE,Daily Raj,4,⭐⭐⭐⭐,7 years ago,The need for building renovation
+15,ChdDSUhNMG9nS0VJQ0FnSUNLaDdYRDZRRRAB,Adi Krismantoro,5,⭐⭐⭐⭐⭐,5 years ago,"Mobile file setup, service and repainting#safe"
+16,ChdDSUhNMG9nS0VJQ0FnSURnZ2FHUnVRRRAB,Mas Sofianul Luthfi,4,⭐⭐⭐⭐,9 years ago,"Asked about the announcement of passing the non-pns TKD exam, they said the security guard came out at 10pm."
+17,ChdDSUhNMG9nS0VJQ0FnSUNLdC1UejlRRRAB,Sagiku 7,4,⭐⭐⭐⭐,5 years ago,Ready to take care of all matters regarding personnel throughout DIY.
+18,ChdDSUhNMG9nS0VJQ0FnSUNLX2FPX3dRRRAB,Marieana Chandra Kusuma,5,⭐⭐⭐⭐⭐,5 years ago,"Came here to take care of my transfer, the service was good and friendly👍 …"
+19,ChdDSUhNMG9nS0VJQ0FnSUNldi03YS1BRRAB,Vigi Verindo,5,⭐⭐⭐⭐⭐,3 years ago,"How to activate NIK for non-ASN, how to do it?"
+20,ChdDSUhNMG9nS0VJQ0FnSUNncE5xMF9BRRAB,Jim,5,⭐⭐⭐⭐⭐,9 years ago,Please take the number for the non-PNS test here..
+21,ChZDSUhNMG9nS0VJQ0FnSURBNTZxRElBEAE,Nayanika Project,4,⭐⭐⭐⭐,Edited 5 years ago,"Undip Public Administration Internship Program, 2011"
+22,ChZDSUhNMG9nS0VJQ0FnSURBa3JtZElBEAE,Tri Bekti Susilo adi,4,⭐⭐⭐⭐,9 years ago,Ready to pick up the card tomorrow..
+23,ChdDSUhNMG9nS0VJQ0FnSUNJaDdiNG1BRRAB,anton legowo,5,⭐⭐⭐⭐⭐,7 years ago,Place for selection of CPNS competency fields
+24,Ci9DQUlRQUNvZENodHljRjlvT2t3dFpreHpaVXhmVFRreGExTkRkbE5uYmtoaVQyYxAB,Karpet Masjid Al-Hilal,5,⭐⭐⭐⭐⭐,7 months ago,Good
+25,ChZDSUhNMG9nS0VJQ0FnSUR5enJUVGZ3EAE,Hernawan Setyanto,5,⭐⭐⭐⭐⭐,5 years ago,Taking care of moving wife
+26,ChdDSUhNMG9nS0VJQ0FnSUQ2MTcyWmx3RRAB,fandi kurniawan,4,⭐⭐⭐⭐,4 years ago,Photo of the training used to be comfortable
+27,ChdDSUhNMG9nS0VJQ0FnSUNocUxqc2tBRRAB,Hari Triwahyudi,5,⭐⭐⭐⭐⭐,3 years ago,Clean and tidy
+28,ChZDSUhNMG9nS0VJQ0FnSURBeHE2Mkx3EAE,IniMedia,3,⭐⭐⭐,9 years ago,improve service
+29,ChdDSUhNMG9nS0VJQ0FnSUQwX282Qm1BRRAB,Lisetyo Ncahyo,4,⭐⭐⭐⭐,6 years ago,Cool
+30,ChdDSUhNMG9nS0VJQ0FnSUQwanUzNXJBRRAB,A. D. Atmaji,5,⭐⭐⭐⭐⭐,6 years ago,memorable place
+31,Ci9DQUlRQUNvZENodHljRjlvT2t0a1RIaGtla1J3WlVOb05uUk5TRkl6T1Y4M05HYxAB,Maya Retnosari,5,⭐⭐⭐⭐⭐,a month ago,the service is very good and satisfying
+32,Ci9DQUlRQUNvZENodHljRjlvT21OV2RHaERjMUV0WTFkdk5raDBXSEZQYWxWUVlXYxAB,Andari Cantika Putri,5,⭐⭐⭐⭐⭐,a month ago,The service is very good and fast👍🏻 …
+33,Ci9DQUlRQUNvZENodHljRjlvT21aeE5FRXpUMUJFU0U1b01FaDBNM2QyVldJeGFFRRAB,Laila Vega,5,⭐⭐⭐⭐⭐,a month ago,     
+34,Ci9DQUlRQUNvZENodHljRjlvT2tsTU1XaElOMmhzWm5sS2EyZFNkRVp4YkMxNWFtYxAB,Siti Naurah Cleofatrah,5,⭐⭐⭐⭐⭐,a month ago,2 reviews      
+35,Ci9DQUlRQUNvZENodHljRjlvT21rNWVYWjNXVzh5T1haWlUzTkRUbUZPV0cwd2NFRRAB,Inayah Setiyorini,5,⭐⭐⭐⭐⭐,a month ago,satisfactory service
+36,Ci9DQUlRQUNvZENodHljRjlvT25GdFduWmhNRU5RWDE5S01HUklTMU5qT1ZGeVEwRRAB,Suwartono Anjar,5,⭐⭐⭐⭐⭐,4 months ago,     
+37,Ci9DQUlRQUNvZENodHljRjlvT25RMFJ6UmtjbVpyWWt4R2NqQmZVVkZwTkZWeE5rRRAB,poniran bang,5,⭐⭐⭐⭐⭐,6 months ago,     
+38,Ci9DQUlRQUNvZENodHljRjlvT2s5cVN6UnFXbnBTUkVWUmNEZExlRGxFVG5keVluYxAB,Nanda chandra Adiputra,1,⭐,a year ago,     
+39,ChdDSUhNMG9nS0VJQ0FnTUNnc0s3YnlnRRAB,Wahyu Joko Setiawan,5,⭐⭐⭐⭐⭐,a year ago,     
+40,ChdDSUhNMG9nS0VJQ0FnSUQ5ek5YX3hnRRAB,M. Yusuf Rahardian Dev,5,⭐⭐⭐⭐⭐,2 years ago,     
+41,ChdDSUhNMG9nS0VJQ0FnSUM5cGRyQ25nRRAB,Kania Widiaratri,5,⭐⭐⭐⭐⭐,2 years ago,1 review      
+42,ChZDSUhNMG9nS0VJQ0FnSUQxNmZPZ0ZnEAE,Fios Zielinski,4,⭐⭐⭐⭐,2 years ago,     
+43,ChZDSUhNMG9nS0VJQ0FnSUNSOV9qaFlnEAE,Renny Sudarti,5,⭐⭐⭐⭐⭐,3 years ago,12 reviews      
+44,ChZDSUhNMG9nS0VJQ0FnSURPazdTWkNREAE,Reza Antara Baskoro,5,⭐⭐⭐⭐⭐,4 years ago,5 reviews · 4 photos      
+45,ChZDSUhNMG9nS0VJQ0FnSURHamYtYk5nEAE,ahmad harimurti nugroho,5,⭐⭐⭐⭐⭐,4 years ago,     
+46,ChZDSUhNMG9nS0VJQ0FnSUNheWFDX0NREAE,Drs. H. Bambang Sudaryo,5,⭐⭐⭐⭐⭐,5 years ago,     
+47,ChZDSUhNMG9nS0VJQ0FnSUN5M2I2Z0NREAE,Ugiek 88,5,⭐⭐⭐⭐⭐,5 years ago,     
+48,ChdDSUhNMG9nS0VJQ0FnSURzbVB6cHBRRRAB,wiwid vindi astriarti,5,⭐⭐⭐⭐⭐,6 years ago,     
+49,ChdDSUhNMG9nS0VJQ0FnSUQwbWEtbndBRRAB,Ernawan Nurhidayat,5,⭐⭐⭐⭐⭐,6 years ago,     
+50,ChdDSUhNMG9nS0VJQ0FnSUQwMXNtNWdnRRAB,rahmat mulyono,5,⭐⭐⭐⭐⭐,6 years ago,     
+51,ChZDSUhNMG9nS0VJQ0FnSURJd3M2SklREAE,Citra Kusuma,5,⭐⭐⭐⭐⭐,7 years ago,     
+52,ChZDSUhNMG9nS0VJQ0FnSURJLUlMT0tnEAE,Eko Widodo,4,⭐⭐⭐⭐,7 years ago,     
+53,ChZDSUhNMG9nS0VJQ0FnSUNJNThTaGZBEAE,Khaerul Rivai,5,⭐⭐⭐⭐⭐,7 years ago,4 reviews      
+54,ChdDSUhNMG9nS0VJQ0FnSUR3bUszdzJBRRAB,Abuya Sabil,4,⭐⭐⭐⭐,7 years ago,     
+55,ChZDSUhNMG9nS0VJQ0FnSUNRX05uU1lREAE,Suprihatin New,3,⭐⭐⭐,8 years ago,1 review · 4 photos      
+56,ChZDSUhNMG9nS0VJQ0FnSURnMWNmWmJBEAE,Wulandari Wulan,4,⭐⭐⭐⭐,8 years ago,     
+57,ChZDSUhNMG9nS0VJQ0FnSUN3aHJTSFBnEAE,dhedit Sujati,4,⭐⭐⭐⭐,8 years ago,9 reviews · 4 photos      
+58,ChdDSUhNMG9nS0VJQ0FnSUN3dmQzOXhRRRAB,Regina Kroesdiyantika W.,5,⭐⭐⭐⭐⭐,8 years ago,     
+59,ChZDSUhNMG9nS0VJQ0FnSUNRa3FiVFJnEAE,Ganis Aditya,3,⭐⭐⭐,8 years ago,     
+60,ChZDSUhNMG9nS0VJQ0FnSUNnbTZfbEh3EAE,Novia Saraswati,5,⭐⭐⭐⭐⭐,8 years ago,     
+61,ChZDSUhNMG9nS0VJQ0FnSURnbXRhMU9REAE,sri rahayu riwanti st,5,⭐⭐⭐⭐⭐,9 years ago,     
+62,ChZDSUhNMG9nS0VJQ0FnSUNnMGZQa0Z3EAE,dyan iyenk,3,⭐⭐⭐,9 years ago,     
+63,ChZDSUhNMG9nS0VJQ0FnSUNBNlpDblRnEAE,jeng sri,5,⭐⭐⭐⭐⭐,9 years ago,     
+64,ChZDSUhNMG9nS0VJQ0FnSURRMnREQmNREAE,Fandi pendutt,5,⭐⭐⭐⭐⭐,9 years ago,     
+65,ChZDSUhNMG9nS0VJQ0FnSURRaFBEQkZREAE,Nawang Kestury,5,⭐⭐⭐⭐⭐,11 years ago,     
+-------ulasan_bnn_provinsi_diy-------
+no,id,Username,Rating,Stars,Date,Review Text
+1,Ci9DQUlRQUNvZENodHljRjlvT21WbFdVVk9kRGwxZDNWU01qVkRkSEZ0T1VGRk4yYxAB,Joceline Gracia Angelina,5,⭐⭐⭐⭐⭐,6 months ago,"Great and friendly staff, everything went smoothly and every hiccup was handled well and assisted by the staff. 🙏 …"
+2,ChZDSUhNMG9nS0VJQ0FnTURBb0lpeGZnEAE,Dayu Purnama,5,⭐⭐⭐⭐⭐,a year ago,excellent
+3,ChdDSUhNMG9nS0VJQ0FnSUNneGRpVTRnRRAB,Monica Nandahayu,4,⭐⭐⭐⭐,9 years ago,Ok
+4,Ci9DQUlRQUNvZENodHljRjlvT205TmVYVmZUbVY0V0daallWOXVZa3B5VVRsTFExRRAB,Mr. Epyphanias Siadari,5,⭐⭐⭐⭐⭐,2 months ago,"I happened to be from out of town and wanted to obtain a drug-free certificate for school admission in Yogyakarta. I called and was asked to come to the location. There, we filled out the registration form on the website and then paid …"
+5,ChdDSUhNMG9nS0VJQ0FnSUR6OEtHMTZBRRAB,Rifqi Akmal,5,⭐⭐⭐⭐⭐,2 years ago,"Fast service, all staff are friendly.
+The price for a drug certificate is 290,000 Rupiah."
+6,Ci9DQUlRQUNvZENodHljRjlvT214VE5YTlBTR0kzY1d4YVpWcDRSRlZ3ZGxSalZHYxAB,PUTRYY,5,⭐⭐⭐⭐⭐,10 months ago,"Making a drug-free certificate here is easy and fast, no drama, no drama.
+It's done right away."
+7,Ci9DQUlRQUNvZENodHljRjlvT25ScmVrcFVaVWRGTFhscE9XbHRhbUl5TFU4eFJYYxAB,Raynaldi Aziz Nugraha,5,⭐⭐⭐⭐⭐,3 months ago,"Fast & accurate service, the flow is clear via social media and directly"
+8,Ci9DQUlRQUNvZENodHljRjlvT2pOVGVVaE9iM0UxV0V0UFUzVm1WbVYzYVZGSVdGRRAB,Rusyda Faza,5,⭐⭐⭐⭐⭐,4 months ago,"access drug-free certificates here, the staff are friendly and kind"
+9,Ci9DQUlRQUNvZENodHljRjlvT2paamIwWXpPVUpXZURkemFFRlhXbUpQVFdNMVowRRAB,Ulandari Ulan,5,⭐⭐⭐⭐⭐,10 months ago,"Fast service, only hampered by a lack of expertise"
+10,Ci9DQUlRQUNvZENodHljRjlvT21ZMlYzY3pSaTB5WDBacFNIRjZXamRtZW5obGVtYxAB,Reky Faturahman,4,⭐⭐⭐⭐,7 months ago,How much is the administration fee for making a drug-free certificate?
+11,ChZDSUhNMG9nS0VJQ0FnSUNRa3UtMVdBEAE,aldhi fajar,5,⭐⭐⭐⭐⭐,8 years ago,"I often come here to help with events organized by BNNP... the people there are friendly. Always be successful, BNNP DIY"
+12,ChZDSUhNMG9nS0VJQ0FnSURpb3RiU0ZBEAE,Kori Prianata Okpamal,5,⭐⭐⭐⭐⭐,5 years ago,"The staff are friendly. The security guard on duty earlier was kind, polite, friendly, and relaxed. We chatted briefly, but not too awkwardly. …"
+13,Ci9DQUlRQUNvZENodHljRjlvT2t0eWRVb3hSRWh4ZFVrMFdrVmtOSHAyUW05V2EwRRAB,Yuana Citra,5,⭐⭐⭐⭐⭐,6 months ago,The service is friendly and fast
+14,ChdDSUhNMG9nS0VJQ0FnSURJb2ZLUTl3RRAB,Twins Corner,5,⭐⭐⭐⭐⭐,7 years ago,"Drug lab tests are free here. But you'll have to buy the equipment yourself. If you don't know where to buy it, the security guard will tell you. The staff are friendly. The results are quick."
+15,ChZDSUhNMG9nS0VJQ0FnSUMydnUyRUp3EAE,Anastasia Sekar,4,⭐⭐⭐⭐,4 years ago,The SKHPN service was very friendly and fast. Please pay more attention to bathroom cleanliness.
+16,ChdDSUhNMG9nS0VJQ0FnSUNLMjhUUnl3RRAB,Ghaniy Saputra,5,⭐⭐⭐⭐⭐,5 years ago,"Friendly staff, from security guards to internal services like the SKPHN (National Public Order Agency) service. The place is clean and comfortable."
+17,ChZDSUhNMG9nS0VJQ0FnSUR1MmJfakNREAE,taman sean,5,⭐⭐⭐⭐⭐,4 years ago,"For those who want to make an anti-drug letter, please feel free to do so, but please follow health protocols."
+18,ChZDSUhNMG9nS0VJQ0FnSUN3dmFLalp3EAE,RA HM,3,⭐⭐⭐,9 years ago,I often exercised here before it became a BNNP building
+19,ChdDSUhNMG9nS0VJQ0FnSUNOel9lVjVBRRAB,nur adila suci ani,5,⭐⭐⭐⭐⭐,2 years ago,The staff are very friendly and the service is easy and fast 👍🏻 …
+20,ChZDSUhNMG9nS0VJQ0FnSUNnaXVtbFlnEAE,wandra ade saputra,5,⭐⭐⭐⭐⭐,9 years ago,The staff are friendly. I also donated blood here once.
+21,ChZDSUhNMG9nS0VJQ0FnSURlajRyRE1nEAE,Wahyu Rahmawati,5,⭐⭐⭐⭐⭐,3 years ago,An alternative place to look for SKHPN here is at the Seger Waras Pratama Clinic :)
+22,ChdDSUhNMG9nS0VJQ0FnSUNMdm9UZDNRRRAB,Slamet Riyadi,5,⭐⭐⭐⭐⭐,2 years ago,"Shining Greetings
+Jogja Shines, Clean from Drugs
+Road to Hani 2024"
+23,ChdDSUhNMG9nS0VJQ0FnSUNINjVQeDd3RRAB,Elsa Junita Bode,5,⭐⭐⭐⭐⭐,a year ago,"very good, the employees are also friendly👍 …"
+24,ChdDSUhNMG9nS0VJQ0FnSURPa09PTXJnRRAB,Siti Alfiah,5,⭐⭐⭐⭐⭐,4 years ago,"The service was very satisfying.
+Fast and friendly."
+25,ChdDSUhNMG9nS0VJQ0FnSURabXJYWjNRRRAB,Sofiana Marjono,5,⭐⭐⭐⭐⭐,2 years ago,Fast and very friendly service
+26,ChdDSUhNMG9nS0VJQ0FnSUNRbGFlaWtnRRAB,Muhammad Veven (mhvn),5,⭐⭐⭐⭐⭐,9 years ago,Very good and friendly service
+27,ChdDSUhNMG9nS0VJQ0FnSUNOcjd5Unl3RRAB,Amri Yoga,5,⭐⭐⭐⭐⭐,2 years ago,"Comfortable place, friendly and good service"
+28,ChZDSUhNMG9nS0VJQ0FnSUNIbTctc1hBEAE,Anindia Ellia,5,⭐⭐⭐⭐⭐,a year ago,Exciting internship experience
+29,ChdDSUhNMG9nS0VJQ0FnSURaMnBtam13RRAB,Ridha Mukti,5,⭐⭐⭐⭐⭐,2 years ago,Friendly and good service
+30,ChdDSUhNMG9nS0VJQ0FnSUNEdHBqNmx3RRAB,erli bandoro,4,⭐⭐⭐⭐,2 years ago,Really good
+31,ChdDSUhNMG9nS0VJQ0FnSUNRMHFfTXpRRRAB,Prasetyo Sigit,4,⭐⭐⭐⭐,8 years ago,often pass in front of his office
+32,ChZDSUhNMG9nS0VJQ0FnSURRdnVyckFREAE,gading sasongko,5,⭐⭐⭐⭐⭐,7 years ago,"Fast, friendly, comfortable service."
+33,ChdDSUhNMG9nS0VJQ0FnSUNUbC1EYTJnRRAB,ilyasin aditya,5,⭐⭐⭐⭐⭐,2 years ago,Friendly and fast service
+34,Ci9DQUlRQUNvZENodHljRjlvT2taalRucDNVRGx3WXpKaFJHVmFOVWM1TWxwQmFrRRAB,ari sahbana,5,⭐⭐⭐⭐⭐,3 weeks ago,Friendly and fast service
+35,Ci9DQUlRQUNvZENodHljRjlvT2s5NldGSTFjVFpsT0daaVF6ZElUa3RVUzFVMGJGRRAB,novi marlina,5,⭐⭐⭐⭐⭐,8 months ago,11 reviews      
+36,Ci9DQUlRQUNvZENodHljRjlvT2pNeGJXeDRkRU5aVEVGc2EyMWlMV1ZvVEhsTFQwRRAB,Rahma Utami,5,⭐⭐⭐⭐⭐,8 months ago,2 reviews      
+37,ChZDSUhNMG9nS0VJQ0FnTURJeEpEdVZnEAE,rakhmat Juliardi,5,⭐⭐⭐⭐⭐,a year ago,1 review · 2 photos      
+38,ChdDSUhNMG9nS0VJQ0FnSUNIMjdXLXFRRRAB,Ariana Adya Faranissa,5,⭐⭐⭐⭐⭐,a year ago,     
+39,ChdDSUhNMG9nS0VJQ0FnSUR4cE92OXVRRRAB,erna,5,⭐⭐⭐⭐⭐,3 years ago,2 reviews      
+40,ChZDSUhNMG9nS0VJQ0FnSUNoMFphOE93EAE,Citra Oktora,4,⭐⭐⭐⭐,3 years ago,     
+41,ChdDSUhNMG9nS0VJQ0FnSUQtaEtLSnBBRRAB,ꦫꦶꦪꦺꦴ,5,⭐⭐⭐⭐⭐,3 years ago,     
+42,ChZDSUhNMG9nS0VJQ0FnSUNlX1BxeEFnEAE,Windy Elfasari,5,⭐⭐⭐⭐⭐,3 years ago,     
+43,ChZDSUhNMG9nS0VJQ0FnSUMyXzdlcFh3EAE,Istriyanto Raharjo,5,⭐⭐⭐⭐⭐,4 years ago,     
+44,ChZDSUhNMG9nS0VJQ0FnSURHLWJIb1pnEAE,ariska windra,5,⭐⭐⭐⭐⭐,4 years ago,7 reviews · 1 photo      
+45,ChdDSUhNMG9nS0VJQ0FnSURDbC1lVzJRRRAB,cucut agus,1,⭐,5 years ago,     
+46,ChdDSUhNMG9nS0VJQ0FnSUNDOHVuYy1nRRAB,Hasbi Basbeth,5,⭐⭐⭐⭐⭐,6 years ago,     
+47,ChZDSUhNMG9nS0VJQ0FnSURzck52dlhnEAE,Hasyim Fathurochman,5,⭐⭐⭐⭐⭐,6 years ago,     
+48,ChdDSUhNMG9nS0VJQ0FnSUNzOHR6Q3BnRRAB,Hammam sv,5,⭐⭐⭐⭐⭐,6 years ago,     
+49,ChdDSUhNMG9nS0VJQ0FnSUQwLVl1RXJRRRAB,Triana W,5,⭐⭐⭐⭐⭐,6 years ago,     
+50,ChdDSUhNMG9nS0VJQ0FnSUNVdEo3SnZ3RRAB,Rina Apriliani,5,⭐⭐⭐⭐⭐,7 years ago,     
+51,ChdDSUhNMG9nS0VJQ0FnSURrdmFXNTZnRRAB,PHI,4,⭐⭐⭐⭐,7 years ago,     
+52,ChZDSUhNMG9nS0VJQ0FnSURFdnV2cUtREAE,Sigit Prstya18,5,⭐⭐⭐⭐⭐,7 years ago,     
+53,ChdDSUhNMG9nS0VJQ0FnSUM0cEx1Tmp3RRAB,Zainal Fauzi,5,⭐⭐⭐⭐⭐,7 years ago,12 reviews      
+54,ChdDSUhNMG9nS0VJQ0FnSURJNW9EeGx3RRAB,Windy Elfasari,5,⭐⭐⭐⭐⭐,7 years ago,     
+55,ChdDSUhNMG9nS0VJQ0FnSUR3aUtteG1BRRAB,Agus Karyanto,5,⭐⭐⭐⭐⭐,7 years ago,     
+56,ChdDSUhNMG9nS0VJQ0FnSUNBbzlpVF9nRRAB,adhi,5,⭐⭐⭐⭐⭐,7 years ago,     
+57,ChZDSUhNMG9nS0VJQ0FnSUNRX0ttZVRBEAE,Suprihatin New,2,⭐⭐,8 years ago,1 review · 4 photos      
+58,ChZDSUhNMG9nS0VJQ0FnSUNRMmEtREp3EAE,Sarah MA,4,⭐⭐⭐⭐,8 years ago,     
+59,ChdDSUhNMG9nS0VJQ0FnSURRX1l1bTJ3RRAB,Fabian Nosa,5,⭐⭐⭐⭐⭐,8 years ago,1 review · 1 photo      
+60,ChZDSUhNMG9nS0VJQ0FnSURRdDVIeU5nEAE,Abdul Muzh'af suriadi,5,⭐⭐⭐⭐⭐,9 years ago,     
+61,ChZDSUhNMG9nS0VJQ0FnSUNBbS02NWZ3EAE,tomapiya pOe,5,⭐⭐⭐⭐⭐,9 years ago,     
+62,ChdDSUhNMG9nS0VJQ0FnSUNnX3Z5MWdRRRAB,Moch.Rinaldi Yansyah,5,⭐⭐⭐⭐⭐,9 years ago,     
+63,ChZDSUhNMG9nS0VJQ0FnSURBMHRHM0lBEAE,Iqbal Jauhar,5,⭐⭐⭐⭐⭐,10 years ago,1 review · 1 photo      
+64,ChZDSUhNMG9nS0VJQ0FnSURBaE5tOVZ3EAE,Fahmi Auliya,5,⭐⭐⭐⭐⭐,10 years ago,     
+65,ChZDSUhNMG9nS0VJQ0FnSUNRdHFXUWFnEAE,Bhayu Kuncoro,5,⭐⭐⭐⭐⭐,10 years ago,2 reviews · 8 photos      
+--------ulasan_bpka_diy--------
+no,id,Username,Rating,Stars,Date,Review Text
+1,Ci9DQUlRQUNvZENodHljRjlvT2xKeE5IWlJSR2hqY25kaVUybHFURzUzUkhwRlVtYxAB,Ivan Tiyuranto,1,⭐,2 months ago,"The security guard/public order officer at the east gate, June 2, 2026, at 8:00 AM, lacked etiquette and manners. When asked politely, his tone was harsh and impolite. Please educate him to be more friendly."
+2,ChZDSUhNMG9nS0VJQ0FnSURJeU02aklREAE,Mas Imam St,5,⭐⭐⭐⭐⭐,7 years ago,"Car parking is spacious, motorbike parking is less spacious"
+3,ChZDSUhNMG9nS0VJQ0FnSUNVdGNxNkR3EAE,Erma Umayah,5,⭐⭐⭐⭐⭐,7 years ago,The agency that manages the finances of the DIY Regional Government
+4,ChdDSUhNMG9nS0VJQ0FnSUR3bk9yTm13RRAB,Mochamad Hapsakti Nurhindratno,4,⭐⭐⭐⭐,7 years ago,DPKAA DIY joss
+5,ChZDSUhNMG9nS0VJQ0FnSUNFZ09xa2NnEAE,Dezurra U.Z,5,⭐⭐⭐⭐⭐,7 years ago,Special
+6,Ci9DQUlRQUNvZENodHljRjlvT2pkcldqZzRaSEpNUzFBd1RFdG5VM1F6V0hNd1dWRRAB,jairi irawan,5,⭐⭐⭐⭐⭐,2 weeks ago,      NEW
+7,Ci9DQUlRQUNvZENodHljRjlvT2xVeVlsVm1iMU15UkZSaFNFWlhkMmRUYkdGYVZtYxAB,wiwid ardhianto,3,⭐⭐⭐,2 months ago,     
+8,ChdDSUhNMG9nS0VJQ0FnSURmbWZhSXN3RRAB,Indri Ika,5,⭐⭐⭐⭐⭐,a year ago,1 review · 7 photos      
+9,ChZDSUhNMG9nS0VJQ0FnSUN4NDlDamF3EAE,Anangha Yasmina,5,⭐⭐⭐⭐⭐,3 years ago,     
+10,ChdDSUhNMG9nS0VJQ0FnSUNDNm8ySXhnRRAB,Rendi Praditya,5,⭐⭐⭐⭐⭐,6 years ago,4 reviews      
+11,ChdDSUhNMG9nS0VJQ0FnSURVMUxTcXZBRRAB,Berlian Freenanda,5,⭐⭐⭐⭐⭐,7 years ago,     
+12,ChdDSUhNMG9nS0VJQ0FnSUNBX01YV3ZBRRAB,rianti w,5,⭐⭐⭐⭐⭐,8 years ago,5 reviews · 1 photo      
+---------ulasan_department_marine_and_fisheries----------
+no,id,Username,Rating,Stars,Date,Review Text
+1,ChdDSUhNMG9nS0VJQ0FnSURTMF82Y3pBRRAB,mbah karyo,5,⭐⭐⭐⭐⭐,5 years ago,good
+2,ChZDSUhNMG9nS0VJQ0FnSURLcmRhM1lBEAE,Muhammad Afrizal,5,⭐⭐⭐⭐⭐,5 years ago,well
+3,ChZDSUhNMG9nS0VJQ0FnSURoX2VPRVNREAE,Amir amir,5,⭐⭐⭐⭐⭐,3 years ago,representative
+4,ChdDSUhNMG9nS0VJQ0FnSURReHNucmtBRRAB,Hary L. Prabowo,3,⭐⭐⭐,8 years ago,Good
+5,Ci9DQUlRQUNvZENodHljRjlvT2twUE5GRTJaR2RpUlhST1VuUklaRUZ3TFdKVVVtYxAB,Ridwan hasani,5,⭐⭐⭐⭐⭐,3 months ago,"Clean, friendly...
+Participating in the 2026 school fish-eating festival outreach program."
+6,ChdDSUhNMG9nS0VJQ0FnSUNWOW9qXzRnRRAB,Ari Arifin,5,⭐⭐⭐⭐⭐,2 years ago,"Good service, comfortable, spacious"
+7,ChZDSUhNMG9nS0VJQ0FnSUMxd0x5MWRREAE,Zacky,5,⭐⭐⭐⭐⭐,2 years ago,"Friendly, good service and comfortable"
+8,ChZDSUhNMG9nS0VJQ0FnSUNJdDUyeGVnEAE,adnan iskandar,4,⭐⭐⭐⭐,7 years ago,"Yogyakarta Regency Maritime and Fisheries Service, the place is cool, there are aquascape decorations in front of the guest reception area"
+9,ChZDSUhNMG9nS0VJQ0FnSURPOGVHeUJBEAE,Taufan Anggoro,5,⭐⭐⭐⭐⭐,4 years ago,The room is spacious and comfortable
+10,ChdDSUhNMG9nS0VJQ0FnSUNxeVBEYnlnRRAB,Priyanto Handyono,5,⭐⭐⭐⭐⭐,5 years ago,"The security guards are friendly and responsive, the service is good 👍 …"
+11,ChZDSUhNMG9nS0VJQ0FnSUNhejhheGZBEAE,Heru Waskitho,5,⭐⭐⭐⭐⭐,5 years ago,The staff are friendly and provide detailed fisheries information.
+12,ChdDSUhNMG9nS0VJQ0FnSURndXV5UXhBRRAB,Dangau Prasasti,5,⭐⭐⭐⭐⭐,10 years ago,"There is an open junior chess tournament on May 1, 2016. Participants are elementary, middle, and high school students. Participants are from Sleman, Gunungkidul, and Yogyakarta."
+13,ChdDSUhNMG9nS0VJQ0FnSUN2Ny1yR3RRRRAB,Dian Kusuma Dewi,5,⭐⭐⭐⭐⭐,a year ago,"The service is okay, the staff are quite responsive,"
+14,ChdDSUhNMG9nS0VJQ0FnSUNKeExfdHZ3RRAB,Andry Purwanto,5,⭐⭐⭐⭐⭐,3 years ago,the office is comfortable
+15,ChZDSUhNMG9nS0VJQ0FnSUNRaGJxdFNBEAE,Siti Nienieng,5,⭐⭐⭐⭐⭐,8 years ago,This is a very good program to encourage the people of Jogja to enjoy eating fish.
+16,ChdDSUhNMG9nS0VJQ0FnSUNBM3BIUjlRRRAB,Local Guide Fotografer,3,⭐⭐⭐,9 years ago,"Yogyakarta Maritime Affairs and Fisheries Office. It's a bit hidden, off the main road, but still easy to find."
+17,ChZDSUhNMG9nS0VJQ0FnSUNLeE1qcExREAE,Rudi Abat,4,⭐⭐⭐⭐,5 years ago,"The office is clean and comfortable, during the pandemic they implemented health protocols"
+18,ChZDSUhNMG9nS0VJQ0FnSURUd092SmZnEAE,aditya yuda Pranata,5,⭐⭐⭐⭐⭐,2 years ago,"Thank you for your cooperation, sir/madam."
+19,ChdDSUhNMG9nS0VJQ0FnSUNnMFlpd2dRRRAB,Kadri Kadri,1,⭐,8 years ago,1 week UPR training at DKP Jogja
+20,ChdDSUhNMG9nS0VJQ0FnSUNHbHJyMzNBRRAB,Parikesit Prasty S,5,⭐⭐⭐⭐⭐,4 years ago,Friendly and fast service
+21,ChdDSUhNMG9nS0VJQ0FnSURBazlxcXpnRRAB,anton legowo,5,⭐⭐⭐⭐⭐,8 years ago,FUN
+22,ChdDSUhNMG9nS0VJQ0FnSUNLcEltLXRBRRAB,Thifal Dwipurnadhani,5,⭐⭐⭐⭐⭐,Edited 5 years ago,Clean and comfortable
+23,ChdDSUhNMG9nS0VJQ0FnSUR1LXJpaXdnRRAB,Dedy Wahyu Ardyanto,5,⭐⭐⭐⭐⭐,4 years ago,     
+24,ChZDSUhNMG9nS0VJQ0FnSUM4Z3BPVkZREAE,ENDAH ESTI ANSHORY,5,⭐⭐⭐⭐⭐,6 years ago,     
+25,ChZDSUhNMG9nS0VJQ0FnSUNtaEs2UVVBEAE,jagoan menoreh,4,⭐⭐⭐⭐,4 years ago,friendly security guard
+26,ChdDSUhNMG9nS0VJQ0FnSUNndXN6OGxBRRAB,Agus Fitriyanto,1,⭐,8 years ago,There will be memories here
+27,ChZDSUhNMG9nS0VJQ0FnSUNxelBielN3EAE,Mufti Khusaeni,5,⭐⭐⭐⭐⭐,5 years ago,Good
+28,Ci9DQUlRQUNvZENodHljRjlvT25wUGNHUkhSR0kyUmpWQmFVSkpia3M0VDJSa1ZYYxAB,FERDIAN ADY SUDRAJAT 230103101,5,⭐⭐⭐⭐⭐,22 hours ago,1 review · 1 photo       NEW
+29,Ci9DQUlRQUNvZENodHljRjlvT2tGbFZUbHdUVWhmZEcxWlltMXhkMlZRTmxCSmRYYxAB,Indra Irawanto,5,⭐⭐⭐⭐⭐,2 months ago,8 reviews      
+30,Ci9DQUlRQUNvZENodHljRjlvT21aU1MxZENjVk5vZEUweFR6UlJOVXg1ZVhNMGRHYxAB,NdahBina rahma,5,⭐⭐⭐⭐⭐,3 months ago,     
+31,Ci9DQUlRQUNvZENodHljRjlvT2xaTVRETTVURzFyVkhsUlVGSTNVazlOUW5wTk5rRRAB,Rian Saputra,5,⭐⭐⭐⭐⭐,7 months ago,     
+32,Ci9DQUlRQUNvZENodHljRjlvT2pRM1ZFODBWMTk2TjJNM1ZGazJZMWMxTVZWNmJXYxAB,Cindy imuttt,5,⭐⭐⭐⭐⭐,8 months ago,     
+33,ChZDSUhNMG9nS0VJQ0FnSURmamE3SEtnEAE,Purnomo Sutanto,5,⭐⭐⭐⭐⭐,a year ago,     
+34,ChZDSUhNMG9nS0VJQ0FnSUNsc3JPRkpnEAE,Yulia Reni,4,⭐⭐⭐⭐,2 years ago,     
+35,ChZDSUhNMG9nS0VJQ0FnSUNxbGV1T1RnEAE,Tolok Triasih,5,⭐⭐⭐⭐⭐,5 years ago,2 reviews      
+36,ChdDSUhNMG9nS0VJQ0FnSUNxbGV1VzFRRRAB,Mojaa,5,⭐⭐⭐⭐⭐,5 years ago,1 review      
+37,ChdDSUhNMG9nS0VJQ0FnSUNxbUs2TDFnRRAB,Agung Prasetyo,5,⭐⭐⭐⭐⭐,5 years ago,1 review      
+38,ChdDSUhNMG9nS0VJQ0FnSURTaTh5SXdBRRAB,Alif Banyumili,4,⭐⭐⭐⭐,5 years ago,     
+39,ChdDSUhNMG9nS0VJQ0FnSURTbGJ5dHBRRRAB,Tiara Ramadhani,5,⭐⭐⭐⭐⭐,5 years ago,7 reviews · 5 photos      
+40,ChZDSUhNMG9nS0VJQ0FnSURTb29ybU5BEAE,Mariona lm,4,⭐⭐⭐⭐,5 years ago,     
+41,ChZDSUhNMG9nS0VJQ0FnSUNTaV9MdkhBEAE,Trie Miyarno,5,⭐⭐⭐⭐⭐,5 years ago,     
+42,ChdDSUhNMG9nS0VJQ0FnSUQ4azczcG13RRAB,Service AC Jogja-Karya Graha Utama,5,⭐⭐⭐⭐⭐,6 years ago,     
+43,ChZDSUhNMG9nS0VJQ0FnSUQ4eHJ2VUdnEAE,Harian suan,1,⭐,6 years ago,     
+44,ChZDSUhNMG9nS0VJQ0FnSUNvd0piSWJnEAE,Evie Sumarno,1,⭐,7 years ago,     
+45,ChdDSUhNMG9nS0VJQ0FnSURJbnRDbzF3RRAB,agus gunawan,5,⭐⭐⭐⭐⭐,7 years ago,6 reviews      
+46,ChdDSUhNMG9nS0VJQ0FnSUN3dmRIaDBnRRAB,Teuku Arfa Tanjung,5,⭐⭐⭐⭐⭐,8 years ago,     
+47,ChdDSUhNMG9nS0VJQ0FnSURRMEktem9nRRAB,Danur Windo,5,⭐⭐⭐⭐⭐,8 years ago,     
+48,ChZDSUhNMG9nS0VJQ0FnSURBdGNDN2ZnEAE,Ringgow m,4,⭐⭐⭐⭐,9 years ago,1 review · 2 photos      
+49,ChdDSUhNMG9nS0VJQ0FnSUNnaTlXeHZRRRAB,Asmadi Amiruddin,5,⭐⭐⭐⭐⭐,9 years ago,5 reviews      
+50,ChdDSUhNMG9nS0VJQ0FnSUNReWQzUm5BRRAB,Reza Yunita,4,⭐⭐⭐⭐,9 years ago,1 review      
+51,ChdDSUhNMG9nS0VJQ0FnSUNna2FXZ3BRRRAB,Muksin,5,⭐⭐⭐⭐⭐,10 years ago,     
+---------ulasan_dinas_komunikasi_dan_informatika_diy----------
+no,id,Username,Rating,Stars,Date,Review Text
+1,ChdDSUhNMG9nS0VJQ0FnSUNxdEpTVGdBRRAB,Yuliana Dik Yull,4,⭐⭐⭐⭐,5 years ago,Sharing and learning about technology would be good move if you do here since the people who are competent about those field will help you. They have such as a working space for those who need extra internet connection and its for free. …
+2,ChZDSUhNMG9nS0VJQ0FnSUNjcVpEOEFREAE,Asppehorti NKRI,5,⭐⭐⭐⭐⭐,6 years ago,"This is a good place for social media activist meet up. Facilitated by government and it's a free service. We can use this place for learning group, Focus Grup Discussion, mini seminar with free high speed wifi."
+3,ChdDSUhNMG9nS0VJQ0FnSURDbk9LWmxnRRAB,Faradina Harumi,5,⭐⭐⭐⭐⭐,5 years ago,"great place, great office"
+4,Ci9DQUlRQUNvZENodHljRjlvT2xGNGJXeEJjbGhXYjNWcFZHc3dWVTloTWpkSlNuYxAB,Imam Suharjo,5,⭐⭐⭐⭐⭐,3 months ago,"This is our umpteenth time working here. The office is located in the city center and is quite spacious and cool, with many large trees.
+There's a hall for seminars with a capacity of around 80 people."
+5,Ci9DQUlRQUNvZENodHljRjlvT213NVdXcG5RMWxrYkZWamRGOHRkRkJ0VERaWWFHYxAB,Mukti Adhy,2,⭐⭐,4 months ago,"Please fix the E-Lapor website.
+1. I want to report using Google email, but it doesn't work.
+2. There's no error message explaining why the report failed. …"
+6,ChdDSUhNMG9nS0VJQ0FnSUNnOGU2QmdRRRAB,Faiz Perjuangan,5,⭐⭐⭐⭐⭐,7 years ago,"Finally, I can come here, and I can join a cool office. They have a coworking space that just launched in September 2018, if I'm not mistaken. It's said to be the first coworking space that's friendly to people with disabilities. So, …"
+7,ChZDSUhNMG9nS0VJQ0FnSUNtcFlxNlNBEAE,Rudi Abat,4,⭐⭐⭐⭐,4 years ago,"The Yogyakarta Communications and Information Agency is located on Jalan Brigjend Katamso, South THR. I remember the free internet cafes here for students and the general public. The location is very strategic."
+8,ChZDSUhNMG9nS0VJQ0FnSUR5b2IySmFnEAE,Fahmi Husein,5,⭐⭐⭐⭐⭐,5 years ago,"Finally arrived at the DIY Communications and Information Service, the service was friendly and to comply with health protocols, when I visited here the main door was temporarily closed."
+9,ChZDSUhNMG9nS0VJQ0FnSUNvMXNfNUJnEAE,Fatya Zaki Ubaidillah,5,⭐⭐⭐⭐⭐,7 years ago,"+ Ample parking
++ Usually has events …"
+10,ChZDSUhNMG9nS0VJQ0FnSUMwM0xEb2FREAE,Admin,4,⭐⭐⭐⭐,6 years ago,"There was an event so we came here, and it turned out to be a great place. The event was in the Sadewa room. The committee wanted to use a microphone, but there wasn't one. 😁 …"
+11,ChZDSUhNMG9nS0VJQ0FnSUQwNmZTS05REAE,Rahmat Nur Kholis,5,⭐⭐⭐⭐⭐,6 years ago,I attended an event here last year. The place is nice and clean. There's also a work area called Srawung Galuh.
+12,ChZDSUhNMG9nS0VJQ0FnSUN3MTdEc0ZREAE,Dwi Subekti,4,⭐⭐⭐⭐,9 years ago,"As of January 2017, services at the Information Plaza were suspended until further notice. This location will be used as the Yogyakarta Regional Government's PPID office."
+13,ChZDSUhNMG9nS0VJQ0FnSUR5dnYyZ0V3EAE,Devi Friesta,2,⭐⭐,5 years ago,"The lady guarding the front is wearing a black dress and a black hijab, she is not friendly and arrogant, I don't know what her field is here but she is really annoying."
+14,ChZDSUhNMG9nS0VJQ0FnSURnaEtMSVRREAE,Yunia NIArfianti,5,⭐⭐⭐⭐⭐,9 years ago,"Starting from the Department of Information, then the structure changed several times until finally it now became the DIY Communications and Information Service."
+15,ChZDSUhNMG9nS0VJQ0FnSUR4eS0yQ1dnEAE,latifah nurrohmah,1,⭐,3 years ago,"Nga is really nice, this is my first time here, asking about internship information, Ms. Nga is rude and friendly"
+16,ChZDSUhNMG9nS0VJQ0FnSUQ3aXMyRENREAE,GeoVyu Berliano,5,⭐⭐⭐⭐⭐,2 years ago,"pleasant atmosphere, free unlimited fast wifi..."
+17,ChZDSUhNMG9nS0VJQ0FnSURBMy1TeVpnEAE,Gradaz Farm,4,⭐⭐⭐⭐,8 years ago,Government transparency is a primary concern of this agency.
+18,ChZDSUhNMG9nS0VJQ0FnSURBbUtMaVlBEAE,Priyo Harjiyono,4,⭐⭐⭐⭐,8 years ago,Currently participating in the DIY Communications and Information Service social media forum event
+19,ChdDSUhNMG9nS0VJQ0FnSUNVdDZta21BRRAB,RA HM,3,⭐⭐⭐,7 years ago,Gud
+20,ChdDSUhNMG9nS0VJQ0FnSUR5b2Myc3JBRRAB,andrieka budi,5,⭐⭐⭐⭐⭐,5 years ago,"Great service, fast and satisfying"
+21,ChZDSUhNMG9nS0VJQ0FnSUNzNnNPcWNREAE,mohamad zainuri,5,⭐⭐⭐⭐⭐,6 years ago,Nice place
+22,ChdDSUhNMG9nS0VJQ0FnSURSeE96eTFnRRAB,Muhammad Izzuddin,4,⭐⭐⭐⭐,3 years ago,pleasure
+23,ChdDSUhNMG9nS0VJQ0FnSURBdzRiOXRnRRAB,Mochamad Hapsakti Nurhindratno,4,⭐⭐⭐⭐,8 years ago,DIY Communication and Information Service is great
+24,ChdDSUhNMG9nS0VJQ0FnSUN5bkpIUzVRRRAB,Lejar Basuki,5,⭐⭐⭐⭐⭐,5 years ago,Clean
+25,ChZDSUhNMG9nS0VJQ0FnSUNRNy02eVRnEAE,Rudi Winarso,5,⭐⭐⭐⭐⭐,8 years ago,Greetings #youth
+26,Ci9DQUlRQUNvZENodHljRjlvT2tKdFRrZzRXazAzWXkxRmVuVkZkV3B4WTBKTGJWRRAB,ipunk oks,5,⭐⭐⭐⭐⭐,4 weeks ago,     
+27,Ci9DQUlRQUNvZENodHljRjlvT2s5dFExbHJXRlo2Y0c5ekxYaHJTWFZLZFVWc1RrRRAB,Jose Nugie,5,⭐⭐⭐⭐⭐,10 months ago,     
+28,ChZDSUhNMG9nS0VJQ0FnSURMN1B2T2V3EAE,laksono adi,5,⭐⭐⭐⭐⭐,2 years ago,     
+29,ChZDSUhNMG9nS0VJQ0FnSUNkaklDY1ZBEAE,Aswino Wardhana,5,⭐⭐⭐⭐⭐,2 years ago,     
+30,ChZDSUhNMG9nS0VJQ0FnSUNCa3NhQUhBEAE,novie amalya,5,⭐⭐⭐⭐⭐,3 years ago,     
+31,ChZDSUhNMG9nS0VJQ0FnSURPelpQOFZBEAE,Sukmana Suci W,4,⭐⭐⭐⭐,4 years ago,     
+32,ChdDSUhNMG9nS0VJQ0FnSUNPLXNMN2d3RRAB,Sigit Ariyanto,5,⭐⭐⭐⭐⭐,4 years ago,     
+33,ChdDSUhNMG9nS0VJQ0FnSUNpaTRuNzZBRRAB,Mirnawaty Ahaya,5,⭐⭐⭐⭐⭐,5 years ago,2 reviews      
+34,ChdDSUhNMG9nS0VJQ0FnSUNpM3U2Vl9nRRAB,ANTONIUS SUTEJO,4,⭐⭐⭐⭐,5 years ago,     
+35,ChdDSUhNMG9nS0VJQ0FnSUNzaThYbXpBRRAB,Rony Primanto,5,⭐⭐⭐⭐⭐,6 years ago,     
+36,ChdDSUhNMG9nS0VJQ0FnSUQwZzhydC13RRAB,Andri Gunawan,5,⭐⭐⭐⭐⭐,6 years ago,     
+37,ChdDSUhNMG9nS0VJQ0FnSURZNkpyNjdRRRAB,Ti Su,1,⭐,7 years ago,3 reviews · 10 photos      
+38,ChZDSUhNMG9nS0VJQ0FnSUNJdC1hMWFREAE,Yan Arief,5,⭐⭐⭐⭐⭐,7 years ago,     
+39,ChdDSUhNMG9nS0VJQ0FnSUNJN3IzMTFnRRAB,AGP TV,5,⭐⭐⭐⭐⭐,7 years ago,     
+40,ChdDSUhNMG9nS0VJQ0FnSUNndzZ5bHFRRRAB,44 Laundry Spesial Express,4,⭐⭐⭐⭐,8 years ago,     
+41,ChdDSUhNMG9nS0VJQ0FnSUNRd2VPZ2dRRRAB,benny sapti,5,⭐⭐⭐⭐⭐,8 years ago,6 reviews · 6 photos      
+42,ChdDSUhNMG9nS0VJQ0FnSURnN0tMaHdRRRAB,Indoprint Purwokerto,5,⭐⭐⭐⭐⭐,8 years ago,     
+43,ChZDSUhNMG9nS0VJQ0FnSUNBd3BxTUpREAE,Rm Gatot,5,⭐⭐⭐⭐⭐,9 years ago,     
+44,ChdDSUhNMG9nS0VJQ0FnSUNnOWZqLW53RRAB,Dewi AmanatS,5,⭐⭐⭐⭐⭐,10 years ago,     
+----------ulasan_satpol_pp_diy---------
+no,id,Username,Rating,Stars,Date,Review Text
+1,Ci9DQUlRQUNvZENodHljRjlvT21WcmVtSXlOME5aTWpoS1QyaFZhWGhKYVRWS09IYxAB,Muhammad sutrisno Novianugraha,1,⭐,3 months ago,"To the Head of the Yogyakarta Provincial Public Order Agency (Satpol PP) and other authorities, we would like to inform you that in order to arrest and prosecute beggars carrying homemade firearms, one-handed or disabled begging at the …"
+2,ChZDSUhNMG9nS0VJQ0FnSURIajdPTldBEAE,anita febriani,5,⭐⭐⭐⭐⭐,a year ago,"Please, please advise the Indomart and Alfamart parking attendants along the south side of the road. They are very annoying. Please ask the local government to provide training for these parking attendants so they can change professions. We, the community, are fed up with thuggery under the guise of parking attendants."
+3,ChZDSUhNMG9nS0VJQ0FnSURqMi1HMktnEAE,hujan deras,1,⭐,2 years ago,"The vendors, food stalls, and street vendors on the sidewalks should be regulated. Even though those who want to walk on the sidewalks are covered with benches, chairs, and carts. What's more, people who can't see have to go down on the …"
+4,ChdDSUhNMG9nS0VJQ0FnSURvMktpNzJRRRAB,Diki Ahmad,5,⭐⭐⭐⭐⭐,7 years ago,"The place is easily accessible because it is in the city, the parking area is also spacious."
+5,ChdDSUhNMG9nS0VJQ0FnSURob1l6WnFnRRAB,Abdullah Alfarizi,1,⭐,3 years ago,"Until 10 pm on March 10, 2023, there was still dangdut music, disturbing the comfort of the surrounding community.... they said they were COMMUNITY PROTECTORS.... what the heck @pemkot Yogyakarta"
+6,ChZDSUhNMG9nS0VJQ0FnSUQ2NWFpTFZ3EAE,azwar andreas,5,⭐⭐⭐⭐⭐,4 years ago,Is it permissible to hold a wedding reception at Graha Tasnem? The problem is that my nephew wants to hold a wedding and reception at Graha Tasnem behind Purawisata in the morning. I don't know how many people there will be... thank you.
+7,ChZDSUhNMG9nS0VJQ0FnSURjaVA3TlVnEAE,Agung Bhaktiyar,5,⭐⭐⭐⭐⭐,6 years ago,"I want to ask, Mr. Public Order Officer, is it okay to play futsal? God willing, we'll maintain a distance of 1.5 meters. Excuse me, sir."
+8,ChdDSUhNMG9nS0VJQ0FnSUNlcEktcThRRRAB,Ilham Kurniawan Adi,1,⭐,3 years ago,"At least if you open the parking lot, pay attention to it sir."
+9,ChdDSUhNMG9nS0VJQ0FnSURBMzZES3hBRRAB,Gradaz Farm,5,⭐⭐⭐⭐⭐,9 years ago,The staff are friendly to the public... Thank you for your service.
+10,ChdDSUhNMG9nS0VJQ0FnSURBNTc2WDlRRRAB,wahyu kuncoro,3,⭐⭐⭐,8 years ago,DIY Provincial PP Office
+11,Ci9DQUlRQUNvZENodHljRjlvT2tkQ2FFRlpkakk1U0daa1RrRXhVRkE0TTFseWJHYxAB,Oktoramadhan Kafil,5,⭐⭐⭐⭐⭐,a year ago,"Wow, that's fast"
+12,ChdDSUhNMG9nS0VJQ0FnSURnMl9xZzBRRRAB,Ali Yusdi,5,⭐⭐⭐⭐⭐,8 years ago,Relaxing again
+13,ChZDSUhNMG9nS0VJQ0FnSUNhel82bk1BEAE,Wasiyanta,5,⭐⭐⭐⭐⭐,5 years ago,Thank God
+14,Ci9DQUlRQUNvZENodHljRjlvT2pGS09GbzFVbFEyYTJKd05HcDJRa000VEdKYVFYYxAB,Cornelius Felix,1,⭐,2 weeks ago,"Sorry, to the Danurejan Public Order Agency. Don't just report a one-sided incident that cuts off people's livelihoods at the Tegalpanggung intersection. Are those reporting it also complying with the rules? Cars are parked on the side of …"
+15,Ci9DQUlRQUNvZENodHljRjlvT205ZlZWQnRSelZWVHpGeGJFOU9ObEU0ZVcxck9YYxAB,Iryawan,4,⭐⭐⭐⭐,11 months ago,     
+16,Ci9DQUlRQUNvZENodHljRjlvT2xGSFlWZFhOR1JHWkd4bVQyd3hRM0JOYzE4MFoyYxAB,Manusia biasa 1,5,⭐⭐⭐⭐⭐,a year ago,6 reviews · 1 photo      
+17,ChZDSUhNMG9nS0VJQ0FnSUNUNVotUlpnEAE,Irfan Fahruzi,1,⭐,2 years ago,6 reviews · 1 photo      
+18,ChZDSUhNMG9nS0VJQ0FnSURlbTZyRmZ3EAE,Mohammad Zaenal,5,⭐⭐⭐⭐⭐,3 years ago,2 reviews      
+19,ChZDSUhNMG9nS0VJQ0FnSUR1dnNYNlRREAE,Lucas Podolsky,5,⭐⭐⭐⭐⭐,4 years ago,     
+20,ChdDSUhNMG9nS0VJQ0FnSUN1cGVmRnJnRRAB,Alifah Nur Octavian,5,⭐⭐⭐⭐⭐,4 years ago,5 reviews · 1 photo      
+21,ChZDSUhNMG9nS0VJQ0FnSUM2MmVtcFhnEAE,Faiz Alfarizky Tofani,1,⭐,4 years ago,     
+22,ChdDSUhNMG9nS0VJQ0FnSURLNV8ydDNBRRAB,gideon gardiawan,1,⭐,5 years ago,     
+23,ChZDSUhNMG9nS0VJQ0FnSURndE5hNUJREAE,Ice Lemontea,5,⭐⭐⭐⭐⭐,8 years ago,2 reviews · 10 photos      
+24,ChdDSUhNMG9nS0VJQ0FnSURBM2VMcDZBRRAB,Zam Zawi,5,⭐⭐⭐⭐⭐,9 years ago,     
+----------ulasan_bpn_diy----------
+no,id,Username,Rating,Stars,Date,Review Text
+1,Ci9DQUlRQUNvZENodHljRjlvT21adGFEUkxPR0p3TmpCeWJGbG9lVGwwWm14VVRXYxAB,rudy salam,5,⭐⭐⭐⭐⭐,4 months ago,❣️
+2,Ci9DQUlRQUNvZENodHljRjlvT2xoWE5HVXpSelI2WDFZd09XcGtjRTgzVFc1elVVRRAB,Virgo Parah,5,⭐⭐⭐⭐⭐,a year ago,"cool, fresh, comfortable, and fragrant"
+3,ChZDSUhNMG9nS0VJQ0FnSUNXaE5tYUlREAE,Tommy Suryaputra,3,⭐⭐⭐,4 years ago,Service from the guard is very good though I am not sure that he is allowed to leave the guard post for doing that.
+4,Ci9DQUlRQUNvZENodHljRjlvT2tsb2RtSnZVVTl5ZVdGNlh6ZzJSV293WlhvMlZHYxAB,Nur Duwi Wanto,5,⭐⭐⭐⭐⭐,8 months ago,The Best
+5,Ci9DQUlRQUNvZENodHljRjlvT210UGJVZG1PRU0xZDB0dE5sbGFlbDlFZDFBd1dXYxAB,Rizky H,5,⭐⭐⭐⭐⭐,11 months ago,Excellent service
+6,ChZDSUhNMG9nS0VJQ0FnSUQwZzVTY0N3EAE,Maryu dianto,4,⭐⭐⭐⭐,6 years ago,ok
+7,ChdDSUhNMG9nS0VJQ0FnSURzdUtfOHdnRRAB,Cahya Gama,5,⭐⭐⭐⭐⭐,6 years ago,Sip
+8,Ci9DQUlRQUNvZENodHljRjlvT2pod1pqUmZZVTFDYlc0emJscExXVTQyUWxZMlkzYxAB,Bayu Donokusumo,5,⭐⭐⭐⭐⭐,6 months ago,"The Regional Office of the BPN of the Province of DIY is good, the officers are friendly, can answer questions about the world of land, hopefully the quality will be maintained and further improved."
+9,Ci9DQUlRQUNvZENodHljRjlvT2sxWWRtODNlbXhwUms1eFNUWTFjMGhKYWkxZmNsRRAB,Yolanda Dwi Agustin,5,⭐⭐⭐⭐⭐,4 months ago,Very good service and the staff are very friendly 🤩 …
+10,Ci9DQUlRQUNvZENodHljRjlvT2pWSGRGWmZYMmRNY2tOQ01XVlpOR0Z0VWsxV1VVRRAB,Anggi Putri,5,⭐⭐⭐⭐⭐,4 months ago,"The staff is very friendly☺️
+Good service"
+11,Ci9DQUlRQUNvZENodHljRjlvT2t4UlNsZE9Vbko2ZFZOa2NrYzVkME5KVkdNeVNHYxAB,Nathasya Adelvin,5,⭐⭐⭐⭐⭐,8 months ago,"For mothers, the staff are very friendly and helpful in getting information."
+12,Ci9DQUlRQUNvZENodHljRjlvT2xOZlRFSnFWVE40ZW5SWVRTMVhOVWhoZG1wTVFuYxAB,Binus TP,4,⭐⭐⭐⭐,3 months ago,Thank you. We from the department have been served well.
+13,Ci9DQUlRQUNvZENodHljRjlvT2pkNVpraG9WVVZWY0hOVWFraFNNVjlGUlU1WWNIYxAB,Tiara Restu,5,⭐⭐⭐⭐⭐,5 months ago,The service is friendly and excellent
+14,Ci9DQUlRQUNvZENodHljRjlvT21sZmNteE5jRmwwYkhSUWFYbERNbGhJVEZKUU5XYxAB,R. Auliasari,5,⭐⭐⭐⭐⭐,a year ago,The service is great. The staff are friendly and welcoming. 🔥 …
+15,ChZDSUhNMG9nS0VOVG1uOG1FMDdDVUtREAE,Mujiyati Muji,5,⭐⭐⭐⭐⭐,a year ago,"Very comfortable, very friendly and fast service"
+16,Ci9DQUlRQUNvZENodHljRjlvT21KamJXTllXRzlGWW01dGRXYzNRa1YwVHpseFVHYxAB,Agus Mindarto (Gus Mind),5,⭐⭐⭐⭐⭐,6 months ago,"Upon arrival at the DIY BPN Regional Office, you will be greeted with friendly smiles and a family-like attitude, and of course, God willing, you will be entertained and given explanations and understanding, or input regarding land matters."
+17,ChZDSUhNMG9nS0VQV2Fvb0RMamJQMUlnEAE,Rita irawati,5,⭐⭐⭐⭐⭐,a year ago,"The service was very satisfying, the staff was very helpful, and the place was comfortable and very clean. What's more, all the staff provided detailed and comprehensive explanations. Thank you for the excellent service. 👍 …"
+18,Ci9DQUlRQUNvZENodHljRjlvT2pORGJYaHVNbll3WVV0UlYyNXVXR1pUV21wcWJsRRAB,BimaPutri,5,⭐⭐⭐⭐⭐,6 months ago,The service is great
+19,Ci9DQUlRQUNvZENodHljRjlvT2xjMVlrTTVWUzFvVm1GUVNuZDFMVGRaVmtoaVdrRRAB,Geralt Aridya,5,⭐⭐⭐⭐⭐,7 months ago,The service is very good and friendly
+20,Ci9DQUlRQUNvZENodHljRjlvT21FeWMxaHZNRVpqV1VOcFIwNTBiblk0V25nd1pVRRAB,Meilista ZF,5,⭐⭐⭐⭐⭐,5 months ago,"Good service, friendly staff.
+Excellent service."
+21,Ci9DQUlRQUNvZENodHljRjlvT21kelJFRjRTRkYyVW1OT2RqbDVhRGM0ZG1wdExXYxAB,lussyana nuri,5,⭐⭐⭐⭐⭐,a year ago,"Clean, good service, there is a kids zone so it is kids friendly"
+22,Ci9DQUlRQUNvZENodHljRjlvT2xaRGExbHBUVVk1VTNSQ1dtMUdlbG93UWtSemRtYxAB,nadia febriana,5,⭐⭐⭐⭐⭐,8 months ago,The information services provided by the DIY Regional Office are very informative.
+23,ChdDSUhNMG9nS0VLZmtyLTdaOFBUTjZ3RRAB,Tri Raharjo,5,⭐⭐⭐⭐⭐,Edited 2 months ago,"The lobby is clean and comfortable, the staff are also friendly."
+24,Ci9DQUlRQUNvZENodHljRjlvT21oT056aHNWekpxYlVWU1JXWXRibmhyTWkxRlgyYxAB,sri wahyuni,5,⭐⭐⭐⭐⭐,a year ago,"The service at the Yogyakarta Regional Land Agency (BPN) Regional Office was very satisfactory. The process was fast, the staff were friendly, and informative. The waiting room was clean and comfortable, and the service flow was clear and …"
+25,Ci9DQUlRQUNvZENodHljRjlvT2pKc1EwcHpaR05qVW5CTlYycGxOSFZ6V201UVgwRRAB,yogajiddana_174,5,⭐⭐⭐⭐⭐,7 months ago,"fast service for your thesis research needs, thank you and stay healthy"
+26,Ci9DQUlRQUNvZENodHljRjlvT2kxclEzZDJaVkJIYjFGd1QyaE1ZMmRQWjAxbGIwRRAB,dandy Irawan,5,⭐⭐⭐⭐⭐,4 months ago,Very friendly service
+27,ChdDSUhNMG9nS0VMNmFwWXlxbGJqZS1RRRAB,rizki indah,5,⭐⭐⭐⭐⭐,a year ago,"The DIY BPN Regional Office is cool, still serving the community professionally, even though the person concerned has gone to the office but is still confused, the regional office is still willing to help explain it again well...thanks DIY BPN Regional Office..."
+28,Ci9DQUlRQUNvZENodHljRjlvT2xwblpVWlhaMmd4Ym05cGEza3pkV1phWlZsVlpFRRAB,shinta arum,5,⭐⭐⭐⭐⭐,a year ago,Friendly service
+29,Ci9DQUlRQUNvZENodHljRjlvT21GdFRtc3laRFpUUWpoT1oxSkdTVkUzWTJKQlMyYxAB,B_Cindy Maharany,5,⭐⭐⭐⭐⭐,8 months ago,excellent and competent service
+30,Ci9DQUlRQUNvZENodHljRjlvT2t0emNVMHhZVU54ZUY5ck4ycHpRak5YT1RGTGNtYxAB,Ardheo Prayitno,5,⭐⭐⭐⭐⭐,6 months ago,"Friendly service, clean and comfortable room"
+31,ChdDSUhNMG9nS0VJQ0FnSURteWJ2eXNRRRAB,Wahyu Setiawan,5,⭐⭐⭐⭐⭐,4 years ago,"DIY provincial land services, friendly staff, fast response service"
+32,Ci9DQUlRQUNvZENodHljRjlvT205Mk5TMXFkbmx0T0VwWVdHcGxNWGRHV1RKa09WRRAB,dyah,5,⭐⭐⭐⭐⭐,8 months ago,"Friendly and satisfying service, answering all information well"
+33,Ci9DQUlRQUNvZENodHljRjlvT2pGVE1sUjNXakZJVFRReWRtMVVUVGhrWTNOcVozYxAB,Figan Muzakki,5,⭐⭐⭐⭐⭐,5 months ago,Very good service👌 …
+34,Ci9DQUlRQUNvZENodHljRjlvT21NeVdqRnJhVVZzU1U4MVdVaG5Wbkl4VkVnNFZIYxAB,maria valarie,5,⭐⭐⭐⭐⭐,9 months ago,"Ms. Uswatu is very friendly and the receptionist is also very friendly. Thank you, and best of luck."
+35,ChZDSUhNMG9nS0VLX2kzSmprajlyV1FREAE,Syafin Dysya,5,⭐⭐⭐⭐⭐,a year ago,"The service is very good, the people are friendly and can be invited often. The cleanliness is very well maintained..It's Okay"
+36,ChZDSUhNMG9nS0VPbUo3NUxnX2QyT05BEAE,Intam Tiwi,5,⭐⭐⭐⭐⭐,a year ago,"The office is comfortable, with a lactation room and a children's play area.
+The staff are friendly."
+37,Ci9DQUlRQUNvZENodHljRjlvT2poRU9IWnlWV3RNTFVwcVpYZHdZMnhIVFhBNE4wRRAB,Anna Vitria,5,⭐⭐⭐⭐⭐,Edited 6 months ago,Friendly and fast service
+38,ChZDSUhNMG9nS0VJbjczSWZqcjV1Y1V3EAE,yery agung,5,⭐⭐⭐⭐⭐,a year ago,"The lobby is clean, the place is comfortable, the AC is cold, the receptionists are friendly and kind, and they serve visitors quickly."
+39,Ci9DQUlRQUNvZENodHljRjlvT2tWbVJrRkJXbFpLVVhOSlVtMTBNa04wTFc4M1dYYxAB,Diva Intan,5,⭐⭐⭐⭐⭐,6 months ago,thank you for the great service
+40,Ci9DQUlRQUNvZENodHljRjlvT2t0c1JUZGlYMUEyV0doV1NVSlZWVzVHTlV0c1VuYxAB,Shandy Permana,5,⭐⭐⭐⭐⭐,a year ago,"Excellent service at the office, very friendly welcome. Especially Ms. Uswatun and Ms. Ema!! Keep up the good work!!"
+41,ChZDSUhNMG9nS0VMcTJ6S1hVaVA2ZkVnEAE,Mulat Sugiarti,5,⭐⭐⭐⭐⭐,a year ago,"The service and explanations provided by the officers to the research students were very good and satisfying, and really helped us in completing our assignments."
+42,Ci9DQUlRQUNvZENodHljRjlvT21VM1V6a3RkMjAyV2tFeVZVWlNPRGc0ZVhWUWJXYxAB,Dwi Santoso,5,⭐⭐⭐⭐⭐,10 months ago,"Overall, according to what was asked... the delivery was precise and good. Valid information is maintained"
+43,Ci9DQUlRQUNvZENodHljRjlvT2psWVlVTTJUV04yYlV3NGVrVllZbkEwVXpJNU1tYxAB,32_Putri Heriza,5,⭐⭐⭐⭐⭐,8 months ago,"The Yogyakarta BPN Regional Office provided satisfactory service and information, as well as solutions to the issues raised. Thank you 🙏🏻🙏🏻 …"
+44,Ci9DQUlRQUNvZENodHljRjlvT21kZmRuTllaa1JvZDI5YWREUlZRa1kxZW0xMk5FRRAB,Ari Puspito Utomo,5,⭐⭐⭐⭐⭐,4 months ago,"Professional, Trusted Service"
+45,ChZDSUhNMG9nS0VLZjZtTnZ1dTh1a1FBEAE,Erlangga Andika,5,⭐⭐⭐⭐⭐,Edited a year ago,"The place is nice and comfortable. The service is also very good, and the staff are very friendly and smart."
+46,Ci9DQUlRQUNvZENodHljRjlvT2pCMVN5MUpTSEZIVTAwNVJqWnNSRVpSY2pGVFpFRRAB,Febri Pratama (Febri Kendrick),5,⭐⭐⭐⭐⭐,a year ago,great. excellent service
+47,Ci9DQUlRQUNvZENodHljRjlvT2xSaFVuZE1OMHByYldkQlNqbGtTMlJXWkZKMlZsRRAB,upil jaran,5,⭐⭐⭐⭐⭐,a year ago,"From the initial service at the security guard, customer service to the employees, everyone was friendly and the service was excellent 👍👍👍
+Continue 🫰🫰🫰 …"
+48,Ci9DQUlRQUNvZENodHljRjlvT2xveFJtcE1UazFJTFRkdlEwaERTazV4U1c1RE1IYxAB,Muhamad Irfan,5,⭐⭐⭐⭐⭐,9 months ago,Very good and pleasant service
+49,Ci9DQUlRQUNvZENodHljRjlvT2xGa1prWndRVVZPTjFZMldsOHhZMGxRY0U1d2FGRRAB,22313973 Muhamad Shah Reza,5,⭐⭐⭐⭐⭐,8 months ago,"Professional service, very informative and very helpful"
+50,Ci9DQUlRQUNvZENodHljRjlvT21sclp6UjRRMUpuZEc1NFFrZHdWekUzV0VKU1UwRRAB,Dina Mayasari,5,⭐⭐⭐⭐⭐,a year ago,"The office is nice, cool, the employees Mrs. Uswatun, Ms. Diah, and Ms. Sarifah are very welcoming."
+51,ChdDSUhNMG9nS0VJQ0FnSURZMGJySnpnRRAB,febri novianto,5,⭐⭐⭐⭐⭐,7 years ago,The place is clean and comfortable. The security guards are very friendly.
+52,ChdDSUhNMG9nS0VPYkd6OWJ5MU5pLTBBRRAB,Subroto Arisenna,5,⭐⭐⭐⭐⭐,a year ago,"Cool and good service, hopefully it will be even better in the future, nice BPN DIY"
+53,Ci9DQUlRQUNvZENodHljRjlvT2kxRVVUQlFjRXhmY25KSWRsSlFPRWRxZGpGTE5tYxAB,Yoyon Suwondo,5,⭐⭐⭐⭐⭐,8 months ago,The welcome at the start was extraordinary
+54,Ci9DQUlRQUNvZENodHljRjlvT21SMVdqQXdaakpRT1ZKeFkyOUpNVFpNU2xsQmVHYxAB,Medi Mahaputra,5,⭐⭐⭐⭐⭐,a year ago,"Optimal and very friendly service, always success for ATR BPN DIY"
+55,Ci9DQUlRQUNvZENodHljRjlvT2poeVExQm5PV3RRUlcxTGRDMXRhVU4wVTFKeGIxRRAB,Marketing Litto,5,⭐⭐⭐⭐⭐,7 months ago,Very friendly service
+56,Ci9DQUlRQUNvZENodHljRjlvT2pKcFRYTlNlbkJ5TVhZME1GZzRkakJSUzJaUlFuYxAB,Sahro Kusumo,5,⭐⭐⭐⭐⭐,a year ago,"The staff are friendly and kind.
+Thank you for the information provided, which is very clear and easy to understand."
+57,Ci9DQUlRQUNvZENodHljRjlvT21FNFRHUldhMVpuZUd4bU5WRlNUWGQ0Wm5CbVJFRRAB,ita Pratiwi,5,⭐⭐⭐⭐⭐,9 months ago,Extremely satisfied with friendly service
+58,ChZDSUhNMG9nS0VJQ0FnSURHZzhXU1BnEAE,Wa Onli warungonline,5,⭐⭐⭐⭐⭐,Edited 4 years ago,"The place is spacious, neat, and clean.
+The staff are also friendly."
+59,ChZDSUhNMG9nS0VJQ0FnTURnczR5RUp3EAE,Sofi Puspasari,5,⭐⭐⭐⭐⭐,a year ago,"The location is quite strategic and easy to access, the room is also comfortable, if you need information about land administration, you can come directly here"
+60,Ci9DQUlRQUNvZENodHljRjlvT2tNM09XMXpSMHBrTjBkUmFEZzBjMWxZYmtZeWRrRRAB,A_02_Agung Prayogo,5,⭐⭐⭐⭐⭐,8 months ago,The atmosphere is comfortable and the service is very facilitating.
+61,Ci9DQUlRQUNvZENodHljRjlvT25jNGEzcGxOekU1YkRGYVYxZGZhbmh3TFd0M2JYYxAB,joshua agung,5,⭐⭐⭐⭐⭐,a year ago,"When you arrive, you will be greeted in a friendly manner and given a detailed explanation regarding the data submission application."
+62,ChZDSUhNMG9nS0VKS2xtNWlybDlYRE1BEAE,Jasmine Affan,5,⭐⭐⭐⭐⭐,a year ago,"The place is nice, the service is very friendly and fast and very informative."
+63,ChZDSUhNMG9nS0VJQ0FnSURka1ozRFhREAE,ErmaDN,5,⭐⭐⭐⭐⭐,2 years ago,"The story is about a reunion, the three people on the left are still at the NTB Regional Office, the rest are alumni of the NTB Regional Office. Let's just pray for the Prophet, who knows, maybe some of you will become alumni and join Yogyakarta or the surrounding areas. Amen... Heehe"
+64,Ci9DQUlRQUNvZENodHljRjlvT21Wa2RGVkRjME5yVGxwcWFtTnFOa05FZFVaWFRHYxAB,Retno Sulistya,5,⭐⭐⭐⭐⭐,a year ago,"Good service, neat and clean place"
+65,Ci9DQUlRQUNvZENodHljRjlvT25wV1pVZEhNR1Z5UjNoV1lsUllTWGcwYTBkVmJuYxAB,Sekar Alamsari,5,⭐⭐⭐⭐⭐,a year ago,There must be a supporting brochure regarding the formation of land registration process requirements.
+66,Ci9DQUlRQUNvZENodHljRjlvT2tOVE1USmlVREUzY3poZmFFbHBObGQxWjJkRWJuYxAB,Mulyawan Cahyo,5,⭐⭐⭐⭐⭐,8 months ago,"Thank you sir/madam, for the information provided, it is very good 🙏 …"
+67,Ci9DQUlRQUNvZENodHljRjlvT2xwWFZXUTRWRVI0UkV4TlUwdDFiRGxoWVZWcFlWRRAB,PANDETT,5,⭐⭐⭐⭐⭐,6 months ago,Comfortable
+68,ChZDSUhNMG9nS0VQYWhydV9SOVkzVVdBEAE,Tamara Irvina,5,⭐⭐⭐⭐⭐,a year ago,"The office is very clean, comfortable, and the staff are friendly. Awesome👏👏 …"
+69,ChdDSUhNMG9nS0VQT1IyNWpNdHNDeWdBRRAB,Sugito,5,⭐⭐⭐⭐⭐,a year ago,"Hopefully the leadership and staff will be trustworthy in carrying out their duties, keep up the enthusiasm...."
+70,ChRDSUhNMG9nS0VJQ0FnSURpM3ZvQxAB,Mohammad Rizal Fahruddin,5,⭐⭐⭐⭐⭐,5 years ago,Fast service and friendly staff
+71,ChZDSUhNMG9nS0VPMzczY3JDOEtxY05nEAE,riris mutfiany,5,⭐⭐⭐⭐⭐,a year ago,"The place is nice, comfortable, the service is friendly & fast."
+72,ChdDSUhNMG9nS0VJQ0FnSUNNcGFQMDNBRRAB,SAUJANA,1,⭐,Edited 2 years ago,"Please follow up, I always find civil servants who like to play truant, please tighten supervision in each field, especially during break time, many go home and take a nap, in the afternoon they are absent and return to the office,,, why are GOVERNMENT AGENCIES employees TRIALING!"
+73,Ci9DQUlRQUNvZENodHljRjlvT2xvM1VrMTJiazk2WjNnd1MwUkhiRWRIU1RsMk4wRRAB,Nailah Winanda,5,⭐⭐⭐⭐⭐,6 months ago,Very good service🤍 …
+74,Ci9DQUlRQUNvZENodHljRjlvT201dE1tZDNUVzFaUlc0eFgwODBUMlpIU1RSWGVsRRAB,Satrio Yoga,5,⭐⭐⭐⭐⭐,a year ago,"Thank you, DIY BPN Regional Office🙏 …"
+75,Ci9DQUlRQUNvZENodHljRjlvT2t4R1NreGhWMjB3UlVWcExYRlpibTUzV0RoRmVVRRAB,rafindha nouraini,5,⭐⭐⭐⭐⭐,10 months ago,"The office is neat and clean, the service is friendly 👍 …"
+76,ChZDSUhNMG9nS0VOenV4SWpHc0puZ0VBEAE,Maria Angela Pinta,5,⭐⭐⭐⭐⭐,a year ago,"A clean, tidy, and comfortable office. Keep up the enthusiasm for serving the community 👍🏻 …"
+77,Ci9DQUlRQUNvZENodHljRjlvT2pFelEyWnJXWGRwUkRodVpqaFBhbE53UTJGbFJXYxAB,Dwi Lestari,5,⭐⭐⭐⭐⭐,a year ago,"Good service, friendly staff, clean office"
+78,Ci9DQUlRQUNvZENodHljRjlvT21GZk5HZGtjVGxFYTFSUFVHTmhMV2RvUTBobU0xRRAB,Jogja Kulonprogo,5,⭐⭐⭐⭐⭐,a year ago,"The DIY Provincial BPN Regional Office is strategically located, all employees are friendly"
+79,Ci9DQUlRQUNvZENodHljRjlvT2xGdWMyeHpOM0J6VlZGQlgwTm5ORzlwV1hod1dsRRAB,GILANG BAGUS RAMADHAN 21.86.0207,5,⭐⭐⭐⭐⭐,11 months ago,friendly service and fast response
+80,Ci9DQUlRQUNvZENodHljRjlvT2pseVlWUmxaRFJNVVdkM2NVWm1SakJsTjJwMFpXYxAB,Alfirazia Ainun,5,⭐⭐⭐⭐⭐,a year ago,"Good service, friendly and very informative"
+81,Ci9DQUlRQUNvZENodHljRjlvT21wTU1sOURkbkZ0YUZCdVNrOXNPV2h5Vmt4c1JrRRAB,21_050 _Farid Za'im,5,⭐⭐⭐⭐⭐,8 months ago,"Excellent service, comfortable and good"
+82,ChZDSUhNMG9nS0VKenA2SWVvcGFxWGF3EAE,Yuni Andri,5,⭐⭐⭐⭐⭐,a year ago,"Clean. May it be a field of reward for all employees here, amen"
+83,ChdDSUhNMG9nS0VPcTVyb3pFMC03N3JRRRAB,Nurika Dwi Purwanti,5,⭐⭐⭐⭐⭐,a year ago,"The office is comfortable, located in the city center, the staff are friendly, top..."
+84,ChZDSUhNMG9nS0VMN1Q5NF90cTdLNUlnEAE,Rina yuliawati,5,⭐⭐⭐⭐⭐,a year ago,"The office is cool, clean, and comfortable. May the DIY National Land Agency (BPN) continue to thrive👍 …"
+85,Ci9DQUlRQUNvZENodHljRjlvT2tKRWFGSjBWVU10UzFseFluUXlhV0pYYWtORFdsRRAB,Hutama Widya Putra,5,⭐⭐⭐⭐⭐,8 months ago,The information and service are very good and satisfying.
+86,Ci9DQUlRQUNvZENodHljRjlvT2xVdFdFeGtSbkpOU25WUFVVVmlhRTFXYTFKNmRIYxAB,Irawan Indra Ardi,5,⭐⭐⭐⭐⭐,a year ago,Very good service
+87,Ci9DQUlRQUNvZENodHljRjlvT2xscGFVMVVNRzVWUXpaU2NWbEhOMjh4TVVwNVFsRRAB,Khikmatun Nisa,5,⭐⭐⭐⭐⭐,5 months ago,"Awesome, awesome"
+88,Ci9DQUlRQUNvZENodHljRjlvT205R1JXMDVObWxRVWxWWFVGRlhkbEExVDA5dlVsRRAB,mediyadesy rahmawati,5,⭐⭐⭐⭐⭐,10 months ago,The service is very good
+89,Ci9DQUlRQUNvZENodHljRjlvT21rNFdsaERaMWxMUzJ0T1dXeEVjRm8wYjJKTGNrRRAB,Nurul Indri Astuti,5,⭐⭐⭐⭐⭐,a year ago,"The BPN Regional Office of Atr provides good and professional service, the information provided is very clear."
+90,ChZDSUhNMG9nS0VPal83cU92b3VXQ1VREAE,Supri Yanto,5,⭐⭐⭐⭐⭐,a year ago,"Thank God, I got a new family and the leader and all the employees are polite and kind."
+91,ChdDSUhNMG9nS0VLcTd6Nnptc3BqVTFBRRAB,Eko Prastowo,5,⭐⭐⭐⭐⭐,a year ago,"BPN DIY is clean, comfortable, the staff are very friendly"
+92,ChZDSUhNMG9nS0VQTHR2NHlSaGRxNVJnEAE,teateen er,5,⭐⭐⭐⭐⭐,a year ago,The information and security officers are friendly... Full of smiles
+93,ChdDSUhNMG9nS0VQVzRqcmlzcHJ1OThnRRAB,Srie Martini,5,⭐⭐⭐⭐⭐,a year ago,"The employees are friendly and smart, respond quickly too"
+94,ChZDSUhNMG9nS0VQQ3B5ZUN5MW83ZElBEAE,Aleksander Januar Satriyo,5,⭐⭐⭐⭐⭐,a year ago,"Satisfactory service, consultation questions answered well and satisfactorily"
+95,ChdDSUhNMG9nS0VOdUgycEdjLTdIMW9RRRAB,Razana Razana,5,⭐⭐⭐⭐⭐,a year ago,The place is clean and comfortable. The staff are friendly.
+96,ChZDSUhNMG9nS0VLM042cE9QMTg2S2F3EAE,Faniza W. Pangestu,5,⭐⭐⭐⭐⭐,a year ago,"Clean lobby, friendly staff
+Thank you, DIY BPN Regional Office"
+97,Ci9DQUlRQUNvZENodHljRjlvT2tOeE1VaEJaVnBtUkZWRWVHbE5keko2V2pFNVRHYxAB,Cindy Agustiningrum,5,⭐⭐⭐⭐⭐,a year ago,"The staff are friendly, the office is also clean."
+98,ChdDSUhNMG9nS0VJQ0FnSURHZ01Tc2pBRRAB,Billy Ananda,5,⭐⭐⭐⭐⭐,4 years ago,"I once lost my wallet here, but thank God I found it. The security guard was very kind and helped me find it."
+99,Ci9DQUlRQUNvZENodHljRjlvT2pWaFYyTjBORFF0U0UweFVtMU5Xa05IZWtoQlZIYxAB,Chatarina Eta,3,⭐⭐⭐,6 months ago,The service is friendly
+100,ChdDSUhNMG9nS0VLN3VrYldfbl8yOGxnRRAB,Bagus Galih Wicaksana,5,⭐⭐⭐⭐⭐,a year ago,"Friendly staff, nice and comfortable office"
+101,ChdDSUhNMG9nS0VPdk10cmpMN3BQd3l3RRAB,dony Erwan B,5,⭐⭐⭐⭐⭐,a year ago,"The staff is friendly, the office is nice"
+102,Ci9DQUlRQUNvZENodHljRjlvT2xvNVRYbFRUalZMVnpseGRubHRYMGh3UVdGWU0wRRAB,dinda 05,5,⭐⭐⭐⭐⭐,8 months ago,the service is fast and informative
+103,Ci9DQUlRQUNvZENodHljRjlvT21WUlVXTkJSSGt4U0RWcWRqQXpRWGcyVm1Oa1pGRRAB,Dave Ings,5,⭐⭐⭐⭐⭐,8 months ago,Very responsive and professional service
+104,Ci9DQUlRQUNvZENodHljRjlvT2tKQlRWaHJaV0Z1YUU5VlMwZG5XRmw2WkU1U2QxRRAB,B_Yunita Suryanitasari,5,⭐⭐⭐⭐⭐,8 months ago,Information related to services is very easy
+105,Ci9DQUlRQUNvZENodHljRjlvT25kTmVrWlhObmRrUmtsc01YZHRXRTFQYjNSdVFVRRAB,Muhammad Alwy,5,⭐⭐⭐⭐⭐,a year ago,Easy access and friendly service
+106,Ci9DQUlRQUNvZENodHljRjlvT25sWWVYWnZNVjlwZFVkRVYzaFViRFpuZDFjdFpFRRAB,Ilham Ardi,5,⭐⭐⭐⭐⭐,9 months ago,Very good service
+107,ChZDSUhNMG9nS0VNdUNvT3I5OVpIWVN3EAE,Danang Kanugrahan,5,⭐⭐⭐⭐⭐,a year ago,The employee conveyed the information in great detail.
+108,Ci9DQUlRQUNvZENodHljRjlvT2xsVGFWSTJlR2N4VUdObldtNVNVemc0VTJ0V2JIYxAB,Febriyanto Chrestiatmojo,5,⭐⭐⭐⭐⭐,9 months ago,Very good and helpful
+109,Ci9DQUlRQUNvZENodHljRjlvT21ndE1WRTRiemRwYWxkTVQxTmxZWGh1Ym14UGRIYxAB,Irawan Indra,5,⭐⭐⭐⭐⭐,a year ago,Very good service
+110,Ci9DQUlRQUNvZENodHljRjlvT21OcVoxVnBjR3RGUmxGMWVXWlBXVXhrYTNGSU1rRRAB,ARMANDA BAYU,5,⭐⭐⭐⭐⭐,10 months ago,"Serving, Professional, Trusted"
+111,ChdDSUhNMG9nS0VNT01vODJxaHRpRThnRRAB,Rafif Ismail Purnama,5,⭐⭐⭐⭐⭐,a year ago,The office is clean and the service is friendly.
+112,ChZDSUhNMG9nS0VKM3Zfc0xpbTVfRWFnEAE,Arsenio Nadine,5,⭐⭐⭐⭐⭐,a year ago,Friendly staff and good service
+113,Ci9DQUlRQUNvZENodHljRjlvT2twaVJIbGthV1Z5VW1KeGNGQXlaa3hzVUV0bWJHYxAB,Rizky Bayu Nugraha rizkybayu.2022,5,⭐⭐⭐⭐⭐,a year ago,Friendly and good service
+114,Ci9DQUlRQUNvZENodHljRjlvT2xSZmMxTkViRlZ4UjAxR1RIVndXSEkxY1haQmFXYxAB,Rizal Ramadhan,5,⭐⭐⭐⭐⭐,7 months ago,friendly service
+115,Ci9DQUlRQUNvZENodHljRjlvT2pKb1VuUTJjSFZxWlROVU5XSjFhV3BqZVROT1JHYxAB,Hillary Kamila Zelda,5,⭐⭐⭐⭐⭐,8 months ago,"Clean, comfortable, cool and quiet"
+116,ChZDSUhNMG9nS0VMWFpxN1NrLU5PY2RnEAE,iis danang,5,⭐⭐⭐⭐⭐,a year ago,The place is comfortable and the parking is spacious..
+117,Ci9DQUlRQUNvZENodHljRjlvT2w5VVMya3hPVWc0WjNkWmExaEpkRE5vVlcweVIzYxAB,apri wulandari,5,⭐⭐⭐⭐⭐,a year ago,Fast and friendly service
+118,ChdDSUhNMG9nS0VLYVdycVMxMUsyXzVnRRAB,Raihan Rizky,5,⭐⭐⭐⭐⭐,a year ago,Good and fast service
+119,Ci9DQUlRQUNvZENodHljRjlvT2xkbVdHeHpSblF0TUZnMldsRkhibkZ5Wm1wM1FsRRAB,Erma De Angels,5,⭐⭐⭐⭐⭐,a year ago,The coordination is good and friendly
+120,ChdDSUhNMG9nS0VPZk4yLVNveE9xUTZBRRAB,mulana arbani,5,⭐⭐⭐⭐⭐,a year ago,There are smart activities together every Wednesday
+121,Ci9DQUlRQUNvZENodHljRjlvT2pGTVV6SkhVbkJwTXpsYWFFNWZaMlUzTlVoRFZYYxAB,Nidha Priyono,5,⭐⭐⭐⭐⭐,a year ago,Good service
+122,ChZDSUhNMG9nS0VJQ0FnSURDcmRDY2R3EAE,Trie Sakti,4,⭐⭐⭐⭐,5 years ago,The only BPN office in front of which there is a row of coffin sellers
+123,ChZDSUhNMG9nS0VJQ0FnSUNNOWQ2aVNREAE,Bambang Sutiyoso,5,⭐⭐⭐⭐⭐,6 years ago,"The place for managing land matters in DiY, so that we can consistently protect the land for the benefit of the people"
+124,Ci9DQUlRQUNvZENodHljRjlvT2pkNFRuSnFTMWRtUm1sVGIwOXZNbGt0WTNoM2IzYxAB,Rizqi Ramadhan,5,⭐⭐⭐⭐⭐,a year ago,Good
+125,ChZDSUhNMG9nS0VLYVhtS25hcGY2blJBEAE,subagya tim2ptsl,5,⭐⭐⭐⭐⭐,a year ago,Great office & service
+126,ChZDSUhNMG9nS0VJQ0FnSURvNC1xWlZBEAE,tama putra,5,⭐⭐⭐⭐⭐,7 years ago,"The Regional Office of the National Land Agency (BPN) in Yogyakarta Special Region, a vertical agency under the Ministry of Agrarian Affairs and Spatial Planning (BPN). The spearhead of the BPN Office in Yogyakarta Special Region."
+127,Ci9DQUlRQUNvZENodHljRjlvT2tWRWIwRnhja2RCUms1NE1WaFZMVE50TTJKcmJHYxAB,ryan budi,5,⭐⭐⭐⭐⭐,a year ago,Reality
+128,ChdDSUhNMG9nS0VQS2czYjJ0X3ZmV3ZBRRAB,agustinus w sahetapy,5,⭐⭐⭐⭐⭐,a year ago,the office is clean and tidy
+129,ChZDSUhNMG9nS0VNRFo4SVN2d0syWU9REAE,siti meimunah,5,⭐⭐⭐⭐⭐,a year ago,Nice and comfortable lobby..
+130,Ci9DQUlRQUNvZENodHljRjlvT2s5RlFXODRRMHRNUm5Fd2N5MUdaMlY1Wldkc2VXYxAB,Achmad Falakhi,5,⭐⭐⭐⭐⭐,a year ago,Good service
+131,ChZDSUhNMG9nS0VJQ0FnSUQwdU9HUE9BEAE,rohmat ary,5,⭐⭐⭐⭐⭐,Edited a year ago,"If you have land problems, you can consult first."
+132,Ci9DQUlRQUNvZENodHljRjlvT2twaWQweDVaRzF2WDJsbmNYSmFkRzVpZDFGTk4xRRAB,Astri Kauni Sari,5,⭐⭐⭐⭐⭐,10 months ago,Excellent service
+133,ChdDSUhNMG9nS0VOcjgtcG5wanQ3NTJ3RRAB,Aprilia Subagya,5,⭐⭐⭐⭐⭐,a year ago,The place is neat and clean
+134,ChZDSUhNMG9nS0VJQ0FnSURNbm9TNVV3EAE,Ari Arifin,5,⭐⭐⭐⭐⭐,6 years ago,Met a client. The security guard was friendly. The staff was friendly.
+135,Ci9DQUlRQUNvZENodHljRjlvT21sa1pqZzVMVWw0ZWpjd1VYcFRaM1l4VlVsYVVHYxAB,Lizer OP,5,⭐⭐⭐⭐⭐,a year ago,5 stars
+136,Ci9DQUlRQUNvZENodHljRjlvT25sRVV6TXpkRkkwZUY5MVVWWTVaMjlGY3kxcGQzYxAB,Fauzan R. Herdito,5,⭐⭐⭐⭐⭐,a year ago,Friendly staff
+137,Ci9DQUlRQUNvZENodHljRjlvT2t4VFRIaFVNRlo2YlhwNGRYWktSVEJMYWxNd1dFRRAB,yulianto risky,5,⭐⭐⭐⭐⭐,a year ago,ready smart smile
+138,ChZDSUhNMG9nS0VJQ0FnSURNanBlVGZnEAE,jayus priyana,4,⭐⭐⭐⭐,6 years ago,Parking space would be better if more were added
+139,ChdDSUhNMG9nS0VPS3d5UF9Xb2RDUHZnRRAB,Ilham Subagyo,5,⭐⭐⭐⭐⭐,a year ago,"Great, .......... thank you"
+140,ChdDSUhNMG9nS0VJQ0FnSURBdmVfMHZBRRAB,zawa wi,4,⭐⭐⭐⭐,9 years ago,Office
+141,Ci9DQUlRQUNvZENodHljRjlvT210ZlJsbHZWM0IxVlY5dldXVmFaR2RVZFZScGRVRRAB,Yoga 2318,5,⭐⭐⭐⭐⭐,a year ago,The Yogyakarta Regional Office of the National Land Agency (BPN) is excellent.
+142,Ci9DQUlRQUNvZENodHljRjlvT21kMWFXbFNjamRvVURBdFZHOUxaMFozWTI5UVdsRRAB,raisa melita septiyani,5,⭐⭐⭐⭐⭐,5 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+143,ChZDSUhNMG9nS0VJQ0FnSURqMnR6S1VREAE,Eff Saipul,5,⭐⭐⭐⭐⭐,2 years ago,The lobby is cool
+144,ChZDSUhNMG9nS0VJQ0FnSURNczRTd1JREAE,Hary L. Prabowo,5,⭐⭐⭐⭐⭐,6 years ago,Regional Office of the National Land Agency of the Special Region of Yogyakarta
+145,Ci9DQUlRQUNvZENodHljRjlvT2xKV2JWZHhNa3hNV0RSeldFOUVTVGhEYnpjNVRGRRAB,sigit iswahyudi,5,⭐⭐⭐⭐⭐,a year ago,SMART employees
+146,Ci9DQUlRQUNvZENodHljRjlvT2paeVNYUk1hMDU2WkdsaFlscEZUbkIyVEdOa1JuYxAB,Dam Exsel,5,⭐⭐⭐⭐⭐,7 months ago,very satisfied
+147,ChdDSUhNMG9nS0VJQ0FnSUMyMDYzSTlRRRAB,Agus Meganada,5,⭐⭐⭐⭐⭐,Edited 4 years ago,     
+148,ChdDSUhNMG9nS0VJQ0FnSUQwby0tS3RRRRAB,Jm Komputer,4,⭐⭐⭐⭐,6 years ago,The office is clean and tidy
+149,Ci9DQUlRQUNvZENodHljRjlvT2xWcE5sSXROSEYzWkRCc2IyeDFTMUJQTVMxRlFWRRAB,Bayu Agung Prabowo,5,⭐⭐⭐⭐⭐,a year ago,OKAY
+150,Ci9DQUlRQUNvZENodHljRjlvT2w5M1dHMVRialZGYUZkT05tcE5WR1o2YWpjMlprRRAB,M. Hana,5,⭐⭐⭐⭐⭐,a year ago,Good
+151,ChZDSUhNMG9nS0VJQ0FnSURzMGNyZmRBEAE,Victor Mahrizal,4,⭐⭐⭐⭐,6 years ago,Take me to the notary.
+152,ChZDSUhNMG9nS0VJQ0FnSUNjbzdleGZBEAE,Erlangga Andika (Toyenk),5,⭐⭐⭐⭐⭐,6 years ago,DIY BPN regional office
+153,Ci9DQUlRQUNvZENodHljRjlvT21KQ2NGUlBPWEpWYTBSek56VjJhV2RIVUVFNWRtYxAB,Amaliawan Basuki,5,⭐⭐⭐⭐⭐,a year ago,comfortable
+154,ChZDSUhNMG9nS0VJQ0FnSUNBdk8teVR3EAE,Bagus Lukmanhadi,5,⭐⭐⭐⭐⭐,9 years ago,Quiet..
+155,ChZDSUhNMG9nS0VJQ0FnSURBdy1xSk13EAE,Mochamad Hapsakti Nurhindratno,4,⭐⭐⭐⭐,8 years ago,Land should be great
+156,ChZDSUhNMG9nS0VJQ0FnSUMwNkx2aE13EAE,Taqien,5,⭐⭐⭐⭐⭐,6 years ago,Comfortable office🤗 …
+157,ChdDSUhNMG9nS0VJQ0FnSUNDX2ViY3ZBRRAB,Iwing Sukarmijan,4,⭐⭐⭐⭐,5 years ago,     
+158,ChdDSUhNMG9nS0VJQ0FnSURTaWNILXhRRRAB,Mas Padno,5,⭐⭐⭐⭐⭐,5 years ago,Excellent
+159,Ci9DQUlRQUNvZENodHljRjlvT2pSS1duaFJiR1pCV1RsU1JURjNPVFJDVjJ0d1gyYxAB,gerry rudianto,5,⭐⭐⭐⭐⭐,a year ago,Special :-)
+160,ChZDSUhNMG9nS0VJQ0FnSUNDX01MMkpnEAE,Erhanuddin,1,⭐,6 years ago,Terrifying . . .
+161,ChZDSUhNMG9nS0VJQ0FnSUNzODYtWVpBEAE,Ian Harfianty,5,⭐⭐⭐⭐⭐,Edited 6 years ago,Excellent
+162,ChdDSUhNMG9nS0VJQ0FnSURJLWFTNW9RRRAB,Santo Mas,4,⭐⭐⭐⭐,7 years ago,Comfortable
+163,ChZDSUhNMG9nS0VJQ0FnSUNBOTlqU0V3EAE,Daily Raj,5,⭐⭐⭐⭐⭐,8 years ago,Good
+164,ChZDSUhNMG9nS0VJQ0FnSURpNmVPTGRREAE,Rizki langgeng,5,⭐⭐⭐⭐⭐,Edited a day ago,     
+165,Ci9DQUlRQUNvZENodHljRjlvT2pGR2FrMUlOSEowVms5RGFqUm1hVk5mYTFVdFRYYxAB,Tyas Laksita,5,⭐⭐⭐⭐⭐,a month ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide the best service possible. For more information, please visit linktr.ee/atrbpndiy"
+166,Ci9DQUlRQUNvZENodHljRjlvT25ZeVJFeEZRelZCVkhKc2IyZzBVR1ZvVDNaV1IzYxAB,Kang Hananto Aza,5,⭐⭐⭐⭐⭐,2 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+167,Ci9DQUlRQUNvZENodHljRjlvT2pOcFRYcFFYekpsTVRRNWVHVm1kMjB6TUVWUk5XYxAB,Sandi Kartika,5,⭐⭐⭐⭐⭐,4 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide the best service possible. For more information, please visit linktr.ee/atrbpndiy"
+168,Ci9DQUlRQUNvZENodHljRjlvT2tjMlZHVjNWbUZ2WWxwQmNIVkJURWhMVEVzNVMwRRAB,Swastika Uki Fardhani,5,⭐⭐⭐⭐⭐,4 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+169,Ci9DQUlRQUNvZENodHljRjlvT2t4dU56aHVkRWxyWTFBeU9YRlNlSGgwWDFNMFpIYxAB,Gita Meutia,5,⭐⭐⭐⭐⭐,7 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+170,Ci9DQUlRQUNvZENodHljRjlvT21SdVdsSlFibE5uUW1kc01WazNlRXhZZEd4R1prRRAB,Renaldi R Wahyu P,5,⭐⭐⭐⭐⭐,7 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+171,Ci9DQUlRQUNvZENodHljRjlvT2pBdFV6ZHhXVGRqUVVvdGIxRkplbTlFYWxveFJVRRAB,B_Dinny Najmi Annisa,5,⭐⭐⭐⭐⭐,8 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+172,Ci9DQUlRQUNvZENodHljRjlvT2tWUVNYbGFUWFJsYkZKc1JXSmZiMnBzTkdwcE1XYxAB,22313989 Tata Indah Putri Maharani,5,⭐⭐⭐⭐⭐,8 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+173,Ci9DQUlRQUNvZENodHljRjlvT2kxbmRrOWhXSGhNVEdsT0xVNWFOSEJIV0d0NGRFRRAB,Danta Aryasuta Pratama,5,⭐⭐⭐⭐⭐,8 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+174,Ci9DQUlRQUNvZENodHljRjlvT2t4b2FuVlJZazF0UVRKbmVEQjNabXhrZW1Oc01uYxAB,Ayu Dewi,5,⭐⭐⭐⭐⭐,8 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+175,Ci9DQUlRQUNvZENodHljRjlvT2tGeWExRktXamd5VDJNdFoxODBRMVkzU0RBMFkxRRAB,Pandu Daniswara,5,⭐⭐⭐⭐⭐,9 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+176,Ci9DQUlRQUNvZENodHljRjlvT21KcFlVUkZOVFJUVUU1R01rVkpUR3BzYWpSSk1YYxAB,Indah Dani,5,⭐⭐⭐⭐⭐,10 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+177,Ci9DQUlRQUNvZENodHljRjlvT2t0aVZHVjViR3BWUVZSak1qUnVUVTk0WlZOVGNtYxAB,Ella Abdullah,5,⭐⭐⭐⭐⭐,10 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+178,Ci9DQUlRQUNvZENodHljRjlvT21OSlJHWm5jVlZ2YjNKR1QzbFRlVlpITW05cFZtYxAB,Aya Vha,5,⭐⭐⭐⭐⭐,11 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+179,Ci9DQUlRQUNvZENodHljRjlvT2pGM2QzcEtOWGMwTWxCeVZYVlFhMU5qYTE5NmNHYxAB,abdullah abad,5,⭐⭐⭐⭐⭐,11 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+180,Ci9DQUlRQUNvZENodHljRjlvT2xwaUxVSkdka3BYUVRSdmJHVlZSV2xoTUV0c1JsRRAB,Dheyandra Amalia,5,⭐⭐⭐⭐⭐,11 months ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+181,Ci9DQUlRQUNvZENodHljRjlvT2tSMGJUSmZkMjVwZUVsc1VqUnpjbEZHWVVWRWMxRRAB,amanda della,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+182,Ci9DQUlRQUNvZENodHljRjlvT2tWdFJGRnFTamt3UW1aSE9VNUlablF3WDFkUlpuYxAB,Bagus Efendi,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+183,Ci9DQUlRQUNvZENodHljRjlvT21weE9YSnZOV3BUTVdsc09WUnJVMW94YzI5TFEwRRAB,kurnia wanti,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+184,Ci9DQUlRQUNvZENodHljRjlvT2pGT1pYWkhORFpsTTJOb2RWSjJTWGx2TFVSM2JVRRAB,Dinda Qatrunnada M,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+185,Ci9DQUlRQUNvZENodHljRjlvT21wb1RESk1hMkpzWTFsRmVVWlJVRTlNZEVkZk5IYxAB,Nia Rositawati,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+186,Ci9DQUlRQUNvZENodHljRjlvT2sxM2FIQndWR0pUVG1KVlJuVlhTbVE0WVhGWFprRRAB,Vita Gayuh Utami,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+187,Ci9DQUlRQUNvZENodHljRjlvT2tNNU9XaEtXblEzVlhkUFRucHBUMmRoTVZGeVpuYxAB,Nopi Arsita,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+188,Ci9DQUlRQUNvZENodHljRjlvT2poTlRuUkJSMDVhWWw4MmNWQlVUelJKYkd0NFpGRRAB,feby nabila,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+189,Ci9DQUlRQUNvZENodHljRjlvT25wM1FuVnJPRm94U0VKV1pucHVTMFJzY0hkZlFVRRAB,Devi Wulandari,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+190,Ci9DQUlRQUNvZENodHljRjlvT2pCcGQxQTFla3B4UVZOMmEyMUpaM1ZJTjJwaWNHYxAB,arinda tiki tifani,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+191,Ci9DQUlRQUNvZENodHljRjlvT2xCamNEUTJiMDEwYjFCMlVYWldWMnh6UldaNlgxRRAB,Candra Ayu,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+192,Ci9DQUlRQUNvZENodHljRjlvT21JMGRXVnlhM1pxVFdsdlYzWmhVRlJVZWpGMGIzYxAB,Basuki Adja,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+193,Ci9DQUlRQUNvZENodHljRjlvT2s1aWIwNXRPRXRUVFRabVIySnVlVUY2VUhGeU1YYxAB,Tantri Wijayanto,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+194,Ci9DQUlRQUNvZENodHljRjlvT2pNMlJuRjRXbGxJU1RSZlJYTmpWR3BrVkVGWmRuYxAB,FUAD FADLY MUJADEDI,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+195,Ci9DQUlRQUNvZENodHljRjlvT2kxaFduUnlTREZLUnpWMFgxRnlSbVp1WkZVNGRIYxAB,Fariza Putri,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+196,Ci9DQUlRQUNvZENodHljRjlvT2xSdE4zSTFkbHBsVkRJMmNrazBjRWxtWlRSMlJtYxAB,Sarash Amalia P,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+197,Ci9DQUlRQUNvZENodHljRjlvT2sxQkxWRmZUMk5UYVRNMVdYSTRlVWQ1UXpGa1JtYxAB,diana eka novita sari,4,⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Diana Eka Novita Sari, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide the best service. For more information, please visit linktr.ee/atrbpndiy"
+198,Ci9DQUlRQUNvZENodHljRjlvT25oWUxYTm9iRTFoYURoa2EzbHRkSGhOY21OTFUwRRAB,Putri Pertiwi,5,⭐⭐⭐⭐⭐,a year ago,"Thank you, Putri Pertiwi, for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+199,Ci9DQUlRQUNvZENodHljRjlvT2xCbFFYbGZXRnBKU1d4ZlJsSjVhV0ZMTmtzdFkyYxAB,Tince,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency (BPN). We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+200,Ci9DQUlRQUNvZENodHljRjlvT2t3eU9FVnhMWFZyYlZsSmFqTkZVWEJ1TkVkMVlVRRAB,Dauz Edogawa,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Dauz Edogawa, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+201,Ci9DQUlRQUNvZENodHljRjlvT21oeE56QmtiMlZyYmpaVFUwMU5PRGhsZG5wcFpXYxAB,ابسمالله الرحمن ارحم Framu,5,⭐⭐⭐⭐⭐,a year ago,"Thank you, Mr./Ms. Pramu Haryono, for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+202,Ci9DQUlRQUNvZENodHljRjlvT2tScGRIaHZOMlpwTUdaNmFIQnhSVWswV2pSc1kyYxAB,Suci Dea,5,⭐⭐⭐⭐⭐,a year ago,"Thank you, Mr./Ms. Suci Dea, for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+203,ChdDSUhNMG9nS0VMeS1rb205eXZIVzJnRRAB,sherllyanur rohmah,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Sherlyanur Rohmah, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+204,ChZDSUhNMG9nS0VLQ3Z1b1RBaGZtTFZREAE,Sari Wijayati,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Sari Wijayati, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+205,ChZDSUhNMG9nS0VLcmk4OV8wanZTTENnEAE,Anik Sudaryanti,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Anik Sudaryanti, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+206,ChdDSUhNMG9nS0VQS1dtNFdaaGVHX2lnRRAB,Jessica Arlene Devina Vashty,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Jessica Arlene Devina Vashty, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+207,ChdDSUhNMG9nS0VLMi1qNzNsZ2J1Q25RRRAB,Abdurrahman saleh,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Abdurrahman Saleh, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+208,ChZDSUhNMG9nS0VJbVcxWTNVOHRYVFNBEAE,Bruno Siswanto,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Bruno Siswanto, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+209,ChdDSUhNMG9nS0VMT3RqcGJvNklIYXR3RRAB,Teresia Nelli,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Teresia Nelli, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+210,ChdDSUhNMG9nS0VLUzA0NUNUak1HU3ZBRRAB,Herni Silandari,5,⭐⭐⭐⭐⭐,a year ago,"Thank you, Herni Silandari, for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+211,ChZDSUhNMG9nS0VKZUExcG1pNzdqRFJnEAE,Karino 2262,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review, Mr./Ms. Karino 2262, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+212,ChdDSUhNMG9nS0VOUzMwZWkxaVozRjR3RRAB,Yuyun Sri Purwati,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency (BPN). We hope we can assist you and provide the best service. For more information, please visit linktr.ee/atrbpndiy"
+213,ChZDSUhNMG9nS0VLV0Y4X3ZrM096RGJ3EAE,Fahreza Maldini,5,⭐⭐⭐⭐⭐,a year ago,"Thank you, Mr. Fahreza Maldini, for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+214,ChZDSUhNMG9nS0VJQ0FnSURIdFltY2NnEAE,Moestika Permana,5,⭐⭐⭐⭐⭐,a year ago,"Thank you for your review of the Yogyakarta Regional Office of the National Land Agency (BPN). We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+215,ChZDSUhNMG9nS0VJQ0FnSURqaGJXYlRREAE,Cilany Yahisala,5,⭐⭐⭐⭐⭐,2 years ago,1 review      
+216,ChdDSUhNMG9nS0VJQ0FnSURscE1pUzdBRRAB,astuna wulandari,5,⭐⭐⭐⭐⭐,2 years ago,"Thank you, Mr./Ms. Astuna Wulandari, for your review of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+217,ChdDSUhNMG9nS0VJQ0FnSUN4NDVudnhRRRAB,Ajoy Njoy,5,⭐⭐⭐⭐⭐,3 years ago,"Thank you for your review of Ajoy Njoy at the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best service. For more information, please visit linktr.ee/atrbpndiy"
+218,ChdDSUhNMG9nS0VJQ0FnSURSeE1XdWhnRRAB,Addie Irwan,5,⭐⭐⭐⭐⭐,3 years ago,"Thank you for your review, Mr./Ms. Addie Irwan, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+219,ChZDSUhNMG9nS0VJQ0FnSUNSaHFPdFdnEAE,musik senja,5,⭐⭐⭐⭐⭐,3 years ago,"Thank you for your review of Senja Music at the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide the best service possible. For more information, please visit linktr.ee/atrbpndiy"
+220,ChdDSUhNMG9nS0VJQ0FnSUNoMEt5Sl9nRRAB,Loekman H. N. Soempeno,5,⭐⭐⭐⭐⭐,3 years ago,"Thank you for your review, Mr./Mrs. Loekman H. N. Soempeno, of the Yogyakarta Regional Office of the National Land Agency. We hope we can assist you and provide you with the best possible service. For more information, please visit linktr.ee/atrbpndiy"
+----------ulasan_bps_kota_yogyakarta----------
+no,id,Username,Rating,Stars,Date,Review Text
+1,Ci9DQUlRQUNvZENodHljRjlvT2s4MlprbGtjVGREWTBkcVdtdHpjMlpMVldaVVIwRRAB,imanuel satya,5,⭐⭐⭐⭐⭐,3 months ago,"Even though the building is old, the service facilities are very good with service staff who are solution-oriented."
+2,ChdDSUhNMG9nS0VJQ0FnSUNpekxlTDl3RRAB,Admin,3,⭐⭐⭐,5 years ago,"The Yogyakarta City Statistics Office (BPS) is small and appears quite old, as evidenced by its ceiling and restrooms. The building is located behind the Yogyakarta Special Region National Land Agency (BPN), and the road is accessible and …"
+3,ChZDSUhNMG9nS0VJQ0FnSUM2MGJENVpBEAE,Iga Putri,5,⭐⭐⭐⭐⭐,4 years ago,"The quality of public services at BPS is assessed in terms of:
+1. Tangibles: The completeness of the data is excellent, allowing us to easily access data for the City of Yogyakarta. …"
+4,ChRDSUhNMG9nS0VJQ0FnSUNXMllzTxAB,rifan robani,1,⭐,4 years ago,     
+5,ChdDSUhNMG9nS0VJQ0FnSUQ2NWRxOHpBRRAB,Sumiya Mrngstr,5,⭐⭐⭐⭐⭐,4 years ago,7 reviews      
+6,ChdDSUhNMG9nS0VJQ0FnSUNjNF9iQnFnRRAB,agung saputra,5,⭐⭐⭐⭐⭐,6 years ago,     
+7,ChZDSUhNMG9nS0VJQ0FnSURRNnBlNldnEAE,Oshy Wahidin,5,⭐⭐⭐⭐⭐,8 years ago,     
+8,ChZDSUhNMG9nS0VJQ0FnSUNRdnZ1SmFREAE,Ayu Lestari,5,⭐⭐⭐⭐⭐,10 years ago,8 reviews · 2 photos      
