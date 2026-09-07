@@ -1,5 +1,5 @@
 import uuid
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 
 from app.models.user import UserRole, UserStatus
 
@@ -12,8 +12,9 @@ class RegisterRequest(BaseModel):
     """
     full_name: str = Field(min_length=3, max_length=150)
     email: EmailStr
-    password: str = Field(min_length=8, max_length=100)
     opd_id: uuid.UUID
+    password: str = Field(min_length=8, max_length=100)
+    konfirmasi_password: str = Field(min_length=8, max_length=100)
 
     @field_validator("password")
     @classmethod
@@ -21,6 +22,12 @@ class RegisterRequest(BaseModel):
         if not any(c.isdigit() for c in value):
             raise ValueError("Password harus mengandung setidaknya satu angka.")
         return value
+
+    @model_validator(mode="after")
+    def validate_konfirmasi_passwords(self):
+        if self.password != self.konfirmasi_password:
+            raise ValueError("Password dan konfirmasi password tidak cocok.")
+        return self
 
 class LoginRequest(BaseModel):
     email: EmailStr
