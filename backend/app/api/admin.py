@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 from app.schemas.user import UserOut, UserApprovalAction, UserRoleAction
 from app.db.session import get_db
 from app.models.user import User, UserRole, UserStatus
 from app.core.deps import get_current_user
+from app.core.mail import send_email
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -28,6 +29,7 @@ def get_pending_users(
 def approve_or_reject_user(
     user_id: str,
     payload: UserApprovalAction,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     admin_user: User = Depends(verify_admin_role)
 ):
@@ -37,13 +39,27 @@ def approve_or_reject_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User tidak ditemukan."
         )
-    
+
     if payload.action == "approve":
         target_user.status = UserStatus.ACTIVE
         target_user.approved_at = datetime.now(timezone.utc)
         target_user.approved_by = admin_user.id
+        email_subject = "Akun Anda Telah Disetujui"
+        email_body = f"""
+        <p>Halo {target_user.full_name},</p>
+        <p>Selamat! Akun Anda pada sistem Suara DIY telah <strong>disetujui</strong> oleh admin.</p>
+        <p>Anda sekarang dapat login menggunakan email dan password yang telah didaftarkan.</p>
+        """
+
     elif payload.action == "reject":
         target_user.status = UserStatus.REJECTED
+        email_subject = "Status Pendaftaran Akun"
+        email_body = f"""
+        <p>Halo {target_user.full_name},</p>
+        <p>Mohon maaf, pendaftaran akun Anda pada sistem Suara DIY <strong>tidak dapat disetujui</strong> oleh admin.</p>
+        <p>Jika Anda merasa ini adalah kesalahan, silakan hubungi admin instansi Anda.</p>
+        """
+
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -52,7 +68,14 @@ def approve_or_reject_user(
 
     db.commit()
     db.refresh(target_user)
-    
+
+    background_tasks.add_task(
+        send_email,
+        to=target_user.email,
+        subject=email_subject,
+        body=email_body
+    )
+
     return target_user
 
 @router.patch("/users/{user_id}/role", response_model=UserOut)
