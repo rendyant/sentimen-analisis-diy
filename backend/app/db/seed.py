@@ -1,4 +1,4 @@
-from app.core.security import hash_password
+from app.core.security import get_password_hash
 from app.db.opd import OPD_DATA
 from app.db.session import SessionLocal
 from app.models.opd import OPD
@@ -24,12 +24,12 @@ def seed_admin(db):
         return
 
     admin = User(
-        full_name = "aAdmin Diskominfo DIY",
-        email = admin_email,
-        hashed_password = hash_password("Rtono2305"),
-        role = UserRole.ADMIN,           
-        status = UserStatus.ACTIVE,
-        )
+        full_name="Admin Diskominfo DIY",
+        email=admin_email,
+        hashed_password=get_password_hash("Rtono2305"),
+        role=UserRole.ADMIN,
+        status=UserStatus.ACTIVE,
+    )
 
     db.add(admin)
     db.commit()
@@ -37,10 +37,8 @@ def seed_admin(db):
 
 if __name__ == "__main__":
     db = SessionLocal()
-
     try:
         seed_opd(db)
         seed_admin(db)
     finally:
         db.close()
-            

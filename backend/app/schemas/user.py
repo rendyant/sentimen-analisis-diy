@@ -4,12 +4,6 @@ from pydantic import BaseModel, EmailStr, Field, field_validator, model_validato
 from app.models.user import UserRole, UserStatus
 
 class RegisterRequest(BaseModel):
-    """
-    Payload dari form register OPD.
-    SENGAJA tidak ada field 'role' atau 'status' di sini walau
-    frontend dimodifikasi atau seseorang menembak API langsung, tidak ada cara mengirim nilai role/status lewat endpoint ini.
-    Backend yang menentukan.
-    """
     full_name: str = Field(min_length=3, max_length=150)
     email: EmailStr
     opd_id: uuid.UUID
@@ -54,3 +48,29 @@ class UserOut(BaseModel):
 
 class UserApprovalAction(BaseModel):
     action: str = Field(pattern="^(approve|reject)$", description="Action yang diambil: 'approve' atau 'reject'")
+
+class UserRoleAction(BaseModel):
+    new_role: str = Field(pattern="^(admin|opd)$",description="Role baru: 'admin' atau 'opd'")
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserOut
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str = Field(min_length=8, max_length=100)
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_new_password(cls, value: str) -> str:
+        if not any(c.isdigit() for c in value):
+            raise ValueError("Password harus mengandung setidaknya satu angka.")
+        return value
