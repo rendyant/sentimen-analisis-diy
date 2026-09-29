@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  nip       String?
+  role      String   @default("USER")
+  opdId     String?
+  opd       Opd?     @relation(fields: [opdId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Opd {
+  id       String   @id @default(cuid())
+  code     String   @unique
+  name     String
+  category String
+  status   String   @default("AKTIF")
+  users    User[]
+  ulasan   Ulasan[]
+}
+
+model Ulasan {
+  id       String   @id @default(cuid())
+  reviewId String?  @unique          // ← TAMBAHKAN BARIS INI
+  tanggal  DateTime
+  sumber   String
+  pengadu  String?
+  isi      String
+  bintang  Int
+  sentimen String
+  aspek    String?
+  akurasi  Float?
+  status   String   @default("PENDING")
+  opdId    String
+  opd      Opd      @relation(fields: [opdId], references: [id])
+}
+
+model UploadLog {
+  id           String   @id @default(cuid())
+  fileName     String
+  mode         String   // "ALL_INSTANSI" atau "SINGLE_OPD"
+  opdId        String?
+  opd          Opd?     @relation(fields: [opdId], references: [id])
+  totalRows    Int
+  inserted     Int
+  updated      Int
+  skipped      Int
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
+  createdAt    DateTime @default(now())
+}
