@@ -14,6 +14,7 @@ conf = ConnectionConfig(
 )
 
 async def send_email(to: str, subject: str, body: str) -> None:
+    print(f"DEBUG: send_email() dipanggil, tujuan={to}")  
     message = MessageSchema(
         subject=subject,
         recipients=[to],
@@ -23,6 +24,6 @@ async def send_email(to: str, subject: str, body: str) -> None:
     fm = FastMail(conf)
     try:
         await fm.send_message(message)
+        print(f"[EMAIL TERKIRIM] Tujuan: {to}, Subjek: {subject}")
     except Exception as e:
-        # TODO: ganti ke proper logging (misal `logging` module) kalau sudah production
         print(f"[EMAIL GAGAL] Tujuan: {to}, Error: {e}")

@@ -45,6 +45,10 @@ class UserOut(BaseModel):
 
     class Config:
         from_attributes = True
+        
+class UserUpdate(BaseModel):
+    full_name: str | None = Field(default=None, min_length=2, max_length=100)
+    email: EmailStr | None = None
 
 class UserApprovalAction(BaseModel):
     action: str = Field(pattern="^(approve|reject)$", description="Action yang diambil: 'approve' atau 'reject'")
