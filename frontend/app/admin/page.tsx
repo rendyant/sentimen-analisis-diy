@@ -11,6 +11,7 @@ import {
   Search,
   Pencil,
   Trash2,
+  UserCog,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const ENDPOINT = {
   all: "/admin/users",
   pending: "/admin/users/pending",
   approval: (id: string) => `/admin/users/${id}/approval`,
+  role: (id: string) => `/admin/users/${id}/role`,
   user: (id: string) => `/admin/users/${id}`,
 };
 
@@ -72,6 +74,11 @@ const BADGE: Record<Status, { label: string; cls: string }> = {
   pending: { label: "Menunggu", cls: "bg-amber-50 text-amber-700 ring-amber-200" },
   active: { label: "Disetujui", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
   rejected: { label: "Ditolak", cls: "bg-red-50 text-red-700 ring-red-200" },
+};
+
+const ROLE_BADGE: Record<string, { label: string; cls: string }> = {
+  admin: { label: "Admin", cls: "bg-[#9b1c1c]/10 text-[#9b1c1c] ring-[#9b1c1c]/20" },
+  opd: { label: "OPD", cls: "bg-gray-100 text-gray-700 ring-gray-200" },
 };
 
 /* ---------- helpers ---------- */
@@ -141,6 +148,10 @@ function time(value?: string | null): number {
   return Number.isNaN(t) ? 0 : t;
 }
 
+function roleBadge(role: string) {
+  return ROLE_BADGE[role?.toLowerCase()] ?? { label: role || "—", cls: ROLE_BADGE.opd.cls };
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /* ---------- page ---------- */
@@ -149,6 +160,8 @@ export default function AdminPendingUsersPage() {
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [adminName, setAdminName] = useState("");
+  const [selfId, setSelfId] = useState("");
+  const [selfEmail, setSelfEmail] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
   const [fullList, setFullList] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -172,6 +185,10 @@ export default function AdminPendingUsersPage() {
   const [deleting, setDeleting] = useState<Row | null>(null);
   const [deleteError, setDeleteError] = useState("");
   const [deleteBusy, setDeleteBusy] = useState(false);
+
+  const [roleTarget, setRoleTarget] = useState<Row | null>(null);
+  const [roleError, setRoleError] = useState("");
+  const [roleBusy, setRoleBusy] = useState(false);
 
   const logout = useCallback(() => {
     clearSession();
@@ -250,7 +267,7 @@ export default function AdminPendingUsersPage() {
   useEffect(() => {
     const token = readStorage("access_token");
     const raw = readStorage("user");
-    let user: { role?: string; full_name?: string } | null = null;
+    let user: { id?: string; email?: string; role?: string; full_name?: string } | null = null;
     try {
       user = raw ? JSON.parse(raw) : null;
     } catch {
@@ -261,6 +278,8 @@ export default function AdminPendingUsersPage() {
       return;
     }
     setAdminName(user.full_name ?? "Admin");
+    setSelfId(user.id ? String(user.id) : "");
+    setSelfEmail(user.email ?? "");
     setReady(true);
   }, [router]);
 
@@ -280,12 +299,13 @@ export default function AdminPendingUsersPage() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       if (confirm) setConfirm(null);
+      else if (roleTarget && !roleBusy) setRoleTarget(null);
       else if (deleting && !deleteBusy) setDeleting(null);
       else if (editing && !saving) setEditing(null);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [confirm, deleting, deleteBusy, editing, saving]);
+  }, [confirm, roleTarget, roleBusy, deleting, deleteBusy, editing, saving]);
 
   /* ---- derived ---- */
 
@@ -333,6 +353,10 @@ export default function AdminPendingUsersPage() {
 
   const showOpd = rows.some((r) => r.opd_name);
   const showDate = rows.some((r) => r.created_at);
+
+  const isSelf = (u: Row) =>
+    (!!selfId && String(u.id) === selfId) ||
+    (!!selfEmail && u.email.toLowerCase() === selfEmail.toLowerCase());
 
   /* ---- actions ---- */
 
@@ -506,6 +530,37 @@ export default function AdminPendingUsersPage() {
     }
   }
 
+  function openRole(u: Row) {
+    setRoleTarget(u);
+    setRoleError("");
+  }
+
+  async function runRole() {
+    if (!roleTarget) return;
+    const user = roleTarget;
+    const newRole = user.role.toLowerCase() === "admin" ? "opd" : "admin";
+    setRoleBusy(true);
+    setRoleError("");
+    try {
+      const data = await request(ENDPOINT.role(user.id), {
+        method: "PATCH",
+        body: JSON.stringify({ new_role: newRole }),
+      });
+      const updated: Row = { ...user, role: data?.role ?? newRole };
+      setRows((prev) => prev.map((r) => (r.id === updated.id ? { ...r, role: updated.role } : r)));
+      updateHistory(updated);
+      setRoleTarget(null);
+      setNotice({
+        text: `Role ${user.full_name} berhasil diubah menjadi ${roleBadge(updated.role).label}.`,
+        ok: true,
+      });
+    } catch (err) {
+      setRoleError(err instanceof Error ? err.message : "Gagal mengubah role.");
+    } finally {
+      setRoleBusy(false);
+    }
+  }
+
   function toggleAll() {
     setSelected((prev) => {
       const next = new Set(prev);
@@ -531,7 +586,13 @@ export default function AdminPendingUsersPage() {
     !!editing &&
     (editName.trim() !== editing.full_name ||
       editEmail.trim().toLowerCase() !== editing.email);
-  const columnCount = 4 + (showOpd ? 1 : 0) + (showDate ? 1 : 0);
+  const columnCount = 5 + (showOpd ? 1 : 0) + (showDate ? 1 : 0);
+
+  const roleNext = roleTarget
+    ? roleTarget.role.toLowerCase() === "admin"
+      ? "opd"
+      : "admin"
+    : "admin";
 
   const emptyText = query
     ? `Tidak ada hasil untuk “${query}”.`
@@ -731,6 +792,7 @@ export default function AdminPendingUsersPage() {
                   />
                 </th>
                 <th className="px-4 py-2.5 font-semibold">Pengguna</th>
+                <th className="px-4 py-2.5 font-semibold">Role</th>
                 {showOpd && <th className="px-4 py-2.5 font-semibold">OPD</th>}
                 {showDate && <th className="px-4 py-2.5 font-semibold">Tanggal Daftar</th>}
                 <th className="px-4 py-2.5 font-semibold">Status</th>
@@ -755,7 +817,11 @@ export default function AdminPendingUsersPage() {
               {pageRows.map((u) => {
                 const busy = busyIds.has(u.id);
                 const isPending = u.status === "pending";
+                const isActive = u.status === "active";
+                const self = isSelf(u);
+                const isAdminRow = u.role?.toLowerCase() === "admin";
                 const badge = BADGE[u.status] ?? BADGE.pending;
+                const rb = roleBadge(u.role);
                 return (
                   <tr key={u.id} className="align-middle transition-colors hover:bg-gray-50/60">
                     <td className="px-4 py-3">
@@ -769,8 +835,22 @@ export default function AdminPendingUsersPage() {
                       />
                     </td>
                     <td className="px-4 py-3">
-                      <p className="font-medium text-gray-800">{u.full_name}</p>
+                      <p className="font-medium text-gray-800">
+                        {u.full_name}
+                        {self && (
+                          <span className="ml-1.5 text-[10px] font-semibold text-gray-400">
+                            (Anda)
+                          </span>
+                        )}
+                      </p>
                       <p className="text-xs text-gray-500">{u.email}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset ${rb.cls}`}
+                      >
+                        {rb.label}
+                      </span>
                     </td>
                     {showOpd && <td className="px-4 py-3 text-gray-600">{u.opd_name ?? "—"}</td>}
                     {showDate && (
@@ -819,6 +899,22 @@ export default function AdminPendingUsersPage() {
                             </button>
                           </>
                         )}
+                        {isActive && (
+                          <button
+                            type="button"
+                            aria-label={`Ubah role ${u.full_name}`}
+                            title={
+                              self
+                                ? "Anda tidak dapat mengubah role akun sendiri"
+                                : "Ubah role"
+                            }
+                            disabled={busy || self}
+                            onClick={() => openRole(u)}
+                            className="flex size-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:border-[#9b1c1c]/40 hover:text-[#9b1c1c] disabled:cursor-not-allowed disabled:opacity-40"
+                          >
+                            <UserCog className="size-3.5" />
+                          </button>
+                        )}
                         <button
                           type="button"
                           aria-label={`Edit ${u.full_name}`}
@@ -832,10 +928,14 @@ export default function AdminPendingUsersPage() {
                         <button
                           type="button"
                           aria-label={`Hapus ${u.full_name}`}
-                          title="Hapus user"
-                          disabled={busy}
+                          title={
+                            isAdminRow
+                              ? "Akun admin tidak dapat dihapus. Ubah role dulu."
+                              : "Hapus user"
+                          }
+                          disabled={busy || isAdminRow || self}
                           onClick={() => openDelete(u)}
-                          className="flex size-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700 disabled:opacity-60"
+                          className="flex size-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:bg-transparent disabled:hover:text-gray-600"
                         >
                           <Trash2 className="size-3.5" />
                         </button>
@@ -937,6 +1037,79 @@ export default function AdminPendingUsersPage() {
                 }`}
               >
                 {confirm.action === "approve" ? "Ya, setujui" : "Ya, tolak"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal ubah role */}
+      {roleTarget && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-black/30 p-4"
+          onClick={() => !roleBusy && setRoleTarget(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex size-10 items-center justify-center rounded-full bg-[#9b1c1c]/10">
+              <UserCog className="size-5 text-[#9b1c1c]" />
+            </div>
+            <h2 className="mt-3 text-base font-bold text-gray-900">Ubah role user?</h2>
+            <p className="mt-2 text-[13px] leading-relaxed text-gray-600">
+              <span className="font-semibold text-gray-800">{roleTarget.full_name}</span> (
+              {roleTarget.email})
+            </p>
+
+            <div className="mt-3 flex items-center gap-2">
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset ${roleBadge(roleTarget.role).cls}`}
+              >
+                {roleBadge(roleTarget.role).label}
+              </span>
+              <span className="text-gray-400">→</span>
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset ${roleBadge(roleNext).cls}`}
+              >
+                {roleBadge(roleNext).label}
+              </span>
+            </div>
+
+            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
+              {roleNext === "admin"
+                ? "User ini akan mendapat akses penuh sebagai admin: menyetujui, mengedit, mengubah role, dan menghapus user."
+                : "User ini akan kehilangan akses admin dan menjadi user OPD biasa."}
+            </p>
+
+            {roleError && (
+              <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
+                {roleError}
+              </p>
+            )}
+
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                disabled={roleBusy}
+                onClick={() => setRoleTarget(null)}
+                className="h-9 rounded-lg border border-gray-200 px-4 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={roleBusy}
+                onClick={runRole}
+                className="h-9 rounded-lg bg-[#9b1c1c] px-4 text-xs font-semibold text-white transition-colors hover:bg-[#7f1616] disabled:opacity-60"
+              >
+                {roleBusy
+                  ? "Menyimpan..."
+                  : roleNext === "admin"
+                    ? "Ya, jadikan admin"
+                    : "Ya, jadikan OPD"}
               </button>
             </div>
           </div>
