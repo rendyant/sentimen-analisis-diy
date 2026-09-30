@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
-from app.schemas.user import UserOut, UserApprovalAction, UserRoleAction
+from app.schemas.user import UserOut, UserApprovalAction, UserRoleAction, UserUpdate
 from app.db.session import get_db
 from app.models.user import User, UserRole, UserStatus
 from app.core.deps import get_current_user
 from app.core.mail import send_email
+from sqlalchemy.exc import IntegrityError
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -103,3 +104,68 @@ def update_user_role(
     db.refresh(target_user)
 
     return target_user
+
+@router.get("/users", response_model=list[UserOut])
+def get_all_users(
+    db: Session = Depends(get_db),
+    admin_user: User = Depends(verify_admin_role),
+):
+    return db.query(User).order_by(User.created_at.desc()).all()
+
+
+@router.patch("/users/{user_id}", response_model=UserOut)
+def update_user(
+    user_id: str,
+    payload: UserUpdate,
+    db: Session = Depends(get_db),
+    admin_user: User = Depends(verify_admin_role),
+):
+    target_user = db.query(User).filter(User.id == user_id).first()
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User tidak ditemukan.")
+
+    data = payload.model_dump(exclude_unset=True)
+
+    if "full_name" in data and data["full_name"] is not None:
+        target_user.full_name = data["full_name"].strip()
+
+    if "email" in data and data["email"] is not None:
+        new_email = str(data["email"]).strip().lower()
+        duplicate = (
+            db.query(User)
+            .filter(User.email == new_email, User.id != target_user.id)
+            .first()
+        )
+        if duplicate:
+            raise HTTPException(status_code=409, detail="Email sudah digunakan user lain.")
+        target_user.email = new_email
+
+    db.commit()
+    db.refresh(target_user)
+    return target_user
+
+@router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(
+    user_id: str,
+    db: Session = Depends(get_db),
+    admin_user: User = Depends(verify_admin_role),
+):
+    target_user = db.query(User).filter(User.id == user_id).first()
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User tidak ditemukan.")
+
+    if str(target_user.id) == str(admin_user.id):
+        raise HTTPException(status_code=403, detail="Anda tidak dapat menghapus akun Anda sendiri.")
+
+    if target_user.role == UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Akun admin tidak dapat dihapus lewat halaman ini.")
+
+    try:
+        db.delete(target_user)
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="User tidak bisa dihapus karena masih memiliki data terkait.",
+        )

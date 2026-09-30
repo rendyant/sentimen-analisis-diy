@@ -1,0 +1,51 @@
+.page {
+    --bg-page: #f5f6f8;
+    --pendopo-width: clamp(300px, 35vw, 620px);
+    --pendopo-top: 26%;
+
+    position: relative;
+    min-height: 100vh;
+    background-color: var(--bg-page);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.bg {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+}
+
+.tugu {
+    inset: 0;
+    background: url("/images/Yogyakarta Backgrounds.png") left center / cover no-repeat;
+}
+
+.pendopo {
+    top: var(--pendopo-top);
+    right: 0;
+    width: var(--pendopo-width);
+    aspect-ratio: 746 / 868;
+    background: url("/images/Pendopo Wrapper.png") right top / contain no-repeat;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+@media(max-width: 1024px) {
+    .tugu { opacity: 0.6; }
+    .page { --pendopo-width: 260px; }
+    .pendopo { opacity: 0.7; }
+}
+
+@media (max-width: 640px) {
+    .pendopo { display: none; }
+    .tugu { background-position: left bottom; opacity: 0.45; }
+}
