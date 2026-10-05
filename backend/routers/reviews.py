@@ -89,7 +89,7 @@ def get_stats(db: Session = Depends(get_db)):
             func.sum(case((Review.sentimen == "netral", 1), else_=0)).label("netral"),
             func.avg(Review.rating).label("avg_rating"),
         )
-        .group_by(Review.instansi_id)
+        .group_by(Review.instansi_id, Review.instansi_nama)  # ← Tambahkan Review.instansi_nama di sini
         .all()
     )
 
@@ -101,7 +101,7 @@ def get_stats(db: Session = Depends(get_db)):
             "positif": s.positif or 0,
             "negatif": s.negatif or 0,
             "netral": s.netral or 0,
-            "avg_rating": round(s.avg_rating or 0, 1),
+            "avg_rating": round(float(s.avg_rating), 1) if s.avg_rating else 0.0,
         }
         for s in stats
     ]

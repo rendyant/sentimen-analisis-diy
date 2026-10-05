@@ -8,58 +8,64 @@ from database.models import Review
 from scrapers.utils import clean_html, make_id
 
 
-async def scrape_news_for_opd(opd: dict, db: Session, max_results: int = 30) -> int:
-    """Scrape berita Google News RSS untuk satu OPD."""
-    query = opd["news_query"].replace(" ", "+")
-    rss_url = f"https://news.google.com/rss/search?q={query}&hl=id&gl=ID&ceid=ID:id"
-    added = 0
+async def scrape_news_for_opd(opd: dict, db: Session, max_results: int = 20) -> int:
+    """Scrape berita Google News RSS untuk satu OPD menggunakan multi-keyword."""
+    # Mendukung format multi-keyword (news_queries) maupun single keyword lama (news_query)
+    queries = opd.get("news_queries") or [opd.get("news_query", opd["nama"])]
+    total_added = 0
 
-    try:
-        feed = feedparser.parse(rss_url)
+    for query in queries:
+        formatted_query = query.replace(" ", "+")
+        rss_url = f"https://news.google.com/rss/search?q={formatted_query}&hl=id&gl=ID&ceid=ID:id"
 
-        for entry in feed.entries[:max_results]:
-            title = entry.get("title", "")
-            summary = entry.get("summary", "")
-            teks = clean_html(f"{title}. {summary}")
-            if not teks:
-                continue
+        try:
+            feed = feedparser.parse(rss_url)
 
-            review_id = make_id(entry.get("link", teks))
+            for entry in feed.entries[:max_results]:
+                title = entry.get("title", "")
+                summary = entry.get("summary", "")
+                teks = clean_html(f"{title}. {summary}")
+                if not teks:
+                    continue
 
-            # Skip jika berita sudah ada di database
-            if db.query(Review).filter(Review.id == review_id).first():
-                continue
+                review_id = make_id(entry.get("link", teks))
 
-            source = entry.get("source", {}).get("title", "Unknown")
+                # Skip jika berita sudah pernah tersimpan di database
+                if db.query(Review).filter(Review.id == review_id).first():
+                    continue
 
-            try:
-                tanggal = parsedate_to_datetime(entry.get("published", "")).isoformat()
-            except Exception:
-                tanggal = entry.get("published", "")
+                source = entry.get("source", {}).get("title", "Unknown")
 
-            review = Review(
-                id=review_id,
-                instansi_id=opd["id"],
-                instansi_nama=opd["nama"],
-                sumber="berita",
-                penulis=source,
-                teks=teks,
-                rating=None,
-                tanggal=tanggal,
-                url=entry.get("link", ""),
-                scraped_at=datetime.now().isoformat(),
-            )
-            db.add(review)
-            added += 1
+                try:
+                    tanggal = parsedate_to_datetime(entry.get("published", "")).isoformat()
+                except Exception:
+                    tanggal = entry.get("published", "")
 
-        db.commit()
-        print(f"✅ Berita {opd['nama']}: {added} baru")
+                review = Review(
+                    id=review_id,
+                    instansi_id=opd["id"],
+                    instansi_nama=opd["nama"],
+                    sumber="berita",
+                    penulis=source,
+                    teks=teks,
+                    rating=None,
+                    tanggal=tanggal,
+                    url=entry.get("link", ""),
+                    scraped_at=datetime.now().isoformat(),
+                )
+                db.add(review)
+                total_added += 1
 
-    except Exception as e:
-        print(f"❌ Error berita {opd['nama']}: {e}")
-        db.rollback()
+            db.commit()
 
-    return added
+        except Exception as e:
+            print(f"❌ Error query '{query}' untuk {opd['nama']}: {e}")
+            db.rollback()
+
+        await asyncio.sleep(0.5)
+
+    print(f"✅ Total berita baru {opd['nama']}: {total_added}")
+    return total_added
 
 
 async def scrape_all_news(db: Session, opds: list) -> int:
