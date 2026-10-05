@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import StatsCard from "@/components/statscard";
 import RatingCard from "@/components/ratingcard";
 import SentimentChart from "@/components/sentimentchart";
@@ -8,68 +11,95 @@ import AspekAnalysis from "@/components/aspekanalysis";
 import UlasanNegatif from "@/components/ulasannegatif";
 import UlasanTerbaru from "@/components/ulasanterbaru";
 import AIInsight from "@/components/aiinsight";
-
-type StatItem = {
-  title: string;
-  value: number;
-  subtitle?: string;
-  change?: string;
-  color: 'gray' | 'positive' | 'neutral' | 'negative';
-};
-
-const statsData: StatItem[] = [
-  { title: 'TOTAL ULASAN DIKNES', value: 128, change: '+12% vs bulan lalu', color: 'gray' },
-  { title: 'SENTIMEN POSITIF', value: 82, subtitle: '64.0% dari total', color: 'positive' },
-  { title: 'SENTIMEN NETRAL', value: 24, subtitle: '18.7% dari total', color: 'neutral' },
-  { title: 'SENTIMEN NEGATIF', value: 22, subtitle: 'Perlu Perhatian 17.3% total', color: 'negative' },
-];
+import { fetchStats, StatItem } from "@/lib/api";
 
 export default function Home() {
+  const [stats, setStats] = useState<StatItem[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchStats();
+        setStats(data);
+      } catch (err) {
+        console.error('Gagal mengambil statistik OPD:', err);
+      }
+    }
+    load();
+  }, []);
+
+  const totalUlasan = stats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+  const totalPositif = stats.reduce((acc, curr) => acc + (curr.positif || 0), 0);
+  const totalNegatif = stats.reduce((acc, curr) => acc + (curr.negatif || 0), 0);
+  const totalNetral = stats.reduce((acc, curr) => acc + (curr.netral || 0), 0);
+
+  const persenPositif = totalUlasan > 0 ? ((totalPositif / totalUlasan) * 100).toFixed(1) : '0';
+  const persenNegatif = totalUlasan > 0 ? ((totalNegatif / totalUlasan) * 100).toFixed(1) : '0';
+  const persenNetral = totalUlasan > 0 ? ((totalNetral / totalUlasan) * 100).toFixed(1) : '0';
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-
       {/* Title Section */}
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-red-800 mb-1">
-          DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA (DISDIKPORA) DIY
+        <h2 className="text-2xl font-bold text-red-900 mb-1">
+          DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA (DIKPORA) DIY
         </h2>
-        <p className="text-gray-600 text-sm">
-          Dashboard pemantauan kepuasan dan sentiment ulasan publik secara real-time
+        <p className="text-gray-500 text-xs">
+          Dashboard pemantauan kepuasan dan sentimen aspirasi publik secara real-time
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        {statsData.map((stat, idx) => (
-          <StatsCard key={idx} {...stat} />
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatsCard
+          title="TOTAL ULASAN MASUK"
+          value={totalUlasan}
+          change="+100% data live"
+          color="gray"
+        />
+        <StatsCard
+          title="SENTIMEN POSITIF"
+          value={totalPositif}
+          subtitle={`${persenPositif}% dari total`}
+          color="positive"
+        />
+        <StatsCard
+          title="SENTIMEN NETRAL"
+          value={totalNetral}
+          subtitle={`${persenNetral}% dari total`}
+          color="neutral"
+        />
+        <StatsCard
+          title="SENTIMEN NEGATIF"
+          value={totalNegatif}
+          subtitle={`Perlu Perhatian ${persenNegatif}% total`}
+          color="negative"
+        />
       </div>
 
-      {/* ✅ SATU GRID: kiri = semua konten, kanan = AI Action Plans */}
-      <div className="grid grid-cols-3 gap-4 mb-6 items-start">
-        {/* Kolom KIRI: semua card ditumpuk rapi */}
-        <div className="col-span-2 space-y-4">
+      {/* Grid Utama: Kiri (Grafik) + Kanan (AI Action Plans) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 items-start">
+        <div className="lg:col-span-2 space-y-5">
           <RatingCard />
           <SentimentChart />
           <WordCloud />
           <PlatformChart />
         </div>
 
-        {/* Kolom KANAN: AI Action Plans */}
-        <div className="col-span-1">
+        <div className="lg:col-span-1">
           <AIActionPlans />
         </div>
       </div>
 
       {/* Analisis Aspek + Ulasan Negatif */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+        <div className="lg:col-span-2">
           <AspekAnalysis />
         </div>
         <UlasanNegatif />
       </div>
 
-      {/* Tabel Ulasan */}
+      {/* Tabel Ulasan Terbaru (Data Live) */}
       <div className="mb-6">
         <UlasanTerbaru />
       </div>
