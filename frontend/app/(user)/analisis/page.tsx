@@ -1,10 +1,11 @@
 'use client';
 
-import { ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell,
 } from 'recharts';
+import { fetchStats, StatItem, OPD_LIST } from '@/lib/api';
 
 const trenData = [
   { tanggal: '21 Jan', positif: 22, netral: 26, negatif: 16 },
@@ -12,12 +13,6 @@ const trenData = [
   { tanggal: '23 Jan', positif: 24, netral: 14, negatif: 12 },
   { tanggal: '24 Jan', positif: 44, netral: 20, negatif: 28 },
   { tanggal: '25 Jan', positif: 38, netral: 15, negatif: 15 },
-];
-
-const proporsiData = [
-  { name: 'Positif', value: 15, color: '#10B981' },
-  { name: 'Netral', value: 6, color: '#3B82F6' },
-  { name: 'Negatif', value: 13, color: '#EF4444' },
 ];
 
 const kataKunci = [
@@ -41,9 +36,9 @@ const friction = [
 ];
 
 const spektrum = [
-  { tipe: 'Sentimen Positif', sumber: 'Puskesmas Bandung', isi: '"Sangat senang dengan pelayanan perawat yang cepat tanggap menangani pendaftaran lansia di loket."', style: 'bg-green-50 border-green-500', teks: 'text-green-700' },
-  { tipe: 'Sentimen Netral', sumber: 'Disdukcapil Bandung', isi: '"Petugas melayani biasa saja sesuai prosedur. Tidak terlalu ramah namun berkas KTP selesai tepat waktu."', style: 'bg-blue-50 border-blue-500', teks: 'text-blue-700' },
-  { tipe: 'Sentimen Negatif', sumber: 'DPMPTSP', isi: '"Klarifikasi perizinan tidak jelas. Sudah kirim email 3 kali tidak ada tanggapan sama sekali dari tim admin."', style: 'bg-red-50 border-red-500', teks: 'text-red-700' },
+  { tipe: 'Sentimen Positif', sumber: 'Dinas Kesehatan DIY', isi: '"Sangat senang dengan pelayanan perawat yang cepat tanggap menangani pendaftaran lansia di loket."', style: 'bg-green-50 border-green-500', teks: 'text-green-700' },
+  { tipe: 'Sentimen Netral', sumber: 'Dinas Perhubungan DIY', isi: '"Petugas melayani biasa saja sesuai prosedur. Tidak terlalu ramah namun jadwal informasi cukup jelas."', style: 'bg-blue-50 border-blue-500', teks: 'text-blue-700' },
+  { tipe: 'Sentimen Negatif', sumber: 'DPMPTSP DIY', isi: '"Klarifikasi perizinan tidak jelas. Sudah kirim email beberapa kali belum ada tanggapan dari tim admin."', style: 'bg-red-50 border-red-500', teks: 'text-red-700' },
 ];
 
 function StackedBar({ parts }: { parts: number[] }) {
@@ -57,63 +52,128 @@ function StackedBar({ parts }: { parts: number[] }) {
   );
 }
 
-function FilterSelect({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm">
-      <span className="text-gray-500">{label}:</span>
-      <span className="font-semibold text-gray-800">{value}</span>
-      <ChevronDown size={14} className="text-gray-400" />
-    </div>
-  );
-}
-
 export default function AnalisisPage() {
+  const [stats, setStats] = useState<StatItem[]>([]);
+  const [instansiId, setInstansiId] = useState('');
+  const [periode, setPeriode] = useState('all');
+  const [sumber, setSumber] = useState('');
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchStats({
+          instansi_id: instansiId || undefined,
+          sumber: sumber || undefined,
+          periode: periode !== 'all' ? periode : undefined,
+        });
+        setStats(data);
+      } catch (err) {
+        console.error('Gagal mengambil data analisis:', err);
+      }
+    }
+    load();
+  }, [instansiId, periode, sumber]);
+
+  const totalUlasan = stats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+  const totalPositif = stats.reduce((acc, curr) => acc + (curr.positif || 0), 0);
+  const totalNetral = stats.reduce((acc, curr) => acc + (curr.netral || 0), 0);
+  const totalNegatif = stats.reduce((acc, curr) => acc + (curr.negatif || 0), 0);
+
+  const persenPositif = totalUlasan > 0 ? ((totalPositif / totalUlasan) * 100).toFixed(1) : '0.0';
+  const persenNetral = totalUlasan > 0 ? ((totalNetral / totalUlasan) * 100).toFixed(1) : '0.0';
+  const persenNegatif = totalUlasan > 0 ? ((totalNegatif / totalUlasan) * 100).toFixed(1) : '0.0';
+
+  const proporsiData = [
+    { name: 'Positif', value: totalPositif || 1, count: totalPositif, color: '#10B981' },
+    { name: 'Netral', value: totalNetral || 0, count: totalNetral, color: '#3B82F6' },
+    { name: 'Negatif', value: totalNegatif || 0, count: totalNegatif, color: '#EF4444' },
+  ];
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      {/* Header + Filter Interaktif */}
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Analisis Sentimen Pelayanan</h1>
           <p className="text-sm text-gray-500 mt-1">Pantau persepsi kepuasan masyarakat terhadap kinerja birokrasi daerah</p>
         </div>
-        <div className="flex gap-2">
-          <FilterSelect label="OPD" value="Semua Layanan" />
-          <FilterSelect label="Periode" value="Januari 2026" />
-          <FilterSelect label="Saluran" value="Semua Media" />
+        <div className="flex flex-wrap gap-2">
+          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-xs">
+            <span className="text-gray-500 font-medium">OPD:</span>
+            <select
+              value={instansiId}
+              onChange={(e) => setInstansiId(e.target.value)}
+              className="font-semibold text-gray-800 outline-none bg-transparent cursor-pointer max-w-[180px]"
+            >
+              {OPD_LIST.map((opd) => (
+                <option key={opd.id} value={opd.id}>{opd.nama}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-xs">
+            <span className="text-gray-500 font-medium">Periode:</span>
+            <select
+              value={periode}
+              onChange={(e) => setPeriode(e.target.value)}
+              className="font-semibold text-gray-800 outline-none bg-transparent cursor-pointer"
+            >
+              <option value="all">Semua Waktu</option>
+              <option value="7d">7 Hari Terakhir</option>
+              <option value="30d">30 Hari Terakhir</option>
+              <option value="90d">3 Bulan Terakhir</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-xs">
+            <span className="text-gray-500 font-medium">Saluran:</span>
+            <select
+              value={sumber}
+              onChange={(e) => setSumber(e.target.value)}
+              className="font-semibold text-gray-800 outline-none bg-transparent cursor-pointer"
+            >
+              <option value="">Semua Media</option>
+              <option value="berita">Google News</option>
+              <option value="maps">Google Maps</option>
+              <option value="twitter">Twitter / X</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
           <h3 className="text-xs font-semibold text-blue-600 uppercase mb-2">Total Sampel Data</h3>
-          <div className="text-3xl font-bold text-gray-900 mb-2">34</div>
-          <p className="text-xs text-gray-500"><span className="text-blue-600 font-semibold">Stable</span> Data keluhan & testimoni</p>
+          <div className="text-3xl font-bold text-gray-900 mb-2">{totalUlasan}</div>
+          <p className="text-xs text-gray-500"><span className="text-blue-600 font-semibold">Live</span> Data keluhan & testimoni</p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
           <h3 className="text-xs font-semibold text-green-600 uppercase mb-2">Indeks Kepuasan (Positif)</h3>
-          <div className="text-3xl font-bold text-gray-900 mb-2">44,1%</div>
-          <p className="text-xs text-gray-500"><span className="text-green-600 font-semibold">+3.4%</span> Tren meningkat positif</p>
+          <div className="text-3xl font-bold text-gray-900 mb-2">{persenPositif}%</div>
+          <p className="text-xs text-gray-500"><span className="text-green-600 font-semibold">{totalPositif} ulasan</span> Apresiasi layanan</p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
           <h3 className="text-xs font-semibold text-orange-500 uppercase mb-2">Sentimen Netral</h3>
-          <div className="text-3xl font-bold text-gray-900 mb-2">17,6%</div>
-          <p className="text-xs text-gray-500"><span className="text-orange-500 font-semibold">Stabil</span> Persepsi objektif warga</p>
+          <div className="text-3xl font-bold text-gray-900 mb-2">{persenNetral}%</div>
+          <p className="text-xs text-gray-500"><span className="text-orange-500 font-semibold">{totalNetral} ulasan</span> Persepsi objektif warga</p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
           <h3 className="text-xs font-semibold text-red-600 uppercase mb-2">Ketidakpuasan (Negatif)</h3>
-          <div className="text-3xl font-bold text-gray-900 mb-2">38,2%</div>
-          <p className="text-xs text-gray-500"><span className="text-red-600 font-semibold">+1.2%</span> Perlu perhatian segera</p>
+          <div className="text-3xl font-bold text-gray-900 mb-2">{persenNegatif}%</div>
+          <p className="text-xs text-gray-500"><span className="text-red-600 font-semibold">{totalNegatif} ulasan</span> Perlu perhatian segera</p>
         </div>
       </div>
 
       {/* Tren Harian + Proporsi */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="col-span-2 bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <div className="lg:col-span-2 bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-bold text-gray-900">Tren Harian Sentimen Publik</h3>
-              <p className="text-xs text-gray-500 mt-1">Perkembangan fluktuasi sentimen dari 21 Jan - 25 Jan 2026</p>
+              <p className="text-xs text-gray-500 mt-1">Perkembangan fluktuasi sentimen masyarakat</p>
             </div>
             <div className="flex gap-3 text-xs">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500"></span> Positif</span>
@@ -147,8 +207,8 @@ export default function AnalisisPage() {
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold text-gray-900">34</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-2xl font-bold text-gray-900">{totalUlasan}</span>
               <span className="text-[10px] text-gray-400 uppercase">Total</span>
             </div>
           </div>
@@ -157,10 +217,10 @@ export default function AnalisisPage() {
               <div key={i} className="flex items-center justify-between text-sm">
                 <span className="flex items-center gap-2 text-gray-600">
                   <span className="w-3 h-3 rounded" style={{ backgroundColor: item.color }}></span>
-                  {item.name} ({item.value})
+                  {item.name} ({item.count})
                 </span>
                 <span className="font-bold text-gray-900">
-                  {((item.value / 34) * 100).toFixed(1)}%
+                  {totalUlasan > 0 ? ((item.count / totalUlasan) * 100).toFixed(1) : '0.0'}%
                 </span>
               </div>
             ))}
@@ -169,7 +229,7 @@ export default function AnalisisPage() {
       </div>
 
       {/* Kata Kunci + Pendorong */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
           <h3 className="font-bold text-gray-900 mb-4">Analisis Frekuensi Kata Kunci Utama</h3>
           <div className="space-y-4">
@@ -212,7 +272,7 @@ export default function AnalisisPage() {
             Butuh Tindakan Cepat
           </span>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {friction.map((item, i) => (
             <div key={i} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
               <h4 className={`font-bold text-sm mb-2 ${item.warna}`}>{item.judul}</h4>
@@ -225,7 +285,7 @@ export default function AnalisisPage() {
       {/* Spektrum Suara */}
       <div>
         <h3 className="font-bold text-gray-900 mb-4">Spektrum Suara Masyarakat Terbaru</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {spektrum.map((item, i) => (
             <div key={i} className={`rounded-xl p-4 border ${item.style}`}>
               <div className="flex items-center justify-between mb-2">

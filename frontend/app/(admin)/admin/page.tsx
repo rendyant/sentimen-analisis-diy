@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, Download, Printer, Sparkles, Zap, ArrowUp, ArrowRight, CheckCircle2, Clock, ChevronDown, Loader2 } from 'lucide-react';
+import { Search, Printer, Sparkles, Zap, ArrowUp, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import StatsCard from '@/components/dashboard/statscard';
 import RatingCard from '@/components/dashboard/ratingcard';
 import SentimentChart from '@/components/dashboard/sentimentchart';
 import AIInsight from '@/components/ai/aiinsight';
-import { fetchStats, StatItem } from '@/lib/api';
+import { fetchStats, StatItem, OPD_LIST } from '@/lib/api';
 
 const kataNegatif = ['lama', 'menunggu', 'lambat', 'ribet', 'berbelit', 'pelayanan', 'susah', 'antrean', 'tidak jelas', 'berkas'];
 
@@ -17,28 +17,25 @@ const rekomendasiTindakan = [
   { judul: 'Sistem antrian digital', desc: 'Terapkan sistem antrian online untuk mengurangi penumpukan dan mempercepat pelayanan.' },
 ];
 
-function FilterBox({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="text-[10px] font-bold text-gray-500 uppercase mb-1">{label}</p>
-      <div className="flex items-center justify-between bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs w-60">
-        <span className="text-gray-700 truncate">{value}</span>
-        <ChevronDown size={14} className="text-gray-400 shrink-0" />
-      </div>
-    </div>
-  );
-}
-
 export default function AdminDashboard() {
   const [stats, setStats] = useState<StatItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchOpd, setSearchOpd] = useState('');
 
+  // State Filter Interaktif
+  const [periode, setPeriode] = useState('all');
+  const [sumber, setSumber] = useState('');
+  const [instansiId, setInstansiId] = useState('');
+
   useEffect(() => {
     async function load() {
       setLoading(true);
       try {
-        const data = await fetchStats();
+        const data = await fetchStats({
+          instansi_id: instansiId || undefined,
+          sumber: sumber || undefined,
+          periode: periode !== 'all' ? periode : undefined,
+        });
         setStats(data);
       } catch (err) {
         console.error('Gagal memuat statistik:', err);
@@ -47,7 +44,7 @@ export default function AdminDashboard() {
       }
     }
     load();
-  }, []);
+  }, [periode, sumber, instansiId]);
 
   // Hitung agregat metrik
   const totalUlasan = stats.reduce((acc, curr) => acc + (curr.total || 0), 0);
@@ -69,7 +66,7 @@ export default function AdminDashboard() {
       <div className="bg-gradient-to-r from-red-900 to-red-950 rounded-xl p-6 text-white mb-6 shadow-md shadow-red-950/20">
         <div className="flex items-center gap-3 mb-2">
           <span className="bg-white text-red-900 text-[10px] font-bold px-3 py-1 rounded-full">SUPER ADMIN</span>
-          <span className="text-xs text-white/70">Data terhubung langsung ke Database Cloud Supabase</span>
+          <span className="text-xs text-white/70">Data terhubung secara real-time dengan Server Backend</span>
         </div>
         <h2 className="text-2xl font-bold mb-1">DASHBOARD OPD PROVINSI DIY</h2>
         <p className="text-xs text-white/80">
@@ -77,13 +74,57 @@ export default function AdminDashboard() {
         </p>
       </div>
 
-      {/* Filter + Export */}
-      <div className="flex items-end justify-between mb-6">
-        <div className="flex gap-4">
-          <FilterBox label="Periode Waktu" value="Semua Waktu (Terkini)" />
-          <FilterBox label="Sumber Data" value="Semua Saluran (Berita, Maps, Sosmed)" />
-          <FilterBox label="Instansi OPD" value="Semua 24 Instansi Pemda DIY" />
+      {/* Filter Interaktif + Export */}
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div className="flex flex-wrap gap-4">
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Periode Waktu</label>
+            <select
+              value={periode}
+              onChange={(e) => setPeriode(e.target.value)}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 w-56 outline-none focus:border-red-800 cursor-pointer"
+            >
+              <option value="all">Semua Waktu (Terkini)</option>
+              <option value="7d">7 Hari Terakhir</option>
+              <option value="30d">30 Hari Terakhir</option>
+              <option value="90d">3 Bulan Terakhir</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Sumber Data</label>
+            <select
+              value={sumber}
+              onChange={(e) => setSumber(e.target.value)}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 w-60 outline-none focus:border-red-800 cursor-pointer"
+            >
+              <option value="">Semua Saluran (Berita, Maps, Sosmed)</option>
+              <option value="berita">Portal Berita (Google News)</option>
+              <option value="maps">Ulasan Google Maps</option>
+              <option value="twitter">Twitter / X</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="facebook">Facebook</option>
+              <option value="youtube">YouTube</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Instansi OPD</label>
+            <select
+              value={instansiId}
+              onChange={(e) => setInstansiId(e.target.value)}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 w-64 outline-none focus:border-red-800 cursor-pointer"
+            >
+              {OPD_LIST.map((opd) => (
+                <option key={opd.id} value={opd.id}>
+                  {opd.nama}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
         <div className="flex gap-2">
           <Link href="/admin/ulasan" className="flex items-center gap-1.5 bg-white border border-gray-300 px-3.5 py-2 rounded-lg text-xs font-semibold text-gray-800 hover:bg-gray-50 transition">
             Lihat Daftar Ulasan
@@ -134,7 +175,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="font-bold text-gray-900 text-sm">Performa per Dinas/OPD</h3>
-                <p className="text-xs text-gray-400">Total 24 Instansi Pemerintah Daerah DIY</p>
+                <p className="text-xs text-gray-400">Menampilkan {filteredStats.length} Instansi Pemerintah Daerah DIY</p>
               </div>
               <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-1.5 bg-white">
                 <Search size={14} className="text-gray-400" />
@@ -169,12 +210,12 @@ export default function AdminDashboard() {
                   ) : filteredStats.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="py-6 text-center text-gray-400">
-                        Tidak ada OPD yang sesuai dengan pencarian.
+                        Tidak ada data OPD yang sesuai dengan filter saat ini.
                       </td>
                     </tr>
                   ) : (
-                    filteredStats.map((row) => (
-                      <tr key={row.instansi_id} className="hover:bg-red-50/30 transition">
+                    filteredStats.map((row, idx) => (
+                      <tr key={`${row.instansi_id}-${idx}`} className="hover:bg-red-50/30 transition">
                         <td className="py-3 px-3 font-semibold text-gray-800">{row.instansi_nama}</td>
                         <td className="py-3 px-3 text-right font-bold text-gray-900">{row.total}</td>
                         <td className="py-3 px-3 text-right font-semibold text-green-600">{row.positif}</td>

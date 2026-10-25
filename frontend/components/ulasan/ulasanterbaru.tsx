@@ -5,7 +5,19 @@ import Link from 'next/link';
 import { ExternalLink, Loader2 } from 'lucide-react';
 import { fetchReviews, Review } from '@/lib/api';
 
-export default function UlasanTerbaru() {
+interface UlasanTerbaruProps {
+  instansiId?: string;
+  sumber?: string;
+  periode?: string;
+  allLinkHref?: string;
+}
+
+export default function UlasanTerbaru({
+  instansiId,
+  sumber,
+  periode,
+  allLinkHref = '/ulasan',
+}: UlasanTerbaruProps) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,7 +25,12 @@ export default function UlasanTerbaru() {
     async function load() {
       setLoading(true);
       try {
-        const res = await fetchReviews({ limit: 5 });
+        const res = await fetchReviews({
+          instansi_id: instansiId || undefined,
+          sumber: sumber || undefined,
+          periode: periode && periode !== 'all' ? periode : undefined,
+          limit: 5,
+        });
         setReviews(res.data);
       } catch (err) {
         console.error('Gagal mengambil ulasan terbaru:', err);
@@ -22,7 +39,7 @@ export default function UlasanTerbaru() {
       }
     }
     load();
-  }, []);
+  }, [instansiId, sumber, periode]);
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
@@ -34,7 +51,7 @@ export default function UlasanTerbaru() {
           </p>
         </div>
         <Link
-          href="/admin/ulasan"
+          href={allLinkHref}
           className="text-xs font-semibold text-red-800 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-red-50 transition"
         >
           Lihat Semua Ulasan →
@@ -63,7 +80,7 @@ export default function UlasanTerbaru() {
             ) : reviews.length === 0 ? (
               <tr>
                 <td colSpan={5} className="py-6 text-center text-gray-400">
-                  Belum ada data ulasan ditemukan.
+                  Belum ada data ulasan ditemukan untuk filter ini.
                 </td>
               </tr>
             ) : (

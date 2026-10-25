@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Printer } from 'lucide-react';
 import StatsCard from "@/components/dashboard/statscard";
 import RatingCard from "@/components/dashboard/ratingcard";
 import SentimentChart from "@/components/dashboard/sentimentchart";
@@ -11,22 +12,33 @@ import AspekAnalysis from "@/components/dashboard/aspekanalysis";
 import UlasanNegatif from "@/components/ulasan/ulasannegatif";
 import UlasanTerbaru from "@/components/ulasan/ulasanterbaru";
 import AIInsight from "@/components/ai/aiinsight";
-import { fetchStats, StatItem } from "@/lib/api";
+import { fetchStats, StatItem, OPD_LIST } from "@/lib/api";
 
 export default function Home() {
   const [stats, setStats] = useState<StatItem[]>([]);
+  const [periode, setPeriode] = useState('all');
+  const [sumber, setSumber] = useState('');
+  const [instansiId, setInstansiId] = useState('dikpora');
 
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchStats();
+        const data = await fetchStats({
+          instansi_id: instansiId || undefined,
+          sumber: sumber || undefined,
+          periode: periode !== 'all' ? periode : undefined,
+        });
         setStats(data);
       } catch (err) {
         console.error('Gagal mengambil statistik OPD:', err);
       }
     }
     load();
-  }, []);
+  }, [periode, sumber, instansiId]);
+
+  const selectedOpdName =
+    OPD_LIST.find((o) => o.id === instansiId)?.nama ||
+    "DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA (DIKPORA) DIY";
 
   const totalUlasan = stats.reduce((acc, curr) => acc + (curr.total || 0), 0);
   const totalPositif = stats.reduce((acc, curr) => acc + (curr.positif || 0), 0);
@@ -39,14 +51,70 @@ export default function Home() {
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-      {/* Title Section */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-red-900 mb-1">
-          DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA (DIKPORA) DIY
-        </h2>
-        <p className="text-gray-500 text-xs">
-          Dashboard pemantauan kepuasan dan sentimen aspirasi publik secara real-time
-        </p>
+      {/* Title + Filter Section */}
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-red-900 mb-1 uppercase">
+            {selectedOpdName}
+          </h2>
+          <p className="text-gray-500 text-xs">
+            Dashboard pemantauan kepuasan dan sentimen aspirasi publik secara real-time
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-end gap-3">
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Periode Waktu</label>
+            <select
+              value={periode}
+              onChange={(e) => setPeriode(e.target.value)}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 outline-none focus:border-red-800 cursor-pointer"
+            >
+              <option value="all">Semua Waktu</option>
+              <option value="7d">7 Hari Terakhir</option>
+              <option value="30d">30 Hari Terakhir</option>
+              <option value="90d">3 Bulan Terakhir</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Sumber Data</label>
+            <select
+              value={sumber}
+              onChange={(e) => setSumber(e.target.value)}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 outline-none focus:border-red-800 cursor-pointer"
+            >
+              <option value="">Semua Saluran</option>
+              <option value="berita">Google News</option>
+              <option value="maps">Google Maps</option>
+              <option value="twitter">Twitter / X</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Instansi OPD</label>
+            <select
+              value={instansiId}
+              onChange={(e) => setInstansiId(e.target.value)}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 w-56 outline-none focus:border-red-800 cursor-pointer"
+            >
+              {OPD_LIST.map((opd) => (
+                <option key={opd.id} value={opd.id}>
+                  {opd.nama}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            onClick={() => window.print()}
+            className="flex items-center gap-1.5 bg-red-800 hover:bg-red-900 text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition"
+          >
+            <Printer size={13} /> Cetak PDF
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -101,7 +169,7 @@ export default function Home() {
 
       {/* Tabel Ulasan Terbaru (Data Live) */}
       <div className="mb-6">
-        <UlasanTerbaru />
+        <UlasanTerbaru instansiId={instansiId} sumber={sumber} periode={periode} />
       </div>
 
       {/* AI Insight */}

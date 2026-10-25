@@ -1,5 +1,6 @@
 import SidebarAdmin from "@/components/layout/admin-sidebar";
 import HeaderAdmin from "@/components/layout/admin-header";
+import ChatWidget from "@/components/ai/chat-widget";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <HeaderAdmin />
         {children}
       </main>
+      <ChatWidget fullPageHref="/admin/chatbot" />
     </div>
   );
 }

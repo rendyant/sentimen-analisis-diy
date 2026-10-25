@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, MessageSquare, FileText, Settings, User, Users } from 'lucide-react';
+import { LayoutDashboard, MessageSquare, FileText, Settings, User, Users, Bot } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -8,6 +8,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/admin' },
   { icon: MessageSquare, label: 'Analisis Sentimen', href: '/admin/analisis' },
   { icon: FileText, label: 'Semua Ulasan OPD', href: '/admin/ulasan' },
+  { icon: Bot, label: 'Asisten AI (Chatbot)', href: '/admin/chatbot' },
   { icon: Users, label: 'Manajemen User OPD', href: '/admin/manajemen-user' },
   { icon: Settings, label: 'Pengaturan', href: '/admin/pengaturan' },
 ];

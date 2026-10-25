@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from database.db import engine, Base
-from routers import reviews, analyze, scraper, users
+from routers import main_router
 from scheduler import start_scheduler
 import uvicorn
 
@@ -30,13 +30,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Endpoint Scraping & Sentimen (/api/...)
-app.include_router(reviews.router, prefix="/api", tags=["Reviews"])
-app.include_router(analyze.router, prefix="/api", tags=["AI Analysis"])
-app.include_router(scraper.router, prefix="/api", tags=["Scraper"])
-
-# Endpoint Manajemen User, Auth & OPD (/auth/..., /admin/..., /opd)
-app.include_router(users.router)
+# Daftarkan Main Router (yang sudah membungkus seluruh endpoint fitur)
+app.include_router(main_router)
 
 
 @app.get("/")
