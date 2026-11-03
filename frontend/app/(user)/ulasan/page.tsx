@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Search, Download, Star, ExternalLink, Loader2 } from 'lucide-react';
-import { fetchReviews, Review } from '@/lib/api';
+import { Search, Download, Star, ExternalLink, Loader2, Sparkles, Lightbulb } from 'lucide-react';
+import { fetchReviews, analyzeSingleReview, Review } from '@/lib/api';
 
 function Bintang({ jumlah }: { jumlah?: number }) {
   if (!jumlah) return <span className="text-gray-300 text-xs">-</span>;
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-0.5 justify-center">
       {[1, 2, 3, 4, 5].map((i) => (
         <Star key={i} size={13} className={i <= jumlah ? 'fill-orange-400 text-orange-400' : 'text-gray-200'} />
       ))}
@@ -19,6 +19,7 @@ export default function UserUlasanPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
 
   // Filter States
   const [selectedSource, setSelectedSource] = useState('');
@@ -39,7 +40,7 @@ export default function UserUlasanPage() {
       setReviews(res.data);
       setTotal(res.total);
     } catch (err) {
-      console.error('Gagal mengambil ulasan OPD:', err);
+      console.warn('Gagal mengambil ulasan OPD:', err);
     } finally {
       setLoading(false);
     }
@@ -49,6 +50,31 @@ export default function UserUlasanPage() {
     loadReviews();
   }, [selectedSource, search, page]);
 
+  async function handleAnalyzeReview(id: string) {
+    setAnalyzingId(id);
+    try {
+      const res = await analyzeSingleReview(id);
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.id === id
+            ? {
+                ...r,
+                sentimen: res.sentimen,
+                masalah_utama: res.masalah_utama,
+                kategori_masalah: res.kategori_masalah,
+                prioritas: res.prioritas,
+                solusi_ai: res.solusi_ai,
+              }
+            : r
+        )
+      );
+    } catch (err) {
+      console.warn('Gagal menganalisis ulasan:', err);
+    } finally {
+      setAnalyzingId(null);
+    }
+  }
+
   const totalPages = Math.ceil(total / limit) || 1;
 
   return (
@@ -56,7 +82,7 @@ export default function UserUlasanPage() {
       {/* Header Halaman */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-red-900">Manajemen Ulasan & Aspirasi Instansi</h1>
+          <h1 className="text-2xl font-bold text-red-900">Manajemen Ulasan & Solusi AI Instansi</h1>
           <p className="text-xs text-gray-500 mt-1">
             Dinas Pendidikan, Pemuda, dan Olahraga (Dikpora) DIY
           </p>
@@ -124,10 +150,10 @@ export default function UserUlasanPage() {
             <thead>
               <tr className="bg-red-900/10 text-red-950 font-bold border-b border-gray-200">
                 <th className="text-left py-3 px-4 w-44">Pengadu / Sumber</th>
-                <th className="text-left py-3 px-4">Isi Ulasan & Feedback Masyarakat</th>
+                <th className="text-left py-3 px-4">Isi Ulasan & Rekomendasi Solusi AI</th>
                 <th className="text-center py-3 px-4 w-24">Rating</th>
                 <th className="text-center py-3 px-4 w-28">Sentimen</th>
-                <th className="text-center py-3 px-4 w-20">Aksi</th>
+                <th className="text-center py-3 px-4 w-28">Aksi AI</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -147,20 +173,28 @@ export default function UserUlasanPage() {
               ) : (
                 reviews.map((u, i) => (
                   <tr key={u.id || i} className={`hover:bg-red-50/30 transition ${i % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'}`}>
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 align-top">
                       <p className="font-bold text-gray-800 truncate max-w-[150px]">{u.penulis || 'Anonim'}</p>
                       <span className="inline-block mt-0.5 text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-gray-200 text-gray-700">
                         {u.sumber}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <p className="text-gray-700 line-clamp-2 leading-relaxed">{u.teks}</p>
+                    <td className="py-3.5 px-4 align-top">
+                      <p className="text-gray-700 leading-relaxed">{u.teks}</p>
+                      {u.solusi_ai && (
+                        <div className="mt-2 bg-red-50 border border-red-100 rounded-lg p-2.5 text-[11px] text-red-800">
+                          <p className="font-bold flex items-center gap-1 text-red-900">
+                            <Lightbulb size={12} /> Solusi AI ({u.kategori_masalah || 'Pelayanan Publik'}):
+                          </p>
+                          <p className="mt-0.5 leading-relaxed">{u.solusi_ai}</p>
+                        </div>
+                      )}
                       <p className="text-[10px] text-gray-400 mt-1">{u.tanggal ? u.tanggal.substring(0, 10) : '-'}</p>
                     </td>
-                    <td className="py-3.5 px-4 text-center">
+                    <td className="py-3.5 px-4 text-center align-top">
                       <Bintang jumlah={u.rating ? Math.round(u.rating) : undefined} />
                     </td>
-                    <td className="py-3.5 px-4 text-center">
+                    <td className="py-3.5 px-4 text-center align-top">
                       {u.sentimen ? (
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           u.sentimen === 'positif' ? 'bg-green-100 text-green-700' :
@@ -172,18 +206,31 @@ export default function UserUlasanPage() {
                         <span className="text-[10px] text-gray-400 italic">Belum Dianalisis</span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-center">
-                      {u.url ? (
-                        <a
-                          href={u.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-[11px] text-blue-600 hover:text-blue-800 font-semibold"
-                        >
-                          Sumber <ExternalLink size={11} />
-                        </a>
-                      ) : (
-                        <span className="text-gray-300">-</span>
+                    <td className="py-3.5 px-4 text-center align-top space-y-1.5">
+                      <button
+                        type="button"
+                        disabled={analyzingId === u.id}
+                        onClick={() => handleAnalyzeReview(u.id)}
+                        className="inline-flex items-center gap-1 text-[10px] bg-red-900 hover:bg-red-950 text-white px-2.5 py-1.5 rounded-md font-semibold transition disabled:opacity-50"
+                      >
+                        {analyzingId === u.id ? (
+                          <Loader2 size={10} className="animate-spin" />
+                        ) : (
+                          <Sparkles size={10} className="text-yellow-300" />
+                        )}
+                        Solusi AI
+                      </button>
+                      {u.url && (
+                        <div>
+                          <a
+                            href={u.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-[10px] text-blue-600 hover:text-blue-800 font-semibold"
+                          >
+                            Sumber <ExternalLink size={10} />
+                          </a>
+                        </div>
                       )}
                     </td>
                   </tr>

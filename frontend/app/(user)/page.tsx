@@ -30,7 +30,7 @@ export default function Home() {
         });
         setStats(data);
       } catch (err) {
-        console.error('Gagal mengambil statistik OPD:', err);
+        console.warn('Gagal mengambil statistik OPD:', err);
       }
     }
     load();
@@ -155,7 +155,7 @@ export default function Home() {
         </div>
 
         <div className="lg:col-span-1">
-          <AIActionPlans />
+          <AIActionPlans instansiId={instansiId} />
         </div>
       </div>
 
@@ -173,7 +173,7 @@ export default function Home() {
       </div>
 
       {/* AI Insight */}
-      <AIInsight />
+      <AIInsight instansiId={instansiId} />
     </div>
   );
 }

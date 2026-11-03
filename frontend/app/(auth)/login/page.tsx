@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
@@ -12,9 +11,8 @@ export default function LoginPage() {
   const [ingat, setIngat] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
-    async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -27,19 +25,15 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) {
         setError(data.message || 'Email atau kata sandi tidak valid');
+        setLoading(false);
         return;
       }
-      // Redirect sesuai role
-      if (data.role === 'ADMIN') {
-        router.push('/admin');
-      } else {
-        router.push('/');
-      }
-      router.refresh();
+      // Hard redirect agar cookie sesi langsung terbaca oleh middleware.ts
+      const targetUrl = data.role === 'ADMIN' ? '/admin' : '/';
+      window.location.assign(targetUrl);
     } catch (err) {
       console.error(err);
       setError('Gagal menghubungi server. Pastikan server frontend berjalan.');
-    } finally {
       setLoading(false);
     }
   }
@@ -118,9 +112,9 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#8B1E1E] hover:bg-[#721818] active:bg-[#5C1313] text-white font-bold text-xs py-3 rounded-lg transition shadow-md shadow-red-900/10 disabled:opacity-50 mt-2"
+            className="w-full bg-[#8B1E1E] hover:bg-[#721818] active:bg-[#5C1313] text-white font-bold text-xs py-3 rounded-lg transition shadow-md shadow-red-900/10 disabled:opacity-50 mt-2 cursor-pointer"
           >
-            {loading ? 'MEMPROSES...' : 'MASUK '}
+            {loading ? 'MEMPROSES...' : 'MASUK'}
           </button>
         </form>
 

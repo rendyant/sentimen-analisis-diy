@@ -16,7 +16,15 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/api\/?$/, "");
+function getBackendRoot(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, "");
+  }
+  if (typeof window !== "undefined") {
+    return `http://${window.location.hostname}:8000`;
+  }
+  return "http://127.0.0.1:8000";
+}
 
 const ENDPOINT = {
   all: "/admin/users",
@@ -197,7 +205,7 @@ export default function AdminPendingUsersPage() {
   const request = useCallback(
     async (path: string, init?: RequestInit) => {
       const token = readStorage("access_token");
-      const res = await fetch(`${API}${path}`, {
+      const res = await fetch(`${getBackendRoot()}${path}`, {
         ...init,
         headers: {
           "Content-Type": "application/json",

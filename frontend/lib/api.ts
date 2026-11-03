@@ -1,4 +1,10 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+function getApiBase(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== "undefined") {
+    return `http://${window.location.hostname}:8000/api`;
+  }
+  return "http://127.0.0.1:8000/api";
+}
 
 export const OPD_LIST = [
   { id: "", nama: "Semua 24 Instansi Pemda DIY" },
@@ -61,6 +67,27 @@ export interface StatItem {
   avg_rating: number;
 }
 
+export interface OpdRecommendation {
+  id: string;
+  instansi_id: string;
+  instansi_nama: string;
+  prioritas: "Tinggi" | "Sedang" | "Rendah" | string;
+  masalah_utama: string;
+  kategori_masalah: string;
+  persen_negatif: number;
+  total_keluhan: number;
+  total_ulasan: number;
+  ringkasan: string[];
+  solusi_ai: string;
+  dampak: string;
+}
+
+export interface RecommendationsResponse {
+  total: number;
+  insight: string;
+  data: OpdRecommendation[];
+}
+
 export async function fetchReviews(params?: {
   instansi_id?: string;
   sumber?: string;
@@ -79,7 +106,7 @@ export async function fetchReviews(params?: {
   if (params?.page) query.append("page", params.page.toString());
   if (params?.limit) query.append("limit", params.limit.toString());
 
-  const res = await fetch(`${API_BASE}/reviews?${query.toString()}`, { cache: "no-store" });
+  const res = await fetch(`${getApiBase()}/reviews?${query.toString()}`, { cache: "no-store" });
   if (!res.ok) throw new Error("Gagal mengambil data review");
   return res.json();
 }
@@ -95,38 +122,55 @@ export async function fetchStats(params?: {
   if (params?.periode) query.append("periode", params.periode);
 
   const qs = query.toString();
-  const res = await fetch(`${API_BASE}/stats${qs ? `?${qs}` : ""}`, { cache: "no-store" });
+  const res = await fetch(`${getApiBase()}/stats${qs ? `?${qs}` : ""}`, { cache: "no-store" });
   if (!res.ok) throw new Error("Gagal mengambil statistik");
   return res.json();
 }
 
+export async function fetchRecommendations(instansi_id?: string): Promise<RecommendationsResponse> {
+  const query = new URLSearchParams();
+  if (instansi_id) query.append("instansi_id", instansi_id);
+  const qs = query.toString();
+  const res = await fetch(`${getApiBase()}/recommendations${qs ? `?${qs}` : ""}`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Gagal mengambil rekomendasi AI");
+  return res.json();
+}
+
+export async function generateOpdRecommendations(instansi_id?: string): Promise<RecommendationsResponse> {
+  const res = await fetch(`${getApiBase()}/recommendations/generate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ instansi_id: instansi_id || null }),
+  });
+  if (!res.ok) throw new Error("Gagal menghasilkan rekomendasi AI");
+  return res.json();
+}
+
+export async function analyzeSingleReview(review_id: string): Promise<{
+  review_id: string;
+  sentimen: string;
+  masalah_utama: string;
+  kategori_masalah: string;
+  prioritas: string;
+  solusi_ai: string;
+}> {
+  const res = await fetch(`${getApiBase()}/analyze`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ review_id }),
+  });
+  if (!res.ok) throw new Error("Gagal menganalisis ulasan dengan AI");
+  return res.json();
+}
+
 export async function triggerScrape(type: "news" | "maps" | "social"): Promise<{ message: string }> {
-  const res = await fetch(`${API_BASE}/scrape/${type}`, { method: "POST" });
+  const res = await fetch(`${getApiBase()}/scrape/${type}`, { method: "POST" });
   if (!res.ok) throw new Error("Gagal memulai scraping");
   return res.json();
 }
 
 export async function fetchScrapeStatus(): Promise<{ is_running: boolean; message: string; progress: number }> {
-  const res = await fetch(`${API_BASE}/scrape/status`, { cache: "no-store" });
+  const res = await fetch(`${getApiBase()}/scrape/status`, { cache: "no-store" });
   if (!res.ok) throw new Error("Gagal mengambil status scraping");
-  return res.json();
-}
-
-export interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
-export async function sendChatMessage(params: {
-  message: string;
-  instansi_id?: string;
-  history?: ChatMessage[];
-}): Promise<{ reply: string; source: string }> {
-  const res = await fetch(`${API_BASE}/chat`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(params),
-  });
-  if (!res.ok) throw new Error("Gagal menghubungi Asisten AI");
   return res.json();
 }

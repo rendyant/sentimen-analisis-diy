@@ -68,7 +68,7 @@ export default function AnalisisPage() {
         });
         setStats(data);
       } catch (err) {
-        console.error('Gagal mengambil data analisis:', err);
+        console.warn('Gagal mengambil data analisis:', err);
       }
     }
     load();

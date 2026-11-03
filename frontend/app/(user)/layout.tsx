@@ -1,6 +1,5 @@
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
-import ChatWidget from "@/components/ai/chat-widget";
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +9,6 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
         <Header />
         {children}
       </main>
-      <ChatWidget fullPageHref="/chatbot" />
     </div>
   );
 }

@@ -38,36 +38,67 @@ export async function POST(req: Request) {
 
     let user: any = null;
 
-    // 1. Coba cari di Database Prisma terlebih dahulu
+    // 1. Coba autentikasi ke Backend FastAPI (user_accounts) terlebih dahulu
     try {
-      user = await prisma.user.findUnique({ where: { email } });
-      if (user) {
-        const valid = await bcrypt.compare(password, user.password);
-        if (!valid) {
-          return NextResponse.json({ message: "Kata sandi salah" }, { status: 401 });
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
+      const fastApiRes = await fetch(`${backendUrl}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (fastApiRes.ok) {
+        const fastData = await fastApiRes.json();
+        if (fastData?.user) {
+          user = {
+            id: fastData.user.id,
+            email: fastData.user.email,
+            name: fastData.user.full_name,
+            role: fastData.user.role?.toUpperCase() === "ADMIN" ? "ADMIN" : "USER",
+          };
         }
+      } else if (fastApiRes.status === 403) {
+        const errData = await fastApiRes.json();
+        return NextResponse.json(
+          { message: errData.detail || "Akun Anda masih menunggu persetujuan admin." },
+          { status: 403 }
+        );
       }
-    } catch (dbErr) {
-      console.warn("⚠️ Database query bermasalah, beralih ke Fallback Authentication...");
+    } catch {
+      // Lanjut jika backend FastAPI tidak merespons
     }
 
-    // 2. Jika tidak ditemukan di DB atau DB error, cek Akun Fallback
+    // 2. Jika belum ketemu, cek Akun Fallback Default
     if (!user) {
       const fallback = FALLBACK_USERS.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+        (u) => u.email.toLowerCase() === email.toLowerCase().trim() && u.password === password
       );
       if (fallback) {
-        console.log("🛡️ Login berhasil menggunakan Akun Fallback:", fallback.email);
         user = fallback;
       }
     }
 
-    // 3. Jika tetap tidak cocok
+    // 3. Jika belum ketemu, coba cari di Database Prisma
+    if (!user) {
+      try {
+        const dbUser = await prisma.user.findUnique({ where: { email } });
+        if (dbUser) {
+          const valid = await bcrypt.compare(password, dbUser.password);
+          if (!valid) {
+            return NextResponse.json({ message: "Kata sandi salah" }, { status: 401 });
+          }
+          user = dbUser;
+        }
+      } catch {
+        // Abaikan jika Prisma tidak terhubung
+      }
+    }
+
+    // 4. Jika tetap tidak cocok
     if (!user) {
       return NextResponse.json({ message: "Email atau kata sandi tidak terdaftar" }, { status: 401 });
     }
 
-    // 4. Buat Token JWT Sesi
+    // 5. Buat Token JWT Sesi
     const token = await signToken({ id: user.id, role: user.role });
 
     const res = NextResponse.json({
@@ -86,7 +117,7 @@ export async function POST(req: Request) {
 
     return res;
   } catch (error) {
-    console.error("💥 Error di login route:", error);
+    console.error("Error di login route:", error);
     return NextResponse.json({ message: "Terjadi kesalahan server" }, { status: 500 });
   }
 }

@@ -2,20 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, Printer, Sparkles, Zap, ArrowUp, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
+import { Search, Printer, Loader2 } from 'lucide-react';
 import StatsCard from '@/components/dashboard/statscard';
 import RatingCard from '@/components/dashboard/ratingcard';
 import SentimentChart from '@/components/dashboard/sentimentchart';
+import AIActionPlans from '@/components/ai/aiactionplans';
 import AIInsight from '@/components/ai/aiinsight';
 import { fetchStats, StatItem, OPD_LIST } from '@/lib/api';
-
-const kataNegatif = ['lama', 'menunggu', 'lambat', 'ribet', 'berbelit', 'pelayanan', 'susah', 'antrean', 'tidak jelas', 'berkas'];
-
-const rekomendasiTindakan = [
-  { judul: 'Optimalkan alur pelayanan', desc: 'Evaluasi dan sederhanakan alur pelayanan agar proses lebih cepat dan efisien.' },
-  { judul: 'Penambahan petugas pada jam sibuk', desc: 'Sesuaikan jumlah petugas dengan volume pelayanan pada jam dan hari tertentu.' },
-  { judul: 'Sistem antrian digital', desc: 'Terapkan sistem antrian online untuk mengurangi penumpukan dan mempercepat pelayanan.' },
-];
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<StatItem[]>([]);
@@ -38,7 +31,7 @@ export default function AdminDashboard() {
         });
         setStats(data);
       } catch (err) {
-        console.error('Gagal memuat statistik:', err);
+        console.warn('Gagal memuat statistik:', err);
       } finally {
         setLoading(false);
       }
@@ -66,11 +59,11 @@ export default function AdminDashboard() {
       <div className="bg-gradient-to-r from-red-900 to-red-950 rounded-xl p-6 text-white mb-6 shadow-md shadow-red-950/20">
         <div className="flex items-center gap-3 mb-2">
           <span className="bg-white text-red-900 text-[10px] font-bold px-3 py-1 rounded-full">SUPER ADMIN</span>
-          <span className="text-xs text-white/70">Data terhubung secara real-time dengan Server Backend</span>
+          <span className="text-xs text-white/70">Data & Rekomendasi Solusi AI terhubung secara real-time</span>
         </div>
         <h2 className="text-2xl font-bold mb-1">DASHBOARD OPD PROVINSI DIY</h2>
         <p className="text-xs text-white/80">
-          Akumulasi suara publik, aspirasi warga, ulasan maps, dan portal berita 24 Organisasi Perangkat Daerah se-DIY.
+          Akumulasi suara publik, aspirasi warga, dan rekomendasi solusi AI untuk 24 Organisasi Perangkat Daerah se-DIY.
         </p>
       </div>
 
@@ -215,7 +208,14 @@ export default function AdminDashboard() {
                     </tr>
                   ) : (
                     filteredStats.map((row, idx) => (
-                      <tr key={`${row.instansi_id}-${idx}`} className="hover:bg-red-50/30 transition">
+                      <tr
+                        key={`${row.instansi_id}-${idx}`}
+                        onClick={() => setInstansiId(row.instansi_id === instansiId ? '' : row.instansi_id)}
+                        title="Klik untuk melihat rekomendasi solusi AI OPD ini"
+                        className={`cursor-pointer transition ${
+                          row.instansi_id === instansiId ? 'bg-red-50' : 'hover:bg-red-50/30'
+                        }`}
+                      >
                         <td className="py-3 px-3 font-semibold text-gray-800">{row.instansi_nama}</td>
                         <td className="py-3 px-3 text-right font-bold text-gray-900">{row.total}</td>
                         <td className="py-3 px-3 text-right font-semibold text-green-600">{row.positif}</td>
@@ -238,69 +238,13 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Kolom Kanan: AI Action Plans */}
+        {/* Kolom Kanan: AI Action Plans (Rekomendasi Solusi untuk Setiap OPD Bermasalah) */}
         <div className="lg:col-span-1">
-          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-            <div className="bg-gradient-to-br from-red-900 to-red-950 p-5 text-white">
-              <div className="flex items-center justify-between mb-2">
-                <span className="flex items-center gap-1 bg-white/10 text-yellow-300 text-[10px] font-bold px-2 py-1 rounded-full">
-                  <Sparkles size={10} /> AI ACTION PLANS
-                </span>
-                <span className="bg-red-500 text-[10px] font-bold px-2 py-1 rounded-full">Prioritas Kebijakan</span>
-              </div>
-              <h3 className="font-bold flex items-center gap-1.5 text-sm">
-                <Zap size={14} /> Rekomendasi Kebijakan
-              </h3>
-              <p className="text-[11px] text-white/70 mt-1 mb-3 leading-relaxed">
-                Panduan aksi prioritas berbasis ekstraksi aspirasi warga
-              </p>
-            </div>
-
-            <div className="bg-white p-5 space-y-4 text-xs">
-              <span className="inline-flex items-center gap-1 bg-red-50 text-red-600 text-xs font-bold px-3 py-1.5 rounded-lg">
-                <ArrowUp size={12} /> Isu Pelayanan Utama
-              </span>
-
-              <div className="border border-gray-100 rounded-lg p-3.5">
-                <h5 className="font-bold text-gray-900 mb-2">Kata Kunci Keluhan Sering Muncul</h5>
-                <div className="flex flex-wrap gap-1.5">
-                  {kataNegatif.map((k, i) => (
-                    <span key={i} className="bg-red-50 text-red-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                      {k}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-green-50 rounded-lg p-3.5 border border-green-100">
-                <h5 className="font-bold text-green-800 mb-2 flex items-center gap-1">
-                  🛡️ Rekomendasi Tindakan
-                </h5>
-                <div className="space-y-2.5">
-                  {rekomendasiTindakan.map((r, i) => (
-                    <div key={i} className="flex items-start gap-2">
-                      <CheckCircle2 size={13} className="text-green-600 mt-0.5 shrink-0" />
-                      <div>
-                        <p className="font-bold text-gray-800 text-[11px]">{r.judul}</p>
-                        <p className="text-[10px] text-gray-500 leading-tight">{r.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <Link
-                href="/admin/ulasan"
-                className="flex items-center justify-center gap-1 w-full border border-gray-200 rounded-lg py-2 font-semibold text-red-800 hover:bg-red-50 transition"
-              >
-                Lihat Seluruh Ulasan Terkait <ArrowRight size={12} />
-              </Link>
-            </div>
-          </div>
+          <AIActionPlans instansiId={instansiId} isAdmin />
         </div>
       </div>
 
-      <AIInsight />
+      <AIInsight instansiId={instansiId} />
     </div>
   );
 }
