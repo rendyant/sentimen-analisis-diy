@@ -1,3 +1,5 @@
+from collections import defaultdict
+import time
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func, case
@@ -6,7 +8,14 @@ from pydantic import BaseModel
 from database.db import get_db
 from database.models import Review
 from routers.reviews import ensure_seed_reviews
-from ai.solver import analyze_review
+from ai.solver import (
+    analyze_review,
+    analyze_grouped_reviews_batch,
+    classify_complaint_category,
+    get_public_ai_config,
+    update_ai_router_config,
+    AI_ROUTER_CONFIG,
+)
 
 router = APIRouter()
 
@@ -17,6 +26,53 @@ class AnalyzeRequest(BaseModel):
 
 class GenerateOpdRequest(BaseModel):
     instansi_id: Optional[str] = None
+    sentimen_filter: Optional[str] = "negatif"  # 'negatif', 'semua_keluhan'
+    kategori: Optional[str] = None
+
+
+class AIRouterConfigPayload(BaseModel):
+    provider: Optional[str] = None
+    model: Optional[str] = None
+    api_key: Optional[str] = None
+    temperature: Optional[float] = None
+    thinking_level: Optional[str] = None
+    batch_limit: Optional[int] = None
+    auto_categorize: Optional[bool] = None
+    system_prompt: Optional[str] = None
+
+
+@router.get("/ai-config")
+def get_ai_router_settings():
+    """Ambil konfigurasi Main Router AI untuk Control Panel Admin di Website."""
+    return get_public_ai_config()
+
+
+@router.put("/ai-config")
+def save_ai_router_settings(payload: AIRouterConfigPayload):
+    """Ubah API Key, Model AI, System Prompt, dan konfigurasi Main Router langsung dari Website."""
+    updated = update_ai_router_config(payload.model_dump(exclude_none=True))
+    return {
+        "message": "Konfigurasi Main Router AI berhasil disimpan dan diaktifkan.",
+        "config": updated,
+    }
+
+
+@router.post("/ai-config/test")
+async def test_ai_router_connection():
+    """Uji koneksi API Key & kecepatan respons model pada Main Router AI."""
+    start = time.perf_counter()
+    res = await analyze_review(
+        "Antrean verifikasi berkas pelayanan di loket pagi ini cukup padat, mohon ditambah petugas loket.",
+        "Dinas Pendidikan, Pemuda dan Olahraga DIY",
+        "maps",
+    )
+    elapsed_ms = round((time.perf_counter() - start) * 1000)
+    return {
+        "status": "ok",
+        "model": AI_ROUTER_CONFIG["model"],
+        "latency_ms": elapsed_ms,
+        "sample_output": res,
+    }
 
 
 @router.post("/analyze")
@@ -29,7 +85,7 @@ async def analyze(request: AnalyzeRequest, db: Session = Depends(get_db)):
 
     review.solusi_ai = result.get("rekomendasi_solusi_text", "")
     review.masalah_utama = result.get("masalah_utama", "")
-    review.kategori_masalah = result.get("kategori_masalah", "")
+    review.kategori_masalah = result.get("kategori_masalah") or classify_complaint_category(review.teks)
     review.prioritas = result.get("prioritas", "Sedang")
     if not review.sentimen or review.sentimen == "netral":
         review.sentimen = result.get("sentimen", review.sentimen or "netral")
@@ -46,6 +102,78 @@ async def analyze(request: AnalyzeRequest, db: Session = Depends(get_db)):
         "prioritas": review.prioritas,
         "solusi_ai": review.solusi_ai,
         "detail": result,
+    }
+
+
+@router.post("/analyze/batch-category")
+async def analyze_reviews_by_category_batch(
+    payload: GenerateOpdRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Mengelompokkan ulasan jelek/keluhan berdasarkan OPD & Kategori Masalah menjadi satu,
+    lalu menganalisisnya secara kolektif (bareng-bareng) sehingga hemat waktu & kuota API.
+    """
+    ensure_seed_reviews(db)
+
+    query = db.query(Review)
+    if payload.sentimen_filter == "negatif":
+        query = query.filter(Review.sentimen == "negatif")
+    else:
+        query = query.filter(Review.sentimen.in_(["negatif", "netral"]))
+
+    if payload.instansi_id:
+        query = query.filter(Review.instansi_id == payload.instansi_id)
+
+    limit_n = int(AI_ROUTER_CONFIG.get("batch_limit") or 25)
+    target_reviews = query.order_by(Review.tanggal.desc()).limit(limit_n).all()
+
+    # Kelompokkan ulasan berdasarkan (instansi_id, kategori_masalah)
+    grouped: dict[tuple[str, str, str], list[Review]] = defaultdict(list)
+    for r in target_reviews:
+        kat = classify_complaint_category(r.teks)
+        if payload.kategori and payload.kategori != kat:
+            continue
+        grouped[(r.instansi_id, r.instansi_nama, kat)].append(r)
+
+    categories_result = []
+    total_updated = 0
+
+    for (inst_id, inst_nama, kat), rev_list in grouped.items():
+        texts = [item.teks for item in rev_list]
+        batch_ai = await analyze_grouped_reviews_batch(inst_nama, kat, texts)
+
+        masalah_kolektif = batch_ai.get("masalah_utama") or f"Keluhan {kat} ({len(rev_list)} laporan warga)"
+        solusi_kolektif = batch_ai.get("rekomendasi_solusi_text") or ""
+        prioritas_kolektif = batch_ai.get("prioritas") or ("Tinggi" if len(rev_list) >= 2 else "Sedang")
+
+        for item in rev_list:
+            item.kategori_masalah = kat
+            item.masalah_utama = masalah_kolektif
+            item.solusi_ai = solusi_kolektif
+            item.prioritas = prioritas_kolektif
+            total_updated += 1
+
+        categories_result.append(
+            {
+                "instansi_id": inst_id,
+                "instansi_nama": inst_nama,
+                "kategori_masalah": kat,
+                "jumlah_ulasan": len(rev_list),
+                "prioritas": prioritas_kolektif,
+                "masalah_utama": masalah_kolektif,
+                "solusi_ai": solusi_kolektif,
+                "contoh_ulasan": texts[:3],
+            }
+        )
+
+    db.commit()
+
+    return {
+        "message": f"Berhasil mengelompokkan dan menganalisis {total_updated} ulasan dalam {len(categories_result)} kategori masalah sekaligus.",
+        "total_reviews_analyzed": total_updated,
+        "total_categories": len(categories_result),
+        "categories": categories_result,
     }
 
 
@@ -80,37 +208,39 @@ def get_opd_recommendations(
         Review.tanggal.desc(),
     ).all()
 
-    recommendations = []
-    seen_opds = set()
-
+    # Kelompokkan ulasan per (OPD, Kategori Masalah) agar ulasan jelek yang sejenis digabung jadi satu kartu rekomendasi
+    grouped_opd: dict[tuple[str, str], list[Review]] = defaultdict(list)
     for r in problem_reviews:
-        # Kelompokkan per OPD atau tampilkan semua keluhan utama pada OPD yang difilter
-        key = r.id if instansi_id else r.instansi_id
-        if key in seen_opds:
-            continue
-        seen_opds.add(key)
+        kat = r.kategori_masalah or classify_complaint_category(r.teks)
+        key = (r.instansi_id, kat) if instansi_id else (r.instansi_id, "all")
+        grouped_opd[key].append(r)
 
-        st = stats_map.get(r.instansi_id)
-        total_opd = st.total if st else 1
-        neg_opd = (st.negatif or 0) if st else (1 if r.sentimen == "negatif" else 0)
+    recommendations = []
+
+    for (inst_id, _), group_revs in grouped_opd.items():
+        r = group_revs[0]
+        st = stats_map.get(inst_id)
+        total_opd = st.total if st else len(group_revs)
+        neg_opd = (st.negatif or 0) if st else sum(1 for x in group_revs if x.sentimen == "negatif")
         pct_neg = round((neg_opd / total_opd) * 100) if total_opd > 0 else 50
 
-        prioritas = r.prioritas or ("Tinggi" if r.sentimen == "negatif" else "Sedang")
+        prioritas = r.prioritas or ("Tinggi" if any(x.sentimen == "negatif" for x in group_revs) else "Sedang")
         if prioritas == "Rendah":
             prioritas = "Sedang"
 
-        masalah = r.masalah_utama or f"Keluhan pelayanan pada {r.instansi_nama}"
-        kategori = r.kategori_masalah or "Pelayanan Publik"
+        kategori = r.kategori_masalah or classify_complaint_category(r.teks)
+        masalah = r.masalah_utama or f"Keluhan {kategori} pada {r.instansi_nama}"
         solusi = (
             r.solusi_ai
             or f"Evaluasi alur layanan pada {r.instansi_nama}, tambah petugas pada jam puncak, dan perjelas informasi prosedur layanan kepada masyarakat."
         )
 
         ringkasan = [
-            f"Laporan warga ({r.sumber.upper()}): \"{r.teks}\"",
-            f"Fokus perbaikan pada aspek {kategori} di {r.instansi_nama}.",
-            "Monitoring berkala tingkat kepuasan dan kecepatan tindak lanjut keluhan.",
+            f"Laporan warga ({x.sumber.upper()}): \"{x.teks}\""
+            for x in group_revs[:3]
         ]
+        if len(ringkasan) == 1:
+            ringkasan.append(f"Kategori keluhan utama: {kategori} di {r.instansi_nama}.")
 
         recommendations.append(
             {
@@ -121,7 +251,7 @@ def get_opd_recommendations(
                 "masalah_utama": masalah,
                 "kategori_masalah": kategori,
                 "persen_negatif": pct_neg,
-                "total_keluhan": neg_opd if neg_opd > 0 else 1,
+                "total_keluhan": len(group_revs),
                 "total_ulasan": total_opd,
                 "ringkasan": ringkasan,
                 "solusi_ai": solusi,
@@ -133,17 +263,15 @@ def get_opd_recommendations(
             }
         )
 
-    # Urutkan Prioritas Tinggi lebih dulu
     recommendations.sort(key=lambda x: (0 if x["prioritas"] == "Tinggi" else 1, -x["persen_negatif"]))
 
-    # Buat AI Insight ringkasan eksekutif
     if recommendations:
         top = recommendations[0]
         opd_count = len({item["instansi_id"] for item in recommendations})
         insight_text = (
-            f"Berdasarkan hasil analisis AI terhadap {opd_count} OPD yang memiliki catatan keluhan, "
+            f"Berdasarkan pengelompokan dan analisis AI terhadap {opd_count} OPD yang memiliki catatan keluhan, "
             f"prioritas penanganan tertinggi berada pada {top['instansi_nama']} terkait \"{top['masalah_utama']}\" "
-            f"(aspek {top['kategori_masalah']}). "
+            f"(kategori {top['kategori_masalah']}). "
             f"AI merekomendasikan langkah utama: {top['solusi_ai']}"
         )
     else:
@@ -164,23 +292,6 @@ async def generate_opd_recommendations(
     payload: GenerateOpdRequest,
     db: Session = Depends(get_db),
 ):
-    """Jalankan analisis Gemini AI untuk memperbarui rekomendasi solusi pada OPD yang bermasalah."""
-    ensure_seed_reviews(db)
-
-    query = db.query(Review).filter(Review.sentimen.in_(["negatif", "netral"]))
-    if payload.instansi_id:
-        query = query.filter(Review.instansi_id == payload.instansi_id)
-
-    targets = query.order_by(Review.tanggal.desc()).limit(3).all()
-    analyzed_count = 0
-
-    for review in targets:
-        res = await analyze_review(review.teks, review.instansi_nama, review.sumber)
-        review.masalah_utama = res.get("masalah_utama") or review.masalah_utama
-        review.kategori_masalah = res.get("kategori_masalah") or review.kategori_masalah
-        review.prioritas = res.get("prioritas") or review.prioritas or "Tinggi"
-        review.solusi_ai = res.get("rekomendasi_solusi_text") or review.solusi_ai
-        analyzed_count += 1
-
-    db.commit()
+    """Jalankan analisis kolektif (Batch per Kategori & OPD) lalu kembalikan daftar rekomendasi terbaru."""
+    await analyze_reviews_by_category_batch(payload=payload, db=db)
     return get_opd_recommendations(instansi_id=payload.instansi_id, db=db)

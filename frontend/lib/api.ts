@@ -174,3 +174,89 @@ export async function fetchScrapeStatus(): Promise<{ is_running: boolean; messag
   if (!res.ok) throw new Error("Gagal mengambil status scraping");
   return res.json();
 }
+
+export interface AIRouterConfig {
+  provider: string;
+  model: string;
+  api_key_masked: string;
+  has_api_key: boolean;
+  temperature: number;
+  thinking_level: string;
+  batch_limit: number;
+  auto_categorize: boolean;
+  system_prompt: string;
+  available_models: { id: string; label: string }[];
+}
+
+export interface BatchCategoryResult {
+  message: string;
+  total_reviews_analyzed: number;
+  total_categories: number;
+  categories: {
+    instansi_id: string;
+    instansi_nama: string;
+    kategori_masalah: string;
+    jumlah_ulasan: number;
+    prioritas: string;
+    masalah_utama: string;
+    solusi_ai: string;
+    contoh_ulasan: string[];
+  }[];
+}
+
+export async function fetchAIRouterConfig(): Promise<AIRouterConfig> {
+  const res = await fetch(`${getApiBase()}/ai-config`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Gagal mengambil konfigurasi Main Router AI");
+  return res.json();
+}
+
+export async function saveAIRouterConfig(payload: {
+  provider?: string;
+  model?: string;
+  api_key?: string;
+  temperature?: number;
+  thinking_level?: string;
+  batch_limit?: number;
+  auto_categorize?: boolean;
+  system_prompt?: string;
+}): Promise<{ message: string; config: AIRouterConfig }> {
+  const res = await fetch(`${getApiBase()}/ai-config`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("Gagal menyimpan konfigurasi Main Router AI");
+  return res.json();
+}
+
+export async function testAIRouterConfig(): Promise<{
+  status: string;
+  model: string;
+  latency_ms: number;
+  sample_output: any;
+}> {
+  const res = await fetch(`${getApiBase()}/ai-config/test`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Gagal menguji koneksi AI");
+  return res.json();
+}
+
+export async function analyzeBatchByCategory(params?: {
+  instansi_id?: string;
+  sentimen_filter?: "negatif" | "semua_keluhan";
+  kategori?: string;
+}): Promise<BatchCategoryResult> {
+  const res = await fetch(`${getApiBase()}/analyze/batch-category`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      instansi_id: params?.instansi_id || null,
+      sentimen_filter: params?.sentimen_filter || "negatif",
+      kategori: params?.kategori || null,
+    }),
+  });
+  if (!res.ok) throw new Error("Gagal menjalankan analisis kolektif per kategori");
+  return res.json();
+}
+

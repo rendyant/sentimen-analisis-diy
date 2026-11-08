@@ -1,38 +1,57 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Search, Download, Star, ExternalLink, Loader2, Sparkles, Lightbulb } from 'lucide-react';
-import { fetchReviews, analyzeSingleReview, Review } from '@/lib/api';
+import { useState, useEffect } from 'react';
+import { Download, Search, Loader2, ExternalLink, Sparkles, Lightbulb, Layers } from 'lucide-react';
+import {
+  fetchReviews,
+  Review,
+  analyzeSingleReview,
+  analyzeBatchByCategory,
+  BatchCategoryResult,
+} from '@/lib/api';
 
 function Bintang({ jumlah }: { jumlah?: number }) {
-  if (!jumlah) return <span className="text-gray-300 text-xs">-</span>;
+  if (!jumlah) return <span className="text-gray-400 text-[10px]">-</span>;
   return (
-    <div className="flex gap-0.5 justify-center">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <Star key={i} size={13} className={i <= jumlah ? 'fill-orange-400 text-orange-400' : 'text-gray-200'} />
-      ))}
-    </div>
+    <span className="text-yellow-400 text-xs tracking-tight">
+      {'★'.repeat(jumlah)}
+      <span className="text-gray-200">{'★'.repeat(5 - jumlah)}</span>
+    </span>
   );
 }
 
-export default function UserUlasanPage() {
+const KATEGORI_OPTIONS = [
+  { value: '', label: 'Semua Kategori Masalah' },
+  { value: 'Kecepatan Layanan & Antrean', label: 'Kecepatan Layanan & Antrean' },
+  { value: 'Sistem & Aplikasi Digital', label: 'Sistem & Aplikasi Digital' },
+  { value: 'Kejelasan Informasi & Prosedur', label: 'Kejelasan Informasi & Prosedur' },
+  { value: 'Sikap Petugas & Pelayanan Loket', label: 'Sikap Petugas & Pelayanan Loket' },
+  { value: 'Fasilitas & Sarana Publik', label: 'Fasilitas & Sarana Publik' },
+];
+
+export default function UlasanOPDPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [analyzingId, setAnalyzingId] = useState<string | null>(null);
 
-  // Filter States
   const [selectedSource, setSelectedSource] = useState('');
+  const [selectedSentimen, setSelectedSentimen] = useState('');
+  const [selectedKategori, setSelectedKategori] = useState('');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const limit = 15;
+
+  const [batchLoading, setBatchLoading] = useState(false);
+  const [batchResult, setBatchResult] = useState<BatchCategoryResult | null>(null);
 
   const loadReviews = async () => {
     setLoading(true);
     try {
       const res = await fetchReviews({
-        instansi_id: 'dikpora', // Default OPD yang login (Dinas Pendidikan)
+        instansi_id: 'dikpora',
         sumber: selectedSource || undefined,
+        sentimen: selectedSentimen || undefined,
         search: search || undefined,
         page,
         limit,
@@ -48,7 +67,7 @@ export default function UserUlasanPage() {
 
   useEffect(() => {
     loadReviews();
-  }, [selectedSource, search, page]);
+  }, [selectedSource, selectedSentimen, search, page]);
 
   async function handleAnalyzeReview(id: string) {
     setAnalyzingId(id);
@@ -75,29 +94,143 @@ export default function UserUlasanPage() {
     }
   }
 
+  async function handleBatchCategoryAnalyze() {
+    setBatchLoading(true);
+    try {
+      const res = await analyzeBatchByCategory({
+        instansi_id: 'dikpora',
+        sentimen_filter: 'semua_keluhan',
+        kategori: selectedKategori || undefined,
+      });
+      setBatchResult(res);
+      await loadReviews();
+    } catch (err) {
+      console.warn('Gagal menjalankan analisis kolektif:', err);
+    } finally {
+      setBatchLoading(false);
+    }
+  }
+
+  const displayedReviews = selectedKategori
+    ? reviews.filter((r) => (r.kategori_masalah || '').toLowerCase().includes(selectedKategori.split(' ')[0].toLowerCase()))
+    : reviews;
+
   const totalPages = Math.ceil(total / limit) || 1;
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header Halaman */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-red-900">Manajemen Ulasan & Solusi AI Instansi</h1>
           <p className="text-xs text-gray-500 mt-1">
-            Dinas Pendidikan, Pemuda, dan Olahraga (Dikpora) DIY
+            Dinas Pendidikan, Pemuda, dan Olahraga (Dikpora) DIY — Analisis Kolektif per Kategori Keluhan
           </p>
         </div>
-        <button
-          onClick={() => window.print()}
-          className="flex items-center gap-2 bg-red-800 hover:bg-red-900 text-white px-4 py-2 rounded-lg text-xs font-semibold transition"
-        >
-          <Download size={13} /> Cetak / Unduh Laporan
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleBatchCategoryAnalyze}
+            disabled={batchLoading}
+            className="flex items-center gap-2 bg-red-900 hover:bg-red-950 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm disabled:opacity-60 cursor-pointer"
+          >
+            {batchLoading ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <Layers size={13} className="text-yellow-300" />
+            )}
+            {batchLoading
+              ? 'Mengelompokkan & Menganalisis...'
+              : 'Analisis Kolektif Ulasan Jelek (Per Kategori)'}
+          </button>
+          <button
+            onClick={() => window.print()}
+            className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer"
+          >
+            <Download size={13} /> Cetak Laporan
+          </button>
+        </div>
       </div>
+
+      {/* Hasil Pengelompokan & Analisis Kolektif AI per Kategori */}
+      {batchResult && (
+        <div className="bg-white rounded-xl border border-red-200 shadow-sm p-5 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Sparkles size={16} className="text-red-800" />
+              <h3 className="font-bold text-red-950 text-sm">
+                Hasil Analisis Kolektif AI per Kategori ({batchResult.total_reviews_analyzed} Ulasan Dikelompokkan)
+              </h3>
+            </div>
+            <button
+              type="button"
+              onClick={() => setBatchResult(null)}
+              className="text-xs text-gray-400 hover:text-gray-600 font-semibold"
+            >
+              Tutup
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {batchResult.categories.map((cat, idx) => (
+              <div
+                key={`${cat.instansi_id}-${cat.kategori_masalah}-${idx}`}
+                className="rounded-lg border border-red-100 bg-red-50/40 p-4"
+              >
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-red-900 text-white">
+                    {cat.kategori_masalah}
+                  </span>
+                  <span className="text-[11px] font-bold text-red-800">
+                    {cat.jumlah_ulasan} Ulasan Digabung • Prioritas {cat.prioritas}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-700 mt-1">
+                  <b>Inti Masalah:</b> {cat.masalah_utama}
+                </p>
+                <div className="mt-2 bg-white border border-red-100 rounded-md p-2.5 text-xs text-red-900">
+                  <b>Rekomendasi Solusi Terpadu AI:</b> {cat.solusi_ai}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Filter Bar */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">
+              Filter Sentimen
+            </label>
+            <select
+              value={selectedSentimen}
+              onChange={(e) => { setSelectedSentimen(e.target.value); setPage(1); }}
+              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 outline-none focus:border-red-800 cursor-pointer"
+            >
+              <option value="">Semua Sentimen</option>
+              <option value="negatif">Khusus Ulasan Jelek (Negatif)</option>
+              <option value="netral">Ulasan Netral / Saran</option>
+              <option value="positif">Ulasan Positif</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">
+              Kategori Masalah
+            </label>
+            <select
+              value={selectedKategori}
+              onChange={(e) => setSelectedKategori(e.target.value)}
+              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 outline-none focus:border-red-800 cursor-pointer"
+            >
+              {KATEGORI_OPTIONS.map((k) => (
+                <option key={k.value} value={k.value}>{k.label}</option>
+              ))}
+            </select>
+          </div>
+
           <div>
             <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">
               Kanal Sumber Data
@@ -122,7 +255,7 @@ export default function UserUlasanPage() {
               <Search size={14} className="text-gray-400 flex-shrink-0" />
               <input
                 type="text"
-                placeholder="Cari keluhan (contoh: PPDB, beasiswa, antrean)..."
+                placeholder="Cari keluhan (PPDB, antrean)..."
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                 className="text-xs outline-none w-full text-gray-800"
@@ -136,7 +269,7 @@ export default function UserUlasanPage() {
       <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-white">
         <div className="bg-red-950 px-6 py-3 flex justify-between items-center text-white">
           <span className="text-xs font-bold uppercase tracking-wider">
-            Total Ulasan Masuk: {total} Data
+            Total Ulasan Masuk: {displayedReviews.length} dari {total} Data
           </span>
           {loading && (
             <span className="text-xs flex items-center gap-1 text-red-200 animate-pulse">
@@ -150,28 +283,28 @@ export default function UserUlasanPage() {
             <thead>
               <tr className="bg-red-900/10 text-red-950 font-bold border-b border-gray-200">
                 <th className="text-left py-3 px-4 w-44">Pengadu / Sumber</th>
-                <th className="text-left py-3 px-4">Isi Ulasan & Rekomendasi Solusi AI</th>
+                <th className="text-left py-3 px-4">Isi Ulasan, Kategori & Rekomendasi Solusi AI</th>
                 <th className="text-center py-3 px-4 w-24">Rating</th>
                 <th className="text-center py-3 px-4 w-28">Sentimen</th>
                 <th className="text-center py-3 px-4 w-28">Aksi AI</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {loading && reviews.length === 0 ? (
+              {loading && displayedReviews.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-10 text-center text-gray-400">
                     <Loader2 size={20} className="animate-spin mx-auto mb-2 text-red-800" />
                     Sedang memuat data ulasan...
                   </td>
                 </tr>
-              ) : reviews.length === 0 ? (
+              ) : displayedReviews.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-10 text-center text-gray-400">
                     Belum ada ulasan yang cocok dengan filter.
                   </td>
                 </tr>
               ) : (
-                reviews.map((u, i) => (
+                displayedReviews.map((u, i) => (
                   <tr key={u.id || i} className={`hover:bg-red-50/30 transition ${i % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'}`}>
                     <td className="py-3.5 px-4 align-top">
                       <p className="font-bold text-gray-800 truncate max-w-[150px]">{u.penulis || 'Anonim'}</p>
@@ -211,7 +344,7 @@ export default function UserUlasanPage() {
                         type="button"
                         disabled={analyzingId === u.id}
                         onClick={() => handleAnalyzeReview(u.id)}
-                        className="inline-flex items-center gap-1 text-[10px] bg-red-900 hover:bg-red-950 text-white px-2.5 py-1.5 rounded-md font-semibold transition disabled:opacity-50"
+                        className="inline-flex items-center gap-1 text-[10px] bg-red-900 hover:bg-red-950 text-white px-2.5 py-1.5 rounded-md font-semibold transition disabled:opacity-50 cursor-pointer"
                       >
                         {analyzingId === u.id ? (
                           <Loader2 size={10} className="animate-spin" />
