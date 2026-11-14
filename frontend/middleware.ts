@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const payload = token ? await verifyToken(token) : null;
   console.log("👤 Payload:", payload);
 
-  const isAuthPage = pathname === "/login" || pathname === "/daftar";
+  const isAuthPage = pathname === "/login";
   const isApi = pathname.startsWith("/api");
   const isAdminArea = pathname.startsWith("/admin");
 

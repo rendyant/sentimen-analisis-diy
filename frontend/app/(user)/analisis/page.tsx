@@ -5,41 +5,11 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell,
 } from 'recharts';
-import { fetchStats, StatItem, OPD_LIST } from '@/lib/api';
-
-const trenData = [
-  { tanggal: '21 Jan', positif: 22, netral: 26, negatif: 16 },
-  { tanggal: '22 Jan', positif: 46, netral: 16, negatif: 14 },
-  { tanggal: '23 Jan', positif: 24, netral: 14, negatif: 12 },
-  { tanggal: '24 Jan', positif: 44, netral: 20, negatif: 28 },
-  { tanggal: '25 Jan', positif: 38, netral: 15, negatif: 15 },
-];
-
-const kataKunci = [
-  { kata: 'pelayanan lambat', sebutan: 12, parts: [10, 15, 75] },
-  { kata: 'sistem error', sebutan: 9, parts: [5, 10, 85] },
-  { kata: 'petugas ramah', sebutan: 8, parts: [90, 8, 2] },
-  { kata: 'antrean panjang', sebutan: 7, parts: [15, 20, 65] },
-  { kata: 'aplikasi mudah', sebutan: 6, parts: [88, 10, 2] },
-];
-
-const pendorong = [
-  { nama: 'Keramahan Petugas', label: 'Sangat Baik', warna: 'bg-green-500', teks: 'text-green-600', persen: 85 },
-  { nama: 'Kejelasan Informasi', label: 'Baik', warna: 'bg-green-500', teks: 'text-green-600', persen: 70 },
-  { nama: 'Kemudahan Aplikasi', label: 'Cukup', warna: 'bg-blue-500', teks: 'text-blue-600', persen: 45 },
-];
-
-const friction = [
-  { judul: 'Kecepatan Respon Loket', warna: 'text-red-600', isi: '"Loket pelayanan di dinas terkait sangat lambat. Antrean menumpuk hingga berjam-jam tanpa kepastian."' },
-  { judul: 'Server Sering Down', warna: 'text-red-600', isi: '"Website portal pendaftaran tidak bisa diakses di pagi hari. Sering membuang waktu pendaftaran online."' },
-  { judul: 'Prosedur Terlalu Berbelit', warna: 'text-orange-500', isi: '"Persyaratan berkas masih harus fotokopi meskipun sistem pendaftaran sudah diklaim berbasis digital."' },
-];
-
-const spektrum = [
-  { tipe: 'Sentimen Positif', sumber: 'Dinas Kesehatan DIY', isi: '"Sangat senang dengan pelayanan perawat yang cepat tanggap menangani pendaftaran lansia di loket."', style: 'bg-green-50 border-green-500', teks: 'text-green-700' },
-  { tipe: 'Sentimen Netral', sumber: 'Dinas Perhubungan DIY', isi: '"Petugas melayani biasa saja sesuai prosedur. Tidak terlalu ramah namun jadwal informasi cukup jelas."', style: 'bg-blue-50 border-blue-500', teks: 'text-blue-700' },
-  { tipe: 'Sentimen Negatif', sumber: 'DPMPTSP DIY', isi: '"Klarifikasi perizinan tidak jelas. Sudah kirim email beberapa kali belum ada tanggapan dari tim admin."', style: 'bg-red-50 border-red-500', teks: 'text-red-700' },
-];
+import {
+  fetchDashboardAnalytics,
+  DashboardAnalyticsResponse,
+  OPD_LIST,
+} from '@/lib/api';
 
 function StackedBar({ parts }: { parts: number[] }) {
   const colors = ['#10B981', '#3B82F6', '#EF4444'];
@@ -53,7 +23,7 @@ function StackedBar({ parts }: { parts: number[] }) {
 }
 
 export default function AnalisisPage() {
-  const [stats, setStats] = useState<StatItem[]>([]);
+  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(null);
   const [instansiId, setInstansiId] = useState('');
   const [periode, setPeriode] = useState('all');
   const [sumber, setSumber] = useState('');
@@ -61,12 +31,12 @@ export default function AnalisisPage() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchStats({
+        const data = await fetchDashboardAnalytics({
           instansi_id: instansiId || undefined,
           sumber: sumber || undefined,
           periode: periode !== 'all' ? periode : undefined,
         });
-        setStats(data);
+        setAnalytics(data);
       } catch (err) {
         console.warn('Gagal mengambil data analisis:', err);
       }
@@ -74,10 +44,10 @@ export default function AnalisisPage() {
     load();
   }, [instansiId, periode, sumber]);
 
-  const totalUlasan = stats.reduce((acc, curr) => acc + (curr.total || 0), 0);
-  const totalPositif = stats.reduce((acc, curr) => acc + (curr.positif || 0), 0);
-  const totalNetral = stats.reduce((acc, curr) => acc + (curr.netral || 0), 0);
-  const totalNegatif = stats.reduce((acc, curr) => acc + (curr.negatif || 0), 0);
+  const totalUlasan = analytics?.summary.total || 0;
+  const totalPositif = analytics?.summary.positif || 0;
+  const totalNetral = analytics?.summary.netral || 0;
+  const totalNegatif = analytics?.summary.negatif || 0;
 
   const persenPositif = totalUlasan > 0 ? ((totalPositif / totalUlasan) * 100).toFixed(1) : '0.0';
   const persenNetral = totalUlasan > 0 ? ((totalNetral / totalUlasan) * 100).toFixed(1) : '0.0';
@@ -89,13 +59,21 @@ export default function AnalisisPage() {
     { name: 'Negatif', value: totalNegatif || 0, count: totalNegatif, color: '#EF4444' },
   ];
 
+  const trenData = analytics?.daily_trend || [];
+  const kataKunci = analytics?.popular_words.slice(0, 6) || [];
+  const aspekList = analytics?.aspects || [];
+  const negReviews = analytics?.negative_reviews.slice(0, 3) || [];
+  const spektrum = analytics?.spectrum || [];
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header + Filter Interaktif */}
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analisis Sentimen Pelayanan</h1>
-          <p className="text-sm text-gray-500 mt-1">Pantau persepsi kepuasan masyarakat terhadap kinerja birokrasi daerah</p>
+          <h1 className="text-2xl font-bold text-gray-900">Analisis Sentimen Pelayanan (Database Live)</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Seluruh grafik tren, proporsi sentimen, kata kunci, dan spektrum suara dihitung langsung dari database
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-xs">
@@ -136,8 +114,6 @@ export default function AnalisisPage() {
               <option value="berita">Google News</option>
               <option value="maps">Google Maps</option>
               <option value="twitter">Twitter / X</option>
-              <option value="instagram">Instagram</option>
-              <option value="tiktok">TikTok</option>
             </select>
           </div>
         </div>
@@ -146,9 +122,9 @@ export default function AnalisisPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-          <h3 className="text-xs font-semibold text-blue-600 uppercase mb-2">Total Sampel Data</h3>
-          <div className="text-3xl font-bold text-gray-900 mb-2">{totalUlasan}</div>
-          <p className="text-xs text-gray-500"><span className="text-blue-600 font-semibold">Live</span> Data keluhan & testimoni</p>
+          <h3 className="text-xs font-semibold text-blue-600 uppercase mb-2">Total Sampel Data (DB)</h3>
+          <div className="text-3xl font-bold text-gray-900 mb-2">{totalUlasan.toLocaleString('id-ID')}</div>
+          <p className="text-xs text-gray-500"><span className="text-blue-600 font-semibold">Live</span> Data keluhan & berita</p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
           <h3 className="text-xs font-semibold text-green-600 uppercase mb-2">Indeks Kepuasan (Positif)</h3>
@@ -172,8 +148,8 @@ export default function AnalisisPage() {
         <div className="lg:col-span-2 bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-bold text-gray-900">Tren Harian Sentimen Publik</h3>
-              <p className="text-xs text-gray-500 mt-1">Perkembangan fluktuasi sentimen masyarakat</p>
+              <h3 className="font-bold text-gray-900">Tren Harian Sentimen Publik (Database Live)</h3>
+              <p className="text-xs text-gray-500 mt-1">Perkembangan jumlah ulasan berdasarkan tanggal di database</p>
             </div>
             <div className="flex gap-3 text-xs">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500"></span> Positif</span>
@@ -187,15 +163,15 @@ export default function AnalisisPage() {
               <XAxis dataKey="tanggal" stroke="#999" fontSize={12} />
               <YAxis stroke="#999" fontSize={12} />
               <Tooltip />
-              <Line type="monotone" dataKey="positif" stroke="#10B981" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="netral" stroke="#3B82F6" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="negatif" stroke="#EF4444" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="positif" stroke="#10B981" strokeWidth={2.5} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="netral" stroke="#3B82F6" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="negatif" stroke="#EF4444" strokeWidth={2.5} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-4">Proporsi Sentimen</h3>
+          <h3 className="font-bold text-gray-900 mb-4">Proporsi Sentimen (Database)</h3>
           <div className="relative">
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
@@ -208,7 +184,7 @@ export default function AnalisisPage() {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-2xl font-bold text-gray-900">{totalUlasan}</span>
+              <span className="text-2xl font-bold text-gray-900">{totalUlasan.toLocaleString('id-ID')}</span>
               <span className="text-[10px] text-gray-400 uppercase">Total</span>
             </div>
           </div>
@@ -228,15 +204,15 @@ export default function AnalisisPage() {
         </div>
       </div>
 
-      {/* Kata Kunci + Pendorong */}
+      {/* Kata Kunci + Pendorong Aspek */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-4">Analisis Frekuensi Kata Kunci Utama</h3>
+          <h3 className="font-bold text-gray-900 mb-4">Analisis Frekuensi Kata Kunci Utama (Database)</h3>
           <div className="space-y-4">
             {kataKunci.map((item, i) => (
               <div key={i} className="flex items-center justify-between border-b border-gray-100 pb-3">
-                <span className="text-sm font-semibold text-gray-800 w-40">{item.kata}</span>
-                <span className="text-xs text-gray-500">{item.sebutan} sebutan</span>
+                <span className="text-sm font-semibold text-gray-800 w-40">{item.text}</span>
+                <span className="text-xs text-gray-500">{item.count} sebutan</span>
                 <StackedBar parts={item.parts} />
               </div>
             ))}
@@ -244,16 +220,16 @@ export default function AnalisisPage() {
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-6">Pendorong Kinerja & Kepuasan Publik</h3>
-          <div className="space-y-6">
-            {pendorong.map((item, i) => (
+          <h3 className="font-bold text-gray-900 mb-6">Indeks Kinerja per Kategori Layanan (Database)</h3>
+          <div className="space-y-5">
+            {aspekList.slice(0, 4).map((item, i) => (
               <div key={i}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-gray-800">{item.nama}</span>
-                  <span className={`text-xs font-medium ${item.teks}`}>{item.label}</span>
+                  <span className="text-xs font-semibold text-gray-800">{item.name} ({item.total} data)</span>
+                  <span className="text-xs font-bold text-gray-700">⭐ {item.rating} / 5.0 ({item.status})</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className={`${item.warna} h-2 rounded-full`} style={{ width: `${item.persen}%` }}></div>
+                  <div className={`${item.progressColor} h-2 rounded-full`} style={{ width: `${item.progress}%` }}></div>
                 </div>
               </div>
             ))}
@@ -261,36 +237,39 @@ export default function AnalisisPage() {
         </div>
       </div>
 
-      {/* Friction Points */}
+      {/* Friction Points (Diambil dari Ulasan Negatif Asli di Database) */}
       <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="font-bold text-gray-900">Identifikasi Titik Hambat & Gesekan (Friction Points)</h3>
-            <p className="text-xs text-gray-500 mt-1">Hal utama yang dikeluhkan oleh masyarakat dan memerlukan tindak lanjut</p>
+            <h3 className="font-bold text-gray-900">Identifikasi Titik Hambat & Keluhan Utama (Database Live)</h3>
+            <p className="text-xs text-gray-500 mt-1">Ulasan negatif terbaru dari masyarakat di database yang memerlukan tindak lanjut</p>
           </div>
           <span className="bg-red-50 text-red-600 text-xs font-semibold px-3 py-1.5 rounded-full">
-            Butuh Tindakan Cepat
+            Data Real-Time DB
           </span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {friction.map((item, i) => (
-            <div key={i} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
-              <h4 className={`font-bold text-sm mb-2 ${item.warna}`}>{item.judul}</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">{item.isi}</p>
+          {negReviews.map((item, i) => (
+            <div key={item.id || i} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+              <h4 className="font-bold text-xs mb-1 text-red-700">{item.instansi_nama}</h4>
+              <span className="inline-block text-[10px] font-semibold bg-red-100 text-red-800 px-2 py-0.5 rounded mb-2">
+                {item.kategori_masalah}
+              </span>
+              <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">&ldquo;{item.teks}&rdquo;</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Spektrum Suara */}
+      {/* Spektrum Suara Masyarakat Terbaru dari Database */}
       <div>
-        <h3 className="font-bold text-gray-900 mb-4">Spektrum Suara Masyarakat Terbaru</h3>
+        <h3 className="font-bold text-gray-900 mb-4">Spektrum Suara Masyarakat Terbaru (Database Live)</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {spektrum.map((item, i) => (
             <div key={i} className={`rounded-xl p-4 border ${item.style}`}>
               <div className="flex items-center justify-between mb-2">
                 <span className={`text-xs font-bold ${item.teks}`}>{item.tipe}</span>
-                <span className="text-xs text-gray-400">{item.sumber}</span>
+                <span className="text-[11px] text-gray-500 font-semibold truncate max-w-[180px]">{item.sumber}</span>
               </div>
               <p className="text-xs text-gray-700 leading-relaxed">{item.isi}</p>
             </div>

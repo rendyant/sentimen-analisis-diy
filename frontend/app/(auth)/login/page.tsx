@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
@@ -117,10 +116,6 @@ export default function LoginPage() {
             {loading ? 'MEMPROSES...' : 'MASUK'}
           </button>
         </form>
-
-        <div className="border-t border-gray-100 mt-6 pt-4 text-center text-xs text-gray-500">
-          Belum memiliki akun? <Link href="/daftar" className="text-[#8B1E1E] font-bold hover:underline ml-1">Daftar</Link>
-        </div>
       </div>
     </div>
   );

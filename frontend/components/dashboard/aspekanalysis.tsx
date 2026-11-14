@@ -1,82 +1,78 @@
-import { Plus } from 'lucide-react';
+'use client';
 
-const aspects = [
-  {
-    name: 'Waktu Antrean',
-    rating: 2.1,
-    status: 'Isu Utama',
-    statusColor: 'bg-red-100 text-red-700',
-    progressColor: 'bg-red-500',
-    progress: 42,
-    desc: 'Keluhan dominan: Lama antrean poli umum.',
-  },
-  {
-    name: 'Sikap Petugas',
-    rating: 4.3,
-    status: 'Baik',
-    statusColor: 'bg-green-600 text-white',
-    progressColor: 'bg-green-500',
-    progress: 86,
-    desc: 'Ulasan memuji keramahan perawat.',
-  },
-  {
-    name: 'Kebersihan Fasilitas',
-    rating: 3.5,
-    status: 'Netral',
-    statusColor: 'bg-blue-500 text-white',
-    progressColor: 'bg-blue-500',
-    progress: 70,
-    desc: 'Beberapa keluhan toilet di jam siang.',
-  },
-];
+import Link from 'next/link';
 
-export default function AspekAnalysis() {
+export interface AspectItem {
+  name: string;
+  rating: number;
+  total: number;
+  positif: number;
+  negatif: number;
+  status: string;
+  statusColor: string;
+  progressColor: string;
+  progress: number;
+  desc: string;
+}
+
+export default function AspekAnalysis({
+  aspects = [],
+  detailHref = '/analisis',
+}: {
+  aspects?: AspectItem[];
+  detailHref?: string;
+}) {
+  const topAspects = aspects.slice(0, 6);
+
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="font-bold text-gray-800 text-lg">Analisis Aspek Layanan</h3>
+          <h3 className="font-bold text-gray-800 text-lg">Analisis Aspek & Kategori Layanan (Database Live)</h3>
           <p className="text-xs text-gray-500 mt-1">
-            Evaluasi spesifik dimensi layanan Puskesmas & RSUD
+            Evaluasi dimensi layanan publik berdasarkan pengelompokan kategori ulasan di database
           </p>
         </div>
-        <button className="text-sm text-red-800 font-medium hover:underline flex items-center gap-1">
-          Detail Aspek →
-        </button>
+        <Link href={detailHref} className="text-xs text-red-800 font-semibold hover:underline flex items-center gap-1">
+          Detail Analisis →
+        </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        {aspects.map((aspect, idx) => (
-          <div key={idx} className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-semibold text-gray-800 text-sm">{aspect.name}</h4>
-              <span className={`text-xs px-2 py-0.5 rounded font-medium ${aspect.statusColor}`}>
-                {aspect.status}
-              </span>
-            </div>
-
-            <div className="flex items-baseline gap-1 mb-2">
-              <span className="text-2xl font-bold text-gray-800">{aspect.rating}</span>
-              <span className="text-xs text-gray-500">/ 5.0</span>
-            </div>
-
-            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-2">
-              <div
-                className={`${aspect.progressColor} h-1.5 rounded-full`}
-                style={{ width: `${aspect.progress}%` }}
-              ></div>
-            </div>
-
-            <p className="text-xs text-gray-600">{aspect.desc}</p>
-          </div>
-        ))}
-
-        {/* Tambah Aspek Baru */}
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-gray-400 hover:border-red-400 hover:text-red-500 transition cursor-pointer min-h-[140px]">
-          <Plus size={24} />
-          <p className="text-sm mt-1">Pantau Aspek Baru</p>
+      {topAspects.length === 0 ? (
+        <div className="py-8 text-center text-xs text-gray-400">
+          Belum ada data aspek layanan pada filter ini.
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {topAspects.map((aspect, idx) => (
+            <div key={`${aspect.name}-${idx}`} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <h4 className="font-semibold text-gray-800 text-xs leading-snug">{aspect.name}</h4>
+                <span className={`text-[10px] px-2 py-0.5 rounded font-semibold shrink-0 ${aspect.statusColor}`}>
+                  {aspect.status}
+                </span>
+              </div>
+
+              <div className="flex items-baseline gap-1 mb-2">
+                <span className="text-2xl font-bold text-gray-800">{aspect.rating}</span>
+                <span className="text-xs text-gray-500">/ 5.0</span>
+                <span className="ml-auto text-[11px] font-semibold text-gray-500">
+                  {aspect.total} data
+                </span>
+              </div>
+
+              <div className="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                <div
+                  className={`${aspect.progressColor} h-1.5 rounded-full`}
+                  style={{ width: `${aspect.progress}%` }}
+                />
+              </div>
+
+              <p className="text-[11px] text-gray-600 line-clamp-2 leading-relaxed">{aspect.desc}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

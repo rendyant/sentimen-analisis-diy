@@ -2,20 +2,27 @@
 
 import { useEffect, useState } from 'react';
 import { Printer } from 'lucide-react';
-import StatsCard from "@/components/dashboard/statscard";
-import RatingCard from "@/components/dashboard/ratingcard";
-import SentimentChart from "@/components/dashboard/sentimentchart";
-import WordCloud from "@/components/dashboard/wordcloud";
-import AIActionPlans from "@/components/ai/aiactionplans";
-import PlatformChart from "@/components/dashboard/platformchart";
-import AspekAnalysis from "@/components/dashboard/aspekanalysis";
-import UlasanNegatif from "@/components/ulasan/ulasannegatif";
-import UlasanTerbaru from "@/components/ulasan/ulasanterbaru";
-import AIInsight from "@/components/ai/aiinsight";
-import { fetchStats, StatItem, OPD_LIST } from "@/lib/api";
+import StatsCard from '@/components/dashboard/statscard';
+import RatingCard from '@/components/dashboard/ratingcard';
+import SentimentChart from '@/components/dashboard/sentimentchart';
+import WordCloud from '@/components/dashboard/wordcloud';
+import AIActionPlans from '@/components/ai/aiactionplans';
+import PlatformChart from '@/components/dashboard/platformchart';
+import AspekAnalysis from '@/components/dashboard/aspekanalysis';
+import UlasanNegatif from '@/components/ulasan/ulasannegatif';
+import UlasanTerbaru from '@/components/ulasan/ulasanterbaru';
+import AIInsight from '@/components/ai/aiinsight';
+import {
+  fetchStats,
+  fetchDashboardAnalytics,
+  StatItem,
+  DashboardAnalyticsResponse,
+  OPD_LIST,
+} from '@/lib/api';
 
 export default function Home() {
   const [stats, setStats] = useState<StatItem[]>([]);
+  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(null);
   const [periode, setPeriode] = useState('all');
   const [sumber, setSumber] = useState('');
   const [instansiId, setInstansiId] = useState('dikpora');
@@ -23,12 +30,20 @@ export default function Home() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchStats({
-          instansi_id: instansiId || undefined,
-          sumber: sumber || undefined,
-          periode: periode !== 'all' ? periode : undefined,
-        });
-        setStats(data);
+        const [statsData, analyticsData] = await Promise.all([
+          fetchStats({
+            instansi_id: instansiId || undefined,
+            sumber: sumber || undefined,
+            periode: periode !== 'all' ? periode : undefined,
+          }),
+          fetchDashboardAnalytics({
+            instansi_id: instansiId || undefined,
+            sumber: sumber || undefined,
+            periode: periode !== 'all' ? periode : undefined,
+          }),
+        ]);
+        setStats(statsData);
+        setAnalytics(analyticsData);
       } catch (err) {
         console.warn('Gagal mengambil statistik OPD:', err);
       }
@@ -38,12 +53,16 @@ export default function Home() {
 
   const selectedOpdName =
     OPD_LIST.find((o) => o.id === instansiId)?.nama ||
-    "DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA (DIKPORA) DIY";
+    'DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA (DIKPORA) DIY';
 
-  const totalUlasan = stats.reduce((acc, curr) => acc + (curr.total || 0), 0);
-  const totalPositif = stats.reduce((acc, curr) => acc + (curr.positif || 0), 0);
-  const totalNegatif = stats.reduce((acc, curr) => acc + (curr.negatif || 0), 0);
-  const totalNetral = stats.reduce((acc, curr) => acc + (curr.netral || 0), 0);
+  const totalUlasan =
+    analytics?.summary.total ?? stats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+  const totalPositif =
+    analytics?.summary.positif ?? stats.reduce((acc, curr) => acc + (curr.positif || 0), 0);
+  const totalNegatif =
+    analytics?.summary.negatif ?? stats.reduce((acc, curr) => acc + (curr.negatif || 0), 0);
+  const totalNetral =
+    analytics?.summary.netral ?? stats.reduce((acc, curr) => acc + (curr.netral || 0), 0);
 
   const persenPositif = totalUlasan > 0 ? ((totalPositif / totalUlasan) * 100).toFixed(1) : '0';
   const persenNegatif = totalUlasan > 0 ? ((totalNegatif / totalUlasan) * 100).toFixed(1) : '0';
@@ -58,7 +77,7 @@ export default function Home() {
             {selectedOpdName}
           </h2>
           <p className="text-gray-500 text-xs">
-            Dashboard pemantauan kepuasan dan sentimen aspirasi publik secara real-time
+            Dashboard pemantauan kepuasan, grafik sentimen, dan solusi AI secara real-time dari database
           </p>
         </div>
 
@@ -88,8 +107,6 @@ export default function Home() {
               <option value="berita">Google News</option>
               <option value="maps">Google Maps</option>
               <option value="twitter">Twitter / X</option>
-              <option value="instagram">Instagram</option>
-              <option value="tiktok">TikTok</option>
             </select>
           </div>
 
@@ -110,7 +127,7 @@ export default function Home() {
 
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 bg-red-800 hover:bg-red-900 text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition"
+            className="flex items-center gap-1.5 bg-red-800 hover:bg-red-900 text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer"
           >
             <Printer size={13} /> Cetak PDF
           </button>
@@ -122,7 +139,7 @@ export default function Home() {
         <StatsCard
           title="TOTAL ULASAN MASUK"
           value={totalUlasan}
-          change="+100% data live"
+          change="Terhubung ke Database"
           color="gray"
         />
         <StatsCard
@@ -145,13 +162,17 @@ export default function Home() {
         />
       </div>
 
-      {/* Grid Utama: Kiri (Grafik) + Kanan (AI Action Plans) */}
+      {/* Grid Utama: Kiri (Grafik Live DB) + Kanan (AI Action Plans) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 items-start">
         <div className="lg:col-span-2 space-y-5">
-          <RatingCard />
-          <SentimentChart />
-          <WordCloud />
-          <PlatformChart />
+          <RatingCard
+            avgRating={analytics?.summary.avg_rating || 0}
+            totalUlasan={totalUlasan}
+            csatPercent={analytics?.summary.csat_percent || 0}
+          />
+          <SentimentChart data={analytics?.sentiment_trend || []} />
+          <WordCloud words={analytics?.popular_words || []} />
+          <PlatformChart data={analytics?.platforms || []} />
         </div>
 
         <div className="lg:col-span-1">
@@ -159,12 +180,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Analisis Aspek + Ulasan Negatif */}
+      {/* Analisis Aspek + Ulasan Negatif (Database Live) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
         <div className="lg:col-span-2">
-          <AspekAnalysis />
+          <AspekAnalysis aspects={analytics?.aspects || []} detailHref="/analisis" />
         </div>
-        <UlasanNegatif />
+        <UlasanNegatif reviews={analytics?.negative_reviews || []} allHref="/ulasan" />
       </div>
 
       {/* Tabel Ulasan Terbaru (Data Live) */}

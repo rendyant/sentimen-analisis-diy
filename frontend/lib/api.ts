@@ -260,3 +260,92 @@ export async function analyzeBatchByCategory(params?: {
   return res.json();
 }
 
+export interface DashboardAnalyticsResponse {
+  summary: {
+    total: number;
+    positif: number;
+    netral: number;
+    negatif: number;
+    avg_rating: number;
+    csat_percent: number;
+  };
+  sentiment_trend: {
+    bulan: string;
+    positif: number;
+    netral: number;
+    negatif: number;
+    positif_count: number;
+    netral_count: number;
+    negatif_count: number;
+  }[];
+  daily_trend: {
+    tanggal: string;
+    positif: number;
+    netral: number;
+    negatif: number;
+  }[];
+  platforms: {
+    platform: string;
+    positif: number;
+    netral: number;
+    negatif: number;
+    total: number;
+  }[];
+  aspects: {
+    name: string;
+    rating: number;
+    total: number;
+    positif: number;
+    negatif: number;
+    status: string;
+    statusColor: string;
+    progressColor: string;
+    progress: number;
+    desc: string;
+  }[];
+  popular_words: {
+    text: string;
+    count: number;
+    sentimen: "positif" | "netral" | "negatif" | string;
+    parts: number[];
+  }[];
+  negative_reviews: {
+    id: string;
+    instansi_id: string;
+    instansi_nama: string;
+    penulis: string;
+    sumber: string;
+    rating: number;
+    tanggal: string;
+    teks: string;
+    kategori_masalah: string;
+    solusi_ai?: string;
+  }[];
+  spectrum: {
+    tipe: string;
+    sumber: string;
+    isi: string;
+    style: string;
+    teks: string;
+  }[];
+}
+
+export async function fetchDashboardAnalytics(params?: {
+  instansi_id?: string;
+  sumber?: string;
+  periode?: string;
+}): Promise<DashboardAnalyticsResponse> {
+  const query = new URLSearchParams();
+  if (params?.instansi_id) query.append("instansi_id", params.instansi_id);
+  if (params?.sumber) query.append("sumber", params.sumber);
+  if (params?.periode && params.periode !== "all") query.append("periode", params.periode);
+
+  const qs = query.toString();
+  const res = await fetch(`${getApiBase()}/dashboard-analytics${qs ? `?${qs}` : ""}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Gagal mengambil analitik dashboard");
+  return res.json();
+}
+
+

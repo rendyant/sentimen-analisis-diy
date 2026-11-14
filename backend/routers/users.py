@@ -26,14 +26,6 @@ def verify_password(password: str, stored: str) -> bool:
     return hmac.compare_digest(check, digest)
 
 
-class RegisterPayload(BaseModel):
-    full_name: str
-    email: str
-    opd_id: str | None = None
-    password: str
-    konfirmasi_password: str | None = None
-
-
 class LoginPayload(BaseModel):
     email: str
     password: str
@@ -128,29 +120,6 @@ def list_opd():
         {"id": item["id"], "name": item["nama"], "slug": item["id"]}
         for item in INSTANSI_LIST
     ]
-
-
-@router.post("/auth/register", status_code=201, tags=["OPD & Auth"])
-def register_user(payload: RegisterPayload, db: Session = Depends(get_db)):
-    ensure_seed_users(db)
-    existing = db.query(UserAccount).filter(UserAccount.email == payload.email.lower().strip()).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Email sudah terdaftar.")
-
-    opd_info = next((i for i in INSTANSI_LIST if i["id"] == payload.opd_id), None)
-    new_user = UserAccount(
-        full_name=payload.full_name.strip(),
-        email=payload.email.lower().strip(),
-        hashed_password=hash_password(payload.password),
-        role="opd",
-        status="pending",
-        opd_id=payload.opd_id,
-        opd_name=opd_info["nama"] if opd_info else payload.opd_id,
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return serialize_user(new_user)
 
 
 @router.post("/auth/login", tags=["OPD & Auth"])
