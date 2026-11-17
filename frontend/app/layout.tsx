@@ -1,26 +1,18 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google"; // ambil font dari Google Fonts lewat Next.js
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
-  subsets: ["latin"],                    
-  weight: ["400", "500", "600", "700"], 
-  variable: "--font-poppins", 
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sentimen Analisis DIY",
-  description: "Analisis sentimen pelayanan publik",
+  title: "Analisis Sentimen OPD SV",
+  description: "Dashboard pemantauan kepuasan dan sentiment ulasan publik",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={poppins.variable}> 
-      <body className="font-sans antialiased"> 
+    <html lang="id">
+      <body className={`${inter.className} bg-gray-100`}>
         {children}
       </body>
     </html>
