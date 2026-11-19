@@ -19,11 +19,17 @@ export default function LoginPage() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
-      const data = await res.json();
+      const rawText = await res.text();
+      let data: any = {};
+      try {
+        data = rawText ? JSON.parse(rawText) : {};
+      } catch {
+        data = {};
+      }
       if (!res.ok) {
-        setError(data.message || 'Email atau kata sandi tidak valid');
+        setError(data.message || `Gagal masuk (HTTP ${res.status})`);
         setLoading(false);
         return;
       }

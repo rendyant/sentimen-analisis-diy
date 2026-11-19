@@ -1,14 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { RefreshCw } from 'lucide-react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell,
 } from 'recharts';
 import {
   fetchDashboardAnalytics,
+  clearApiCache,
+  peekCache,
+  analyticsCacheKey,
   DashboardAnalyticsResponse,
   OPD_LIST,
+  SOURCE_LIST,
 } from '@/lib/api';
 
 function StackedBar({ parts }: { parts: number[] }) {
@@ -23,26 +28,51 @@ function StackedBar({ parts }: { parts: number[] }) {
 }
 
 export default function AnalisisPage() {
-  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(null);
   const [instansiId, setInstansiId] = useState('');
   const [periode, setPeriode] = useState('all');
   const [sumber, setSumber] = useState('');
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const data = await fetchDashboardAnalytics({
-          instansi_id: instansiId || undefined,
-          sumber: sumber || undefined,
-          periode: periode !== 'all' ? periode : undefined,
-        });
-        setAnalytics(data);
-      } catch (err) {
-        console.warn('Gagal mengambil data analisis:', err);
+  const filterParams = {
+    instansi_id: instansiId || undefined,
+    sumber: sumber || undefined,
+    periode: periode !== 'all' ? periode : undefined,
+  };
+  const cachedInit = peekCache<DashboardAnalyticsResponse>(analyticsCacheKey(filterParams));
+  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(cachedInit);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadData = async (force = false) => {
+    const params = {
+      instansi_id: instansiId || undefined,
+      sumber: sumber || undefined,
+      periode: periode !== 'all' ? periode : undefined,
+    };
+    if (!force) {
+      const cached = peekCache<DashboardAnalyticsResponse>(analyticsCacheKey(params));
+      if (cached) {
+        setAnalytics(cached);
+        return;
       }
     }
-    load();
+    if (force) setRefreshing(true);
+    try {
+      const data = await fetchDashboardAnalytics(params, force);
+      setAnalytics(data);
+    } catch (err) {
+      console.warn('Gagal mengambil data analisis:', err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData(false);
   }, [instansiId, periode, sumber]);
+
+  const handleManualRefresh = () => {
+    clearApiCache('analytics:');
+    loadData(true);
+  };
 
   const totalUlasan = analytics?.summary.total || 0;
   const totalPositif = analytics?.summary.positif || 0;
@@ -110,12 +140,22 @@ export default function AnalisisPage() {
               onChange={(e) => setSumber(e.target.value)}
               className="font-semibold text-gray-800 outline-none bg-transparent cursor-pointer"
             >
-              <option value="">Semua Media</option>
-              <option value="berita">Google News</option>
-              <option value="maps">Google Maps</option>
-              <option value="twitter">Twitter / X</option>
+              {SOURCE_LIST.map((src) => (
+                <option key={src.id} value={src.id}>{src.nama}</option>
+              ))}
             </select>
           </div>
+
+          <button
+            type="button"
+            onClick={handleManualRefresh}
+            disabled={refreshing}
+            className="flex items-center gap-1.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-800 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-60"
+            title="Muat ulang data analitik terbaru dari database"
+          >
+            <RefreshCw size={13} className={refreshing ? 'animate-spin text-red-800' : 'text-red-800'} />
+            {refreshing ? 'Menyegarkan...' : 'Refresh Data'}
+          </button>
         </div>
       </div>
 

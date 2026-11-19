@@ -30,7 +30,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Format request tidak valid" }, { status: 400 });
     }
 
-    const { email, password } = body;
+    const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
+    const password = typeof body?.password === "string" ? body.password : "";
 
     if (!email || !password) {
       return NextResponse.json({ message: "Email dan password wajib diisi" }, { status: 400 });

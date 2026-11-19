@@ -1,17 +1,20 @@
 from collections import defaultdict
 import time
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func, case
 from typing import Optional
 from pydantic import BaseModel
-from database.db import get_db
+from database.db import SessionLocal, get_db
 from database.models import Review
 from routers.reviews import ensure_seed_reviews
 from ai.solver import (
     analyze_review,
     analyze_grouped_reviews_batch,
     classify_complaint_category,
+    classify_db_reviews_in_batches,
+    get_ai_client,
+    get_classifier_client,
     get_public_ai_config,
     update_ai_router_config,
     AI_ROUTER_CONFIG,
@@ -33,7 +36,12 @@ class GenerateOpdRequest(BaseModel):
 class AIRouterConfigPayload(BaseModel):
     provider: Optional[str] = None
     model: Optional[str] = None
+    classifier_model: Optional[str] = None
+    classifier_fallback_models: Optional[list[str]] = None
+    classifier_batch_size: Optional[int] = None
+    classifier_allow_local_fallback: Optional[bool] = None
     api_key: Optional[str] = None
+    classifier_api_key: Optional[str] = None
     temperature: Optional[float] = None
     thinking_level: Optional[str] = None
     batch_limit: Optional[int] = None
@@ -41,9 +49,38 @@ class AIRouterConfigPayload(BaseModel):
     system_prompt: Optional[str] = None
 
 
+class ClassifyBatchRequest(BaseModel):
+    instansi_id: Optional[str] = None
+    limit: int = 250
+    only_unclassified: bool = True
+    force_reclassify: bool = False
+
+
+class ClassifyAllBackgroundRequest(BaseModel):
+    instansi_id: Optional[str] = None
+    limit: int = 0  # 0 = seluruh ulasan yang belum dianalisis AI
+    force_reclassify: bool = False
+    upgrade_fallback_only: bool = False
+
+
+classify_status = {
+    "is_running": False,
+    "stop_requested": False,
+    "message": "Idle",
+    "processed": 0,
+    "total_target": 0,
+    "ai_classified": 0,
+    "fallback_classified": 0,
+    "batches_used": 0,
+    "model": "gemini-3.5-flash-lite",
+    "model_usage": {},
+}
+
+
 @router.get("/ai-config")
 def get_ai_router_settings():
     """Ambil konfigurasi Main Router AI untuk Control Panel Admin di Website."""
+    get_ai_client()
     return get_public_ai_config()
 
 
@@ -60,6 +97,11 @@ def save_ai_router_settings(payload: AIRouterConfigPayload):
 @router.post("/ai-config/test")
 async def test_ai_router_connection():
     """Uji koneksi API Key & kecepatan respons model pada Main Router AI."""
+    if not get_ai_client():
+        raise HTTPException(
+            status_code=400,
+            detail="GEMINI_API_KEY belum terdeteksi atau tidak valid. Simpan API Key di Pengaturan atau backend/.env.",
+        )
     start = time.perf_counter()
     res = await analyze_review(
         "Antrean verifikasi berkas pelayanan di loket pagi ini cukup padat, mohon ditambah petugas loket.",
@@ -67,9 +109,16 @@ async def test_ai_router_connection():
         "maps",
     )
     elapsed_ms = round((time.perf_counter() - start) * 1000)
+    used_real_ai = bool(res.pop("_used_real_ai", False))
+    model_used = res.pop("_model_used", AI_ROUTER_CONFIG["model"])
+    if not used_real_ai:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Gagal menghubungi model utama ({AI_ROUTER_CONFIG['model']}) — cek API Key atau kuota.",
+        )
     return {
         "status": "ok",
-        "model": AI_ROUTER_CONFIG["model"],
+        "model": model_used,
         "latency_ms": elapsed_ms,
         "sample_output": res,
     }
@@ -87,8 +136,19 @@ async def analyze(request: AnalyzeRequest, db: Session = Depends(get_db)):
     review.masalah_utama = result.get("masalah_utama", "")
     review.kategori_masalah = result.get("kategori_masalah") or classify_complaint_category(review.teks)
     review.prioritas = result.get("prioritas", "Sedang")
-    if not review.sentimen or review.sentimen == "netral":
-        review.sentimen = result.get("sentimen", review.sentimen or "netral")
+
+    ai_sentimen = str(result.get("sentimen", "")).strip().lower()
+    if ai_sentimen in ("positif", "negatif", "netral"):
+        review.sentimen = ai_sentimen
+
+    if result.get("rating") is not None:
+        try:
+            review.rating = round(max(1.0, min(5.0, float(result["rating"]))), 1)
+        except (TypeError, ValueError):
+            pass
+
+    if result.get("_used_real_ai"):
+        review.ai_model = result.get("_model_used") or AI_ROUTER_CONFIG.get("model", "gemini-3.5-flash")
 
     db.commit()
     db.refresh(review)
@@ -97,12 +157,212 @@ async def analyze(request: AnalyzeRequest, db: Session = Depends(get_db)):
         "review_id": review.id,
         "instansi_nama": review.instansi_nama,
         "sentimen": review.sentimen,
+        "rating": review.rating,
         "masalah_utama": review.masalah_utama,
         "kategori_masalah": review.kategori_masalah,
         "prioritas": review.prioritas,
         "solusi_ai": review.solusi_ai,
         "detail": result,
     }
+
+
+@router.post("/analyze/classify-batch")
+async def classify_reviews_cloud_batch(
+    payload: ClassifyBatchRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Model AI #1 (Cloud Batching): Mengklasifikasikan sentimen & rating bintang (1.0-5.0)
+    sebanyak 50 ulasan per 1 request menggunakan gemini-2.5-flash-lite.
+    """
+    query = db.query(Review)
+    if payload.instansi_id:
+        query = query.filter(Review.instansi_id == payload.instansi_id)
+    if payload.only_unclassified and not payload.force_reclassify:
+        query = query.filter(Review.ai_model.is_(None))
+
+    limit_n = max(1, min(1000, int(payload.limit or 250)))
+    targets = query.order_by(Review.scraped_at.desc()).limit(limit_n).all()
+    if not targets:
+        return {
+            "message": "Seluruh ulasan pada filter ini sudah terklasifikasi AI.",
+            "total_processed": 0,
+            "ai_classified": 0,
+            "batches_used": 0,
+        }
+
+    batch_size = int(AI_ROUTER_CONFIG.get("classifier_batch_size") or 50)
+    summary = await classify_db_reviews_in_batches(db, targets, batch_size=batch_size)
+    return {
+        "message": (
+            f"Berhasil mengklasifikasi {summary['total_processed']} ulasan "
+            f"({summary['ai_classified']} via {summary['model']}) dalam {summary['batches_used']} batch request."
+        ),
+        **summary,
+    }
+
+
+@router.get("/analyze/classify-status")
+def get_classify_status(db: Session = Depends(get_db)):
+    """Cek progress worker multi-model dan rincian berapa ulasan yang dianalisis tiap model."""
+    total_reviews = db.query(func.count(Review.id)).scalar() or 0
+    rows = db.query(Review.ai_model, func.count(Review.id)).group_by(Review.ai_model).all()
+
+    model_breakdown: dict[str, int] = {}
+    cloud_ai_count = 0
+    fallback_count = 0
+    unclassified_count = 0
+
+    for mname, cnt in rows:
+        if mname is None:
+            unclassified_count += cnt
+        elif mname == "local_smart_fallback":
+            fallback_count += cnt
+            model_breakdown[mname] = cnt
+        else:
+            cloud_ai_count += cnt
+            model_breakdown[mname] = cnt
+
+    ai_analyzed_count = cloud_ai_count + fallback_count
+    return {
+        **classify_status,
+        "total_reviews": total_reviews,
+        "ai_analyzed_count": ai_analyzed_count,
+        "cloud_ai_count": cloud_ai_count,
+        "fallback_count": fallback_count,
+        "unclassified_count": unclassified_count,
+        "model_breakdown": model_breakdown,
+    }
+
+
+async def _run_classify_all_background(
+    instansi_id: Optional[str],
+    limit: int,
+    force_reclassify: bool,
+    upgrade_fallback_only: bool,
+):
+    classify_status["is_running"] = True
+    classify_status["stop_requested"] = False
+    classify_status["processed"] = 0
+    classify_status["ai_classified"] = 0
+    classify_status["fallback_classified"] = 0
+    classify_status["batches_used"] = 0
+    classify_status["model_usage"] = {}
+    classify_status["model"] = AI_ROUTER_CONFIG.get("classifier_model", "gemini-3.5-flash-lite")
+
+    db = SessionLocal()
+    try:
+        query = db.query(Review)
+        if instansi_id:
+            query = query.filter(Review.instansi_id == instansi_id)
+        if upgrade_fallback_only:
+            query = query.filter((Review.ai_model.is_(None)) | (Review.ai_model == "local_smart_fallback"))
+        elif not force_reclassify:
+            query = query.filter(Review.ai_model.is_(None))
+
+        query = query.order_by(Review.scraped_at.desc())
+        if limit and limit > 0:
+            targets = query.limit(limit).all()
+        else:
+            targets = query.all()
+
+        classify_status["total_target"] = len(targets)
+        if not targets:
+            classify_status["message"] = "Seluruh ulasan sudah teranalisis lengkap ✅"
+            return
+
+        classify_status["message"] = f"Memulai analisis Multi-Model untuk {len(targets)} ulasan (50/batch)..."
+
+        def on_progress(
+            processed: int,
+            ai_ok: int,
+            fb_ok: int,
+            batches: int,
+            active_model: str,
+            usage: dict,
+        ):
+            classify_status["processed"] = processed
+            classify_status["ai_classified"] = ai_ok
+            classify_status["fallback_classified"] = fb_ok
+            classify_status["batches_used"] = batches
+            classify_status["model"] = active_model
+            classify_status["model_usage"] = dict(usage)
+            classify_status["message"] = (
+                f"Menganalisis {processed}/{len(targets)} ulasan • Model aktif: {active_model} "
+                f"(Cloud AI: {ai_ok}, Fallback Lokal: {fb_ok})"
+            )
+
+        batch_size = int(AI_ROUTER_CONFIG.get("classifier_batch_size") or 50)
+        allow_fb = bool(AI_ROUTER_CONFIG.get("classifier_allow_local_fallback", True))
+        summary = await classify_db_reviews_in_batches(
+            db,
+            targets,
+            batch_size=batch_size,
+            on_progress=on_progress,
+            should_stop=lambda: classify_status["stop_requested"],
+            allow_local_fallback=allow_fb,
+        )
+
+        classify_status["model_usage"] = summary.get("model_usage", {})
+        if summary.get("stopped_reason"):
+            classify_status["message"] = (
+                f"Berhenti di {summary['total_processed']}/{len(targets)} ulasan "
+                f"({summary['stopped_reason']})."
+            )
+        else:
+            classify_status["message"] = (
+                f"Selesai 100%! {summary['total_processed']} ulasan teranalisis "
+                f"(Cloud AI: {summary['ai_classified']}, Fallback: {summary['fallback_classified']}) ✅"
+            )
+    except Exception as e:
+        classify_status["message"] = f"Error: {str(e)}"
+    finally:
+        db.close()
+        classify_status["is_running"] = False
+        classify_status["stop_requested"] = False
+
+
+@router.post("/analyze/classify-all-background")
+async def start_classify_all_background(
+    payload: ClassifyAllBackgroundRequest,
+    background_tasks: BackgroundTasks,
+):
+    """Jalankan analisis sentimen & rating bintang Multi-Model (dengan fallback) di background."""
+    if classify_status["is_running"]:
+        return {"started": False, "message": "Analisis massal AI sedang berjalan, harap tunggu..."}
+
+    has_cloud_client = bool(get_classifier_client())
+    allow_fb = bool(AI_ROUTER_CONFIG.get("classifier_allow_local_fallback", True))
+    if not has_cloud_client and not allow_fb:
+        raise HTTPException(
+            status_code=400,
+            detail="GEMINI_API_KEY belum terdeteksi dan fallback lokal dimatikan.",
+        )
+
+    background_tasks.add_task(
+        _run_classify_all_background,
+        payload.instansi_id,
+        int(payload.limit or 0),
+        bool(payload.force_reclassify),
+        bool(payload.upgrade_fallback_only),
+    )
+    return {
+        "started": True,
+        "message": (
+            "Analisis massal Multi-Model (50 ulasan/batch + auto-failover + fallback) "
+            "dimulai di latar belakang!"
+        ),
+    }
+
+
+@router.post("/analyze/classify-stop")
+def stop_classify_background():
+    """Hentikan worker analisis massal dengan aman setelah batch saat ini selesai."""
+    if not classify_status["is_running"]:
+        return {"message": "Tidak ada proses analisis massal yang sedang berjalan."}
+    classify_status["stop_requested"] = True
+    classify_status["message"] = "Menghentikan setelah batch ini selesai..."
+    return {"message": "Permintaan hentikan dikirim."}
 
 
 @router.post("/analyze/batch-category")

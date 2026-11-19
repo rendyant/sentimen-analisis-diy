@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ExternalLink, Loader2 } from 'lucide-react';
-import { fetchReviews, Review } from '@/lib/api';
+import { fetchReviews, peekCache, Review, ReviewResponse, reviewsCacheKey } from '@/lib/api';
 
 interface UlasanTerbaruProps {
   instansiId?: string;
   sumber?: string;
   periode?: string;
   allLinkHref?: string;
+  refreshKey?: number;
 }
 
 export default function UlasanTerbaru({
@@ -17,29 +18,44 @@ export default function UlasanTerbaru({
   sumber,
   periode,
   allLinkHref = '/ulasan',
+  refreshKey = 0,
 }: UlasanTerbaruProps) {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const reqParams = {
+    instansi_id: instansiId || undefined,
+    sumber: sumber || undefined,
+    periode: periode && periode !== 'all' ? periode : undefined,
+    limit: 5,
+  };
+  const cachedInit = peekCache<ReviewResponse>(reviewsCacheKey(reqParams));
+  const [reviews, setReviews] = useState<Review[]>(cachedInit?.data || []);
+  const [loading, setLoading] = useState(!cachedInit);
 
   useEffect(() => {
+    const force = refreshKey > 0;
+    const cached = force ? null : peekCache<ReviewResponse>(reviewsCacheKey(reqParams));
+    if (cached) {
+      setReviews(cached.data);
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
     async function load() {
       setLoading(true);
       try {
-        const res = await fetchReviews({
-          instansi_id: instansiId || undefined,
-          sumber: sumber || undefined,
-          periode: periode && periode !== 'all' ? periode : undefined,
-          limit: 5,
-        });
-        setReviews(res.data);
+        const res = await fetchReviews(reqParams, force);
+        if (!cancelled) setReviews(res.data);
       } catch (err) {
         console.error('Gagal mengambil ulasan terbaru:', err);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
     load();
-  }, [instansiId, sumber, periode]);
+    return () => {
+      cancelled = true;
+    };
+  }, [instansiId, sumber, periode, refreshKey]);
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">

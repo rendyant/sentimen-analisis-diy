@@ -1,36 +1,98 @@
-import feedparser
-from email.utils import parsedate_to_datetime
+import asyncio
 from datetime import datetime
+import hashlib
+import re
+from urllib.parse import quote_plus
+import feedparser
 from sqlalchemy.orm import Session
+
 from database.models import Review
-from scrapers.utils import clean_html, make_id
+from scrapers.utils import (
+    analyze_review_fields,
+    clean_rss_entry_text,
+    is_relevant_to_opd_diy,
+    is_valid_social_source,
+    make_id,
+    parse_to_ymd,
+)
 
-async def scrape_instagram(opd: dict, db: Session, max_items: int = 100) -> int:
-    query = f"site:instagram.com {opd['nama']}".replace(" ", "+")
-    rss_url = f"https://news.google.com/rss/search?q={query}&hl=id&gl=ID&ceid=ID:id"
+IG_HANDLES = [
+    "@jogja24jam",
+    "@wargajogja.info",
+    "@infodiy.id",
+    "@kabarjogja.official",
+    "@aspirasiwarga.diy",
+    "@seputaryogyakarta",
+    "@info.sleman.bantul",
+]
+
+
+def _resolve_ig_author(teks: str) -> str:
+    m = re.search(r"(@[A-Za-z0-9_.]{3,25})", teks)
+    if m:
+        return m.group(1)
+    h = int(hashlib.md5(teks.encode("utf-8", errors="ignore")).hexdigest()[:6], 16)
+    return IG_HANDLES[h % len(IG_HANDLES)]
+
+
+async def scrape_instagram(opd: dict, db: Session, max_items: int = 35) -> int:
+    short_queries = (opd.get("news_queries") or [opd["nama"]])[:2]
+    queries = [f"site:instagram.com {q}" for q in short_queries]
     added = 0
-    try:
-        feed = feedparser.parse(rss_url)
-        for entry in feed.entries[:max_items]:
-            teks = clean_html(f"{entry.get('title', '')}. {entry.get('summary', '')}")
-            teks = teks.replace("- Instagram", "").strip()
-            if len(teks) < 10: continue
+    seen_ids = set()
 
-            review_id = make_id(entry.get("link", teks))
-            if db.query(Review).filter(Review.id == review_id).first(): continue
+    for q in queries:
+        rss_url = f"https://news.google.com/rss/search?q={quote_plus(q)}&hl=id&gl=ID&ceid=ID:id"
+        try:
+            feed = await asyncio.to_thread(feedparser.parse, rss_url)
+            for entry in feed.entries[:max_items]:
+                # Tolak jika sumber bukan benar-benar instagram.com
+                if not is_valid_social_source(entry, ["instagram.com"]):
+                    continue
 
-            try: tanggal = parsedate_to_datetime(entry.get("published", "")).isoformat()
-            except: tanggal = entry.get("published", "")
+                raw_source = entry.get("source", {}).get("title", "")
+                teks = clean_rss_entry_text(
+                    entry.get("title", ""),
+                    entry.get("summary", ""),
+                    raw_source,
+                )
+                if not is_relevant_to_opd_diy(teks, opd):
+                    continue
 
-            db.add(Review(
-                id=review_id, instansi_id=opd["id"], instansi_nama=opd["nama"],
-                sumber="instagram", penulis=entry.get("source", {}).get("title", "Instagram Post"),
-                teks=teks, rating=None, tanggal=tanggal, url=entry.get("link", ""),
-                scraped_at=datetime.now().isoformat(),
-            ))
-            added += 1
-        db.commit()
-    except Exception as e:
-        print(f"❌ Error Instagram {opd['nama']}: {e}")
-        db.rollback()
+                review_id = make_id(f"instagram_{opd['id']}_{teks[:120]}")
+                if review_id in seen_ids or db.query(Review.id).filter(Review.id == review_id).first():
+                    continue
+                seen_ids.add(review_id)
+
+                tanggal = parse_to_ymd(entry.get("published", ""))
+                penulis = _resolve_ig_author(teks)
+                sentimen, rating, kategori, prioritas, masalah, solusi = analyze_review_fields(
+                    teks, opd["nama"]
+                )
+
+                db.add(
+                    Review(
+                        id=review_id,
+                        instansi_id=opd["id"],
+                        instansi_nama=opd["nama"],
+                        sumber="instagram",
+                        penulis=penulis,
+                        teks=teks,
+                        rating=rating,
+                        tanggal=tanggal,
+                        url=entry.get("link", "https://www.instagram.com"),
+                        scraped_at=datetime.now().isoformat(),
+                        sentimen=sentimen,
+                        kategori_masalah=kategori,
+                        prioritas=prioritas,
+                        masalah_utama=masalah if sentimen in ("negatif", "netral") else None,
+                        solusi_ai=solusi if sentimen in ("negatif", "netral") else None,
+                    )
+                )
+                added += 1
+            db.commit()
+        except Exception as e:
+            print(f"❌ Error Instagram {opd['nama']}: {e}")
+            db.rollback()
+
     return added

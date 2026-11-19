@@ -1,11 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Download, Search, Loader2, ExternalLink, Sparkles, Lightbulb, Layers } from 'lucide-react';
+import { Download, Search, Loader2, ExternalLink, Sparkles, Lightbulb, Layers, RefreshCw } from 'lucide-react';
 import {
   fetchReviews,
+  clearApiCache,
+  peekCache,
+  reviewsCacheKey,
   Review,
+  ReviewResponse,
   OPD_LIST,
+  SOURCE_LIST,
   analyzeSingleReview,
   analyzeBatchByCategory,
   BatchCategoryResult,
@@ -13,10 +18,14 @@ import {
 
 function Bintang({ jumlah }: { jumlah?: number }) {
   if (!jumlah) return <span className="text-gray-400 text-[10px]">-</span>;
+  const rounded = Math.max(1, Math.min(5, Math.round(jumlah)));
   return (
-    <span className="text-yellow-400 text-xs tracking-tight">
-      {'★'.repeat(jumlah)}
-      <span className="text-gray-200">{'★'.repeat(5 - jumlah)}</span>
+    <span className="text-yellow-400 text-xs tracking-tight inline-flex items-center gap-1">
+      <span>
+        {'★'.repeat(rounded)}
+        <span className="text-gray-200">{'★'.repeat(5 - rounded)}</span>
+      </span>
+      <span className="text-[10px] font-semibold text-gray-500">{jumlah.toFixed(1)}</span>
     </span>
   );
 }
@@ -31,11 +40,6 @@ const KATEGORI_OPTIONS = [
 ];
 
 export default function AdminUlasan() {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
-
   const [selectedOpd, setSelectedOpd] = useState('');
   const [selectedSource, setSelectedSource] = useState('');
   const [selectedSentimen, setSelectedSentimen] = useState('');
@@ -44,33 +48,65 @@ export default function AdminUlasan() {
   const [page, setPage] = useState(1);
   const limit = 15;
 
+  const queryParams = {
+    instansi_id: selectedOpd || undefined,
+    sumber: selectedSource || undefined,
+    sentimen: selectedSentimen || undefined,
+    search: search || undefined,
+    page,
+    limit,
+  };
+  const cachedInit = peekCache<ReviewResponse>(reviewsCacheKey(queryParams));
+  const [reviews, setReviews] = useState<Review[]>(cachedInit?.data || []);
+  const [total, setTotal] = useState(cachedInit?.total || 0);
+  const [loading, setLoading] = useState(!cachedInit);
+  const [refreshing, setRefreshing] = useState(false);
+  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
+
   // State Analisis Kolektif per Kategori
   const [batchLoading, setBatchLoading] = useState(false);
   const [batchResult, setBatchResult] = useState<BatchCategoryResult | null>(null);
 
-  const loadReviews = async () => {
-    setLoading(true);
+  const loadReviews = async (force = false) => {
+    const params = {
+      instansi_id: selectedOpd || undefined,
+      sumber: selectedSource || undefined,
+      sentimen: selectedSentimen || undefined,
+      search: search || undefined,
+      page,
+      limit,
+    };
+    if (!force) {
+      const cached = peekCache<ReviewResponse>(reviewsCacheKey(params));
+      if (cached) {
+        setReviews(cached.data);
+        setTotal(cached.total);
+        setLoading(false);
+        return;
+      }
+    }
+    if (force) setRefreshing(true);
+    else setLoading(true);
     try {
-      const res = await fetchReviews({
-        instansi_id: selectedOpd || undefined,
-        sumber: selectedSource || undefined,
-        sentimen: selectedSentimen || undefined,
-        search: search || undefined,
-        page,
-        limit,
-      });
+      const res = await fetchReviews(params, force);
       setReviews(res.data);
       setTotal(res.total);
     } catch (err) {
       console.warn(err);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
   useEffect(() => {
-    loadReviews();
+    loadReviews(false);
   }, [selectedOpd, selectedSource, selectedSentimen, search, page]);
+
+  const handleManualRefresh = () => {
+    clearApiCache('reviews:');
+    loadReviews(true);
+  };
 
   async function handleAnalyzeReview(id: string) {
     setAnalyzingId(id);
@@ -82,6 +118,7 @@ export default function AdminUlasan() {
             ? {
                 ...r,
                 sentimen: res.sentimen,
+                rating: res.rating ?? r.rating,
                 masalah_utama: res.masalah_utama,
                 kategori_masalah: res.kategori_masalah,
                 prioritas: res.prioritas,
@@ -131,6 +168,17 @@ export default function AdminUlasan() {
           </p>
         </div>
         <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={handleManualRefresh}
+            disabled={refreshing || loading}
+            className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-800 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-60"
+            title="Muat ulang daftar ulasan terbaru dari database"
+          >
+            <RefreshCw size={14} className={refreshing ? 'animate-spin text-red-800' : 'text-red-800'} />
+            {refreshing ? 'Menyegarkan...' : 'Refresh Data'}
+          </button>
+
           <button
             type="button"
             onClick={handleBatchCategoryAnalyze}
@@ -253,10 +301,9 @@ export default function AdminUlasan() {
               onChange={(e) => { setSelectedSource(e.target.value); setPage(1); }}
               className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 outline-none focus:border-red-800 cursor-pointer"
             >
-              <option value="">Semua Saluran</option>
-              <option value="berita">Portal Berita (Google News)</option>
-              <option value="maps">Google Maps Review</option>
-              <option value="twitter">Media Sosial (Twitter / X)</option>
+              {SOURCE_LIST.map((src) => (
+                <option key={src.id} value={src.id}>{src.nama}</option>
+              ))}
             </select>
           </div>
 

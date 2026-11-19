@@ -1,45 +1,53 @@
 import asyncio
 from datetime import datetime
-from email.utils import parsedate_to_datetime
+from urllib.parse import quote_plus
 import feedparser
 from sqlalchemy.orm import Session
 
 from database.models import Review
-from scrapers.utils import clean_html, make_id
+from scrapers.utils import (
+    analyze_review_fields,
+    clean_rss_entry_text,
+    is_relevant_to_opd_diy,
+    make_id,
+    parse_to_ymd,
+)
 
 
 async def scrape_news_for_opd(opd: dict, db: Session, max_results: int = 20) -> int:
-    """Scrape berita Google News RSS untuk satu OPD menggunakan multi-keyword."""
-    # Mendukung format multi-keyword (news_queries) maupun single keyword lama (news_query)
+    """Scrape berita Google News RSS untuk satu OPD menggunakan multi-keyword & auto-sentimen."""
     queries = opd.get("news_queries") or [opd.get("news_query", opd["nama"])]
     total_added = 0
+    seen_ids = set()
 
     for query in queries:
-        formatted_query = query.replace(" ", "+")
+        formatted_query = quote_plus(query)
         rss_url = f"https://news.google.com/rss/search?q={formatted_query}&hl=id&gl=ID&ceid=ID:id"
 
         try:
-            feed = feedparser.parse(rss_url)
+            feed = await asyncio.to_thread(feedparser.parse, rss_url)
 
             for entry in feed.entries[:max_results]:
-                title = entry.get("title", "")
-                summary = entry.get("summary", "")
-                teks = clean_html(f"{title}. {summary}")
-                if not teks:
+                source = entry.get("source", {}).get("title", "Portal Berita DIY")
+                teks = clean_rss_entry_text(
+                    entry.get("title", ""),
+                    entry.get("summary", ""),
+                    source,
+                )
+                if not is_relevant_to_opd_diy(teks, opd):
                     continue
 
-                review_id = make_id(entry.get("link", teks))
+                review_id = make_id(f"berita_{opd['id']}_{teks[:120]}")
 
-                # Skip jika berita sudah pernah tersimpan di database
-                if db.query(Review).filter(Review.id == review_id).first():
+                # Skip jika berita sudah ada di batch ini atau di database
+                if review_id in seen_ids or db.query(Review.id).filter(Review.id == review_id).first():
                     continue
+                seen_ids.add(review_id)
 
-                source = entry.get("source", {}).get("title", "Unknown")
-
-                try:
-                    tanggal = parsedate_to_datetime(entry.get("published", "")).isoformat()
-                except Exception:
-                    tanggal = entry.get("published", "")
+                tanggal = parse_to_ymd(entry.get("published", ""))
+                sentimen, rating, kategori, prioritas, masalah, solusi = analyze_review_fields(
+                    teks, opd["nama"]
+                )
 
                 review = Review(
                     id=review_id,
@@ -48,10 +56,15 @@ async def scrape_news_for_opd(opd: dict, db: Session, max_results: int = 20) -> 
                     sumber="berita",
                     penulis=source,
                     teks=teks,
-                    rating=None,
+                    rating=rating,
                     tanggal=tanggal,
                     url=entry.get("link", ""),
                     scraped_at=datetime.now().isoformat(),
+                    sentimen=sentimen,
+                    kategori_masalah=kategori,
+                    prioritas=prioritas,
+                    masalah_utama=masalah if sentimen in ("negatif", "netral") else None,
+                    solusi_ai=solusi if sentimen in ("negatif", "netral") else None,
                 )
                 db.add(review)
                 total_added += 1
@@ -62,7 +75,7 @@ async def scrape_news_for_opd(opd: dict, db: Session, max_results: int = 20) -> 
             print(f"❌ Error query '{query}' untuk {opd['nama']}: {e}")
             db.rollback()
 
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.3)
 
     print(f"✅ Total berita baru {opd['nama']}: {total_added}")
     return total_added
@@ -73,5 +86,5 @@ async def scrape_all_news(db: Session, opds: list) -> int:
     total = 0
     for opd in opds:
         total += await scrape_news_for_opd(opd, db)
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
     return total

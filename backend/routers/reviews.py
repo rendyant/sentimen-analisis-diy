@@ -137,44 +137,44 @@ def infer_review_attributes(teks: str, instansi_nama: str, existing_sentimen: Op
 
 def ensure_seed_reviews(db: Session):
     global _SEEDED
-    if _SEEDED:
-        return
     try:
-        total_count = db.query(Review).count()
-        if total_count == 0:
-            today = datetime.now()
-            samples = [
-                Review(
-                    instansi_id="dikpora",
-                    instansi_nama="Dinas Pendidikan, Pemuda dan Olahraga DIY",
-                    sumber="maps",
-                    penulis="Rina Kusuma",
-                    teks="Pelayanan legalisir dan informasi PPDB di Dikpora DIY sangat ramah dan tertib, petugas sangat membantu.",
-                    rating=5.0,
-                    tanggal=(today - timedelta(days=1)).strftime("%Y-%m-%d"),
-                    sentimen="positif",
-                    kategori_masalah="Sikap Petugas & Pelayanan Loket",
-                    prioritas="Rendah",
-                ),
-                Review(
-                    instansi_id="dikpora",
-                    instansi_nama="Dinas Pendidikan, Pemuda dan Olahraga DIY",
-                    sumber="twitter",
-                    penulis="@wargajogja",
-                    teks="Antrean verifikasi berkas PPDB lumayan lama di jam pagi, mohon ditambah loket pelayanannya.",
-                    rating=2.0,
-                    tanggal=(today - timedelta(days=3)).strftime("%Y-%m-%d"),
-                    sentimen="negatif",
-                    masalah_utama="Antrean verifikasi berkas lama pada jam sibuk",
-                    kategori_masalah="Kecepatan Layanan & Antrean",
-                    prioritas="Tinggi",
-                    solusi_ai="Tambahkan loket verifikasi sementara pada jam puncak dan terapkan penjadwalan antrean online.",
-                ),
-            ]
-            db.add_all(samples)
-            db.commit()
+        if not _SEEDED:
+            total_count = db.query(Review).count()
+            if total_count == 0:
+                today = datetime.now()
+                samples = [
+                    Review(
+                        instansi_id="dikpora",
+                        instansi_nama="Dinas Pendidikan, Pemuda dan Olahraga DIY",
+                        sumber="maps",
+                        penulis="Rina Kusuma",
+                        teks="Pelayanan legalisir dan informasi PPDB di Dikpora DIY sangat ramah dan tertib, petugas sangat membantu.",
+                        rating=5.0,
+                        tanggal=(today - timedelta(days=1)).strftime("%Y-%m-%d"),
+                        sentimen="positif",
+                        kategori_masalah="Sikap Petugas & Pelayanan Loket",
+                        prioritas="Rendah",
+                    ),
+                    Review(
+                        instansi_id="dikpora",
+                        instansi_nama="Dinas Pendidikan, Pemuda dan Olahraga DIY",
+                        sumber="twitter",
+                        penulis="@wargajogja",
+                        teks="Antrean verifikasi berkas PPDB lumayan lama di jam pagi, mohon ditambah loket pelayanannya.",
+                        rating=2.0,
+                        tanggal=(today - timedelta(days=3)).strftime("%Y-%m-%d"),
+                        sentimen="negatif",
+                        masalah_utama="Antrean verifikasi berkas lama pada jam sibuk",
+                        kategori_masalah="Kecepatan Layanan & Antrean",
+                        prioritas="Tinggi",
+                        solusi_ai="Tambahkan loket verifikasi sementara pada jam puncak dan terapkan penjadwalan antrean online.",
+                    ),
+                ]
+                db.add_all(samples)
+                db.commit()
+            _SEEDED = True
 
-        # Lengkapi ulasan di database yang belum memiliki sentimen / rating / kategori_masalah
+        # Selalu lengkapi ulasan baru di database yang belum memiliki sentimen / rating / kategori_masalah
         incomplete = (
             db.query(Review)
             .filter(
@@ -199,8 +199,6 @@ def ensure_seed_reviews(db: Session):
                     r.masalah_utama = r.masalah_utama or msl
                     r.solusi_ai = r.solusi_ai or sol
             db.commit()
-
-        _SEEDED = True
     except Exception as e:
         db.rollback()
         print(f"[INFO] Seed/enrich reviews warning: {e}")

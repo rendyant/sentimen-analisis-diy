@@ -44,6 +44,7 @@ class Review(Base):
     kategori_masalah = Column(String(100), nullable=True)
     prioritas = Column(String(20), nullable=True)      # 'Tinggi', 'Sedang', 'Rendah'
     solusi_ai = Column(Text, nullable=True)
+    ai_model = Column(String(100), nullable=True, index=True)  # NULL = belum dianalisis Gemini AI
 
 
 class OPD(Base):

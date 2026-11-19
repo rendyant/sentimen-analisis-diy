@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Printer } from 'lucide-react';
+import { Printer, RefreshCw } from 'lucide-react';
 import StatsCard from '@/components/dashboard/statscard';
 import RatingCard from '@/components/dashboard/ratingcard';
 import SentimentChart from '@/components/dashboard/sentimentchart';
@@ -15,41 +15,73 @@ import AIInsight from '@/components/ai/aiinsight';
 import {
   fetchStats,
   fetchDashboardAnalytics,
+  clearApiCache,
+  peekCache,
+  statsCacheKey,
+  analyticsCacheKey,
   StatItem,
   DashboardAnalyticsResponse,
   OPD_LIST,
+  SOURCE_LIST,
 } from '@/lib/api';
 
 export default function Home() {
-  const [stats, setStats] = useState<StatItem[]>([]);
-  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(null);
   const [periode, setPeriode] = useState('all');
   const [sumber, setSumber] = useState('');
   const [instansiId, setInstansiId] = useState('dikpora');
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const [statsData, analyticsData] = await Promise.all([
-          fetchStats({
-            instansi_id: instansiId || undefined,
-            sumber: sumber || undefined,
-            periode: periode !== 'all' ? periode : undefined,
-          }),
-          fetchDashboardAnalytics({
-            instansi_id: instansiId || undefined,
-            sumber: sumber || undefined,
-            periode: periode !== 'all' ? periode : undefined,
-          }),
-        ]);
-        setStats(statsData);
-        setAnalytics(analyticsData);
-      } catch (err) {
-        console.warn('Gagal mengambil statistik OPD:', err);
+  const filterParams = {
+    instansi_id: instansiId || undefined,
+    sumber: sumber || undefined,
+    periode: periode !== 'all' ? periode : undefined,
+  };
+  const cachedStatsInit = peekCache<StatItem[]>(statsCacheKey(filterParams));
+  const cachedAnalyticsInit = peekCache<DashboardAnalyticsResponse>(analyticsCacheKey(filterParams));
+
+  const [stats, setStats] = useState<StatItem[]>(cachedStatsInit || []);
+  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(cachedAnalyticsInit);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadData = async (force = false) => {
+    const params = {
+      instansi_id: instansiId || undefined,
+      sumber: sumber || undefined,
+      periode: periode !== 'all' ? periode : undefined,
+    };
+    if (!force) {
+      const cStats = peekCache<StatItem[]>(statsCacheKey(params));
+      const cAnalytics = peekCache<DashboardAnalyticsResponse>(analyticsCacheKey(params));
+      if (cStats && cAnalytics) {
+        setStats(cStats);
+        setAnalytics(cAnalytics);
+        return;
       }
     }
-    load();
+    if (force) setRefreshing(true);
+    try {
+      const [statsData, analyticsData] = await Promise.all([
+        fetchStats(params, force),
+        fetchDashboardAnalytics(params, force),
+      ]);
+      setStats(statsData);
+      setAnalytics(analyticsData);
+    } catch (err) {
+      console.warn('Gagal mengambil statistik OPD:', err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData(false);
   }, [periode, sumber, instansiId]);
+
+  const handleManualRefresh = () => {
+    clearApiCache();
+    setRefreshKey((k) => k + 1);
+    loadData(true);
+  };
 
   const selectedOpdName =
     OPD_LIST.find((o) => o.id === instansiId)?.nama ||
@@ -103,10 +135,11 @@ export default function Home() {
               onChange={(e) => setSumber(e.target.value)}
               className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 outline-none focus:border-red-800 cursor-pointer"
             >
-              <option value="">Semua Saluran</option>
-              <option value="berita">Google News</option>
-              <option value="maps">Google Maps</option>
-              <option value="twitter">Twitter / X</option>
+              {SOURCE_LIST.map((src) => (
+                <option key={src.id} value={src.id}>
+                  {src.nama}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -124,6 +157,17 @@ export default function Home() {
               ))}
             </select>
           </div>
+
+          <button
+            type="button"
+            onClick={handleManualRefresh}
+            disabled={refreshing}
+            className="flex items-center gap-1.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-60"
+            title="Muat ulang data terbaru langsung dari database"
+          >
+            <RefreshCw size={13} className={refreshing ? 'animate-spin text-red-800' : 'text-red-800'} />
+            {refreshing ? 'Menyegarkan...' : 'Refresh Data'}
+          </button>
 
           <button
             onClick={() => window.print()}
@@ -176,7 +220,7 @@ export default function Home() {
         </div>
 
         <div className="lg:col-span-1">
-          <AIActionPlans instansiId={instansiId} />
+          <AIActionPlans instansiId={instansiId} refreshKey={refreshKey} />
         </div>
       </div>
 
@@ -190,11 +234,11 @@ export default function Home() {
 
       {/* Tabel Ulasan Terbaru (Data Live) */}
       <div className="mb-6">
-        <UlasanTerbaru instansiId={instansiId} sumber={sumber} periode={periode} />
+        <UlasanTerbaru instansiId={instansiId} sumber={sumber} periode={periode} refreshKey={refreshKey} />
       </div>
 
       {/* AI Insight */}
-      <AIInsight instansiId={instansiId} />
+      <AIInsight instansiId={instansiId} refreshKey={refreshKey} />
     </div>
   );
 }

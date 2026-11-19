@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, Printer, Loader2 } from 'lucide-react';
+import { Search, Printer, Loader2, RefreshCw } from 'lucide-react';
 import StatsCard from '@/components/dashboard/statscard';
 import RatingCard from '@/components/dashboard/ratingcard';
 import SentimentChart from '@/components/dashboard/sentimentchart';
@@ -15,48 +15,85 @@ import AIInsight from '@/components/ai/aiinsight';
 import {
   fetchStats,
   fetchDashboardAnalytics,
+  clearApiCache,
+  peekCache,
+  statsCacheKey,
+  analyticsCacheKey,
   StatItem,
   DashboardAnalyticsResponse,
   OPD_LIST,
+  SOURCE_LIST,
 } from '@/lib/api';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<StatItem[]>([]);
-  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [searchOpd, setSearchOpd] = useState('');
-
-  // State Filter Interaktif
   const [periode, setPeriode] = useState('all');
   const [sumber, setSumber] = useState('');
   const [instansiId, setInstansiId] = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      try {
-        const [statsData, analyticsData] = await Promise.all([
-          fetchStats({
-            instansi_id: instansiId || undefined,
-            sumber: sumber || undefined,
-            periode: periode !== 'all' ? periode : undefined,
-          }),
-          fetchDashboardAnalytics({
-            instansi_id: instansiId || undefined,
-            sumber: sumber || undefined,
-            periode: periode !== 'all' ? periode : undefined,
-          }),
-        ]);
-        setStats(statsData);
-        setAnalytics(analyticsData);
-      } catch (err) {
-        console.warn('Gagal memuat statistik:', err);
-      } finally {
+  const filterParams = {
+    instansi_id: instansiId || undefined,
+    sumber: sumber || undefined,
+    periode: periode !== 'all' ? periode : undefined,
+  };
+
+  const cachedStatsInit = peekCache<StatItem[]>(statsCacheKey(filterParams));
+  const cachedAnalyticsInit = peekCache<DashboardAnalyticsResponse>(analyticsCacheKey(filterParams));
+
+  const [stats, setStats] = useState<StatItem[]>(cachedStatsInit || []);
+  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(cachedAnalyticsInit);
+  const [loading, setLoading] = useState(!cachedStatsInit || !cachedAnalyticsInit);
+  const [refreshing, setRefreshing] = useState(false);
+  const [searchOpd, setSearchOpd] = useState('');
+
+  const loadData = async (force = false) => {
+    const params = {
+      instansi_id: instansiId || undefined,
+      sumber: sumber || undefined,
+      periode: periode !== 'all' ? periode : undefined,
+    };
+
+    if (!force) {
+      const cStats = peekCache<StatItem[]>(statsCacheKey(params));
+      const cAnalytics = peekCache<DashboardAnalyticsResponse>(analyticsCacheKey(params));
+      if (cStats && cAnalytics) {
+        setStats(cStats);
+        setAnalytics(cAnalytics);
         setLoading(false);
+        return;
       }
     }
-    load();
+
+    if (force) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
+
+    try {
+      const [statsData, analyticsData] = await Promise.all([
+        fetchStats(params, force),
+        fetchDashboardAnalytics(params, force),
+      ]);
+      setStats(statsData);
+      setAnalytics(analyticsData);
+    } catch (err) {
+      console.warn('Gagal memuat statistik:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData(false);
   }, [periode, sumber, instansiId]);
+
+  const handleManualRefresh = () => {
+    clearApiCache();
+    setRefreshKey((k) => k + 1);
+    loadData(true);
+  };
 
   // Hitung agregat metrik langsung dari Database
   const totalUlasan =
@@ -114,10 +151,11 @@ export default function AdminDashboard() {
               onChange={(e) => setSumber(e.target.value)}
               className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 w-60 outline-none focus:border-red-800 cursor-pointer"
             >
-              <option value="">Semua Saluran (Berita, Maps, Sosmed)</option>
-              <option value="berita">Portal Berita (Google News)</option>
-              <option value="maps">Ulasan Google Maps</option>
-              <option value="twitter">Twitter / X</option>
+              {SOURCE_LIST.map((src) => (
+                <option key={src.id} value={src.id}>
+                  {src.nama}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -138,6 +176,16 @@ export default function AdminDashboard() {
         </div>
 
         <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleManualRefresh}
+            disabled={refreshing || loading}
+            className="flex items-center gap-1.5 bg-white border border-gray-300 px-3.5 py-2 rounded-lg text-xs font-semibold text-gray-800 hover:bg-gray-50 transition cursor-pointer disabled:opacity-60"
+            title="Muat ulang data terbaru langsung dari database"
+          >
+            <RefreshCw size={13} className={refreshing ? 'animate-spin text-red-800' : 'text-red-800'} />
+            {refreshing ? 'Menyegarkan...' : 'Refresh Data'}
+          </button>
           <Link href="/admin/ulasan" className="flex items-center gap-1.5 bg-white border border-gray-300 px-3.5 py-2 rounded-lg text-xs font-semibold text-gray-800 hover:bg-gray-50 transition">
             Lihat Daftar Ulasan
           </Link>
@@ -267,7 +315,7 @@ export default function AdminDashboard() {
 
         {/* Kolom Kanan: AI Action Plans (Rekomendasi Solusi untuk Setiap OPD Bermasalah) */}
         <div className="lg:col-span-1 space-y-5">
-          <AIActionPlans instansiId={instansiId} isAdmin />
+          <AIActionPlans instansiId={instansiId} isAdmin refreshKey={refreshKey} />
           <UlasanNegatif reviews={analytics?.negative_reviews || []} allHref="/admin/ulasan" />
         </div>
       </div>
@@ -276,7 +324,7 @@ export default function AdminDashboard() {
         <AspekAnalysis aspects={analytics?.aspects || []} detailHref="/admin/analisis" />
       </div>
 
-      <AIInsight instansiId={instansiId} />
+      <AIInsight instansiId={instansiId} refreshKey={refreshKey} />
     </div>
   );
 }

@@ -16,33 +16,51 @@ import {
   fetchRecommendations,
   generateOpdRecommendations,
   OpdRecommendation,
+  peekCache,
+  recommendationsCacheKey,
+  RecommendationsResponse,
 } from '@/lib/api';
 
 interface AIActionPlansProps {
   instansiId?: string;
   isAdmin?: boolean;
+  refreshKey?: number;
 }
 
-export default function AIActionPlans({ instansiId, isAdmin = false }: AIActionPlansProps) {
-  const [plans, setPlans] = useState<OpdRecommendation[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function AIActionPlans({ instansiId, isAdmin = false, refreshKey = 0 }: AIActionPlansProps) {
+  const initialCached = peekCache<RecommendationsResponse>(recommendationsCacheKey(instansiId || undefined));
+  const [plans, setPlans] = useState<OpdRecommendation[]>(initialCached?.data || []);
+  const [loading, setLoading] = useState(!initialCached);
   const [generating, setGenerating] = useState(false);
   const [filter, setFilter] = useState<'Semua' | 'Tinggi' | 'Sedang'>('Semua');
 
   useEffect(() => {
+    const key = recommendationsCacheKey(instansiId || undefined);
+    const force = refreshKey > 0;
+    const cached = force ? null : peekCache<RecommendationsResponse>(key);
+    if (cached) {
+      setPlans(cached.data || []);
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
     async function load() {
       setLoading(true);
       try {
-        const res = await fetchRecommendations(instansiId || undefined);
-        setPlans(res.data || []);
+        const res = await fetchRecommendations(instansiId || undefined, force);
+        if (!cancelled) setPlans(res.data || []);
       } catch (err) {
         console.warn('Gagal mengambil rekomendasi solusi AI:', err);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
     load();
-  }, [instansiId]);
+    return () => {
+      cancelled = true;
+    };
+  }, [instansiId, refreshKey]);
 
   async function handleGenerateAI() {
     setGenerating(true);
