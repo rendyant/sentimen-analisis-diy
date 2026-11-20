@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Bell, LogOut, UserCircle, ShieldCheck } from 'lucide-react';
+import { clearApiCache } from '@/lib/api';
 
 export default function HeaderAdmin() {
   const [open, setOpen] = useState(false);
@@ -11,6 +12,7 @@ export default function HeaderAdmin() {
   const router = useRouter();
 
   async function logout() {
+    clearApiCache();
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/login');
     router.refresh();

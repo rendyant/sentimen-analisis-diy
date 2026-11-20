@@ -53,6 +53,31 @@ async function cachedFetch<T>(
   return promise;
 }
 
+export interface CurrentUser {
+  id: string;
+  role: string;
+  name: string;
+  email: string;
+  opdId: string;
+  opdName: string;
+}
+
+export async function fetchCurrentUser(forceRefresh = false): Promise<CurrentUser | null> {
+  try {
+    return await cachedFetch<CurrentUser>(
+      "current-user",
+      async () => {
+        const res = await fetch("/api/auth/me", { cache: "no-store" });
+        if (!res.ok) throw new Error("Unauthenticated");
+        return res.json();
+      },
+      forceRefresh
+    );
+  } catch {
+    return null;
+  }
+}
+
 export const SOURCE_LIST = [
   { id: "", nama: "Semua 7 Saluran (Berita, Maps, Sosmed)" },
   { id: "berita", nama: "Portal Berita (Google News)" },

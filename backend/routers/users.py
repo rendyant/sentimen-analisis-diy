@@ -44,57 +44,88 @@ class UserUpdatePayload(BaseModel):
     email: str | None = None
 
 
+_USERS_SEEDED = False
+
+
+def _opd_email_slug(opd_id: str) -> str:
+    return opd_id.replace("_", "-")
+
+
 def ensure_seed_users(db: Session):
-    """Pastikan selalu ada akun default di tabel user_accounts untuk demo/manajemen user."""
+    """Pastikan Super Admin dan seluruh 24 akun OPD aktif tersedia di tabel user_accounts."""
+    global _USERS_SEEDED
+    if _USERS_SEEDED:
+        return
     try:
-        count = db.query(UserAccount).count()
-        if count == 0:
-            defaults = [
+        existing_emails = {row[0].lower() for row in db.query(UserAccount.email).all()}
+        now_utc = datetime.now(timezone.utc)
+        shared_hash = hash_password("password123")
+        to_insert = []
+
+        if "admin@jogjaprov.go.id" not in existing_emails:
+            to_insert.append(
                 UserAccount(
                     id="admin-001",
                     full_name="Super Admin Pemda DIY",
                     email="admin@jogjaprov.go.id",
-                    hashed_password=hash_password("password123"),
+                    hashed_password=shared_hash,
                     role="admin",
                     status="active",
                     opd_id="sekda",
                     opd_name="Sekretariat Daerah DIY",
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                UserAccount(
-                    id="user-001",
-                    full_name="Admin Analis Dikpora DIY",
-                    email="user@dikpora.go.id",
-                    hashed_password=hash_password("password123"),
-                    role="opd",
-                    status="active",
-                    opd_id="dikpora",
-                    opd_name="Dinas Pendidikan, Pemuda dan Olahraga DIY",
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                UserAccount(
-                    id="user-002",
-                    full_name="Budi Santoso",
-                    email="budi@dinkes.jogjaprov.go.id",
-                    hashed_password=hash_password("password123"),
-                    role="opd",
-                    status="pending",
-                    opd_id="dinkes",
-                    opd_name="Dinas Kesehatan DIY",
-                ),
-                UserAccount(
-                    id="user-003",
-                    full_name="Siti Rahmawati",
-                    email="siti@kominfo.jogjaprov.go.id",
-                    hashed_password=hash_password("password123"),
-                    role="opd",
-                    status="pending",
-                    opd_id="diskominfo",
-                    opd_name="Dinas Komunikasi dan Informatika DIY",
-                ),
-            ]
-            db.add_all(defaults)
+                    approved_at=now_utc,
+                )
+            )
+
+        # Pastikan setiap dari 24 OPD memiliki 1 akun aktif masing-masing (user@<opd>.go.id)
+        for idx, opd in enumerate(INSTANSI_LIST, start=1):
+            email = f"user@{_opd_email_slug(opd['id'])}.go.id"
+            if email not in existing_emails:
+                to_insert.append(
+                    UserAccount(
+                        id="user-001" if opd["id"] == "dikpora" else f"opd-{opd['id']}-{idx:02d}",
+                        full_name=f"Admin Analis {opd['nama']}",
+                        email=email,
+                        hashed_password=shared_hash,
+                        role="opd",
+                        status="active",
+                        opd_id=opd["id"],
+                        opd_name=opd["nama"],
+                        approved_at=now_utc,
+                    )
+                )
+
+        # Tambah sampel akun pending untuk demo menu Manajemen User jika DB baru kosong
+        if len(existing_emails) == 0:
+            to_insert.extend(
+                [
+                    UserAccount(
+                        id="pending-001",
+                        full_name="Budi Santoso",
+                        email="budi@dinkes.jogjaprov.go.id",
+                        hashed_password=shared_hash,
+                        role="opd",
+                        status="pending",
+                        opd_id="dinkes",
+                        opd_name="Dinas Kesehatan DIY",
+                    ),
+                    UserAccount(
+                        id="pending-002",
+                        full_name="Siti Rahmawati",
+                        email="siti@kominfo.jogjaprov.go.id",
+                        hashed_password=shared_hash,
+                        role="opd",
+                        status="pending",
+                        opd_id="diskominfo",
+                        opd_name="Dinas Komunikasi dan Informatika DIY",
+                    ),
+                ]
+            )
+
+        if to_insert:
+            db.add_all(to_insert)
             db.commit()
+        _USERS_SEEDED = True
     except Exception as e:
         db.rollback()
         print(f"Info seed user_accounts: {e}")

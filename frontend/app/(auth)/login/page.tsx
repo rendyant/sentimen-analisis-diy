@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { clearApiCache } from '@/lib/api';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -34,6 +35,7 @@ export default function LoginPage() {
         return;
       }
       // Hard redirect agar cookie sesi langsung terbaca oleh middleware.ts
+      clearApiCache();
       const targetUrl = data.role === 'ADMIN' ? '/admin' : '/';
       window.location.assign(targetUrl);
     } catch (err) {

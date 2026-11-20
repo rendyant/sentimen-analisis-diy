@@ -2,8 +2,19 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
+import { OPD_LIST } from "@/lib/api";
 
-// Akun Fallback Darurat (Pasti Berhasil Meskipun DB Bermasalah)
+// Akun Fallback Darurat untuk Super Admin + seluruh 24 OPD Pemda DIY
+const FALLBACK_OPD_USERS = OPD_LIST.filter((o) => Boolean(o.id)).map((opd, idx) => ({
+  id: opd.id === "dikpora" ? "user-fallback-002" : `opd-fallback-${idx + 1}`,
+  email: `user@${opd.id.replace(/_/g, "-")}.go.id`,
+  password: "password123",
+  name: `Admin Analis ${opd.nama}`,
+  role: "USER",
+  opdId: opd.id,
+  opdName: opd.nama,
+}));
+
 const FALLBACK_USERS = [
   {
     id: "admin-fallback-001",
@@ -11,14 +22,10 @@ const FALLBACK_USERS = [
     password: "password123",
     name: "Super Admin Pemda DIY",
     role: "ADMIN",
+    opdId: "sekda",
+    opdName: "Pemerintah Daerah Istimewa Yogyakarta",
   },
-  {
-    id: "user-fallback-002",
-    email: "user@dikpora.go.id",
-    password: "password123",
-    name: "Admin Analis Dikpora DIY",
-    role: "USER",
-  },
+  ...FALLBACK_OPD_USERS,
 ];
 
 export async function POST(req: Request) {
@@ -55,6 +62,8 @@ export async function POST(req: Request) {
             email: fastData.user.email,
             name: fastData.user.full_name,
             role: fastData.user.role?.toUpperCase() === "ADMIN" ? "ADMIN" : "USER",
+            opdId: fastData.user.opd_id || "dikpora",
+            opdName: fastData.user.opd_name || "OPD Pemda DIY",
           };
         }
       } else if (fastApiRes.status === 403) {
@@ -68,29 +77,42 @@ export async function POST(req: Request) {
       // Lanjut jika backend FastAPI tidak merespons
     }
 
-    // 2. Jika belum ketemu, cek Akun Fallback Default
-    if (!user) {
-      const fallback = FALLBACK_USERS.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase().trim() && u.password === password
-      );
-      if (fallback) {
-        user = fallback;
-      }
-    }
-
-    // 3. Jika belum ketemu, coba cari di Database Prisma
+    // 2. Jika belum ketemu, cek Database Prisma lokal
     if (!user) {
       try {
-        const dbUser = await prisma.user.findUnique({ where: { email } });
+        const dbUser = await prisma.user.findUnique({
+          where: { email },
+          include: { opd: true },
+        });
         if (dbUser) {
           const valid = await bcrypt.compare(password, dbUser.password);
           if (!valid) {
             return NextResponse.json({ message: "Kata sandi salah" }, { status: 401 });
           }
-          user = dbUser;
+          const matchedOpd = OPD_LIST.find(
+            (o) => o.id && (o.id === dbUser.opd?.code || email.includes(`@${o.id.replace(/_/g, "-")}.`))
+          );
+          user = {
+            id: dbUser.id,
+            email: dbUser.email,
+            name: dbUser.name,
+            role: dbUser.role,
+            opdId: matchedOpd?.id || (dbUser.opd?.code?.startsWith("OPD-") ? "dikpora" : dbUser.opd?.code) || "dikpora",
+            opdName: dbUser.opd?.name || matchedOpd?.nama || "OPD Pemda DIY",
+          };
         }
       } catch {
         // Abaikan jika Prisma tidak terhubung
+      }
+    }
+
+    // 3. Jika belum ketemu, cek Akun Fallback Default (Super Admin + 24 OPD)
+    if (!user) {
+      const fallback = FALLBACK_USERS.find(
+        (u) => u.email.toLowerCase() === email && u.password === password
+      );
+      if (fallback) {
+        user = fallback;
       }
     }
 
@@ -99,12 +121,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Email atau kata sandi tidak terdaftar" }, { status: 401 });
     }
 
-    // 5. Buat Token JWT Sesi
-    const token = await signToken({ id: user.id, role: user.role });
+    // 5. Buat Token JWT Sesi lengkap dengan identitas OPD
+    const token = await signToken({
+      id: user.id,
+      role: user.role,
+      name: user.name,
+      email: user.email,
+      opdId: user.opdId,
+      opdName: user.opdName,
+    });
 
     const res = NextResponse.json({
       role: user.role,
       name: user.name,
+      email: user.email,
+      opdId: user.opdId,
+      opdName: user.opdName,
       message: "Login berhasil",
     });
 

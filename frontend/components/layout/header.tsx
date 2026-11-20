@@ -1,20 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Bell, LogOut, UserCircle } from 'lucide-react';
+import { clearApiCache, CurrentUser, fetchCurrentUser, peekCache } from '@/lib/api';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [user, setUser] = useState<CurrentUser | null>(peekCache<CurrentUser>('current-user'));
   const router = useRouter();
 
+  useEffect(() => {
+    fetchCurrentUser().then((u) => {
+      if (u) setUser(u);
+    });
+  }, []);
+
   async function logout() {
+    clearApiCache();
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/login');
     router.refresh();
   }
+
+  const displayName = user?.name || 'Admin Analis OPD';
+  const displayEmail = user?.email || 'user@dikpora.go.id';
+  const displayOpd = user?.opdName || 'Pemda DIY';
+  const initials = (user?.opdId || 'OP').slice(0, 2).toUpperCase();
 
   return (
     <header className="sticky top-0 z-10 bg-white border-b px-8 py-4 flex items-center justify-between">
@@ -76,11 +90,11 @@ export default function Header() {
             className="flex items-center gap-3"
           >
             <div className="text-right">
-              <p className="text-sm font-semibold">Admin Analis OPD</p>
-              <p className="text-xs text-gray-500">Pemda DIY</p>
+              <p className="text-sm font-semibold">{displayName}</p>
+              <p className="text-xs text-gray-500">{displayOpd}</p>
             </div>
             <div className="w-9 h-9 rounded-full bg-red-100 text-red-800 flex items-center justify-center text-sm font-bold">
-              OP
+              {initials}
             </div>
           </button>
 
@@ -89,8 +103,8 @@ export default function Header() {
               <div className="fixed inset-0 z-10" onClick={() => setOpen(false)}></div>
               <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 p-2 z-20">
                 <div className="px-3 py-2 border-b border-gray-100 mb-1">
-                  <p className="text-sm font-bold text-gray-800">Admin Analis OPD</p>
-                  <p className="text-xs text-gray-500">user@dikpora.go.id</p>
+                  <p className="text-sm font-bold text-gray-800 truncate">{displayName}</p>
+                  <p className="text-xs text-gray-500 truncate">{displayEmail}</p>
                 </div>
                 <Link
                   href="/pengaturan"

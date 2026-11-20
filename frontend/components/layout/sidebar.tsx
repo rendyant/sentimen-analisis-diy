@@ -1,8 +1,10 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { LayoutDashboard, MessageSquare, FileText, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { CurrentUser, fetchCurrentUser, peekCache } from '@/lib/api';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
@@ -13,6 +15,13 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [user, setUser] = useState<CurrentUser | null>(peekCache<CurrentUser>('current-user'));
+
+  useEffect(() => {
+    fetchCurrentUser().then((u) => {
+      if (u) setUser(u);
+    });
+  }, []);
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-red-800 to-red-950 text-white flex flex-col">
@@ -47,8 +56,8 @@ export default function Sidebar() {
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center"><User size={18} /></div>
           <div>
-            <p className="text-sm font-medium">Admin Analyst</p>
-            <p className="text-xs text-white/60">OPD Admin</p>
+            <p className="text-sm font-medium truncate max-w-[160px]">{user?.name || 'Admin Analyst'}</p>
+            <p className="text-xs text-white/60 truncate max-w-[160px]">{user?.opdName || 'OPD Admin'}</p>
           </div>
         </div>
       </div>

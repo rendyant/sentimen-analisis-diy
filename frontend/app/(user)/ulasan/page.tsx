@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { Download, Search, Loader2, ExternalLink, Sparkles, Lightbulb, Layers, RefreshCw } from 'lucide-react';
 import {
   fetchReviews,
+  fetchCurrentUser,
   clearApiCache,
   peekCache,
   reviewsCacheKey,
+  CurrentUser,
   Review,
   ReviewResponse,
   SOURCE_LIST,
@@ -39,6 +41,11 @@ const KATEGORI_OPTIONS = [
 ];
 
 export default function UlasanOPDPage() {
+  const cachedUser = peekCache<CurrentUser>('current-user');
+  const [opdId, setOpdId] = useState(cachedUser?.opdId || 'dikpora');
+  const [opdName, setOpdName] = useState(
+    cachedUser?.opdName || 'Dinas Pendidikan, Pemuda dan Olahraga DIY'
+  );
   const [selectedSource, setSelectedSource] = useState('');
   const [selectedSentimen, setSelectedSentimen] = useState('');
   const [selectedKategori, setSelectedKategori] = useState('');
@@ -46,8 +53,16 @@ export default function UlasanOPDPage() {
   const [page, setPage] = useState(1);
   const limit = 15;
 
+  useEffect(() => {
+    if (cachedUser?.opdId) return;
+    fetchCurrentUser().then((u) => {
+      if (u?.opdId) setOpdId(u.opdId);
+      if (u?.opdName) setOpdName(u.opdName);
+    });
+  }, []);
+
   const queryParams = {
-    instansi_id: 'dikpora',
+    instansi_id: opdId,
     sumber: selectedSource || undefined,
     sentimen: selectedSentimen || undefined,
     search: search || undefined,
@@ -66,7 +81,7 @@ export default function UlasanOPDPage() {
 
   const loadReviews = async (force = false) => {
     const params = {
-      instansi_id: 'dikpora',
+      instansi_id: opdId,
       sumber: selectedSource || undefined,
       sentimen: selectedSentimen || undefined,
       search: search || undefined,
@@ -98,7 +113,7 @@ export default function UlasanOPDPage() {
 
   useEffect(() => {
     loadReviews(false);
-  }, [selectedSource, selectedSentimen, search, page]);
+  }, [opdId, selectedSource, selectedSentimen, search, page]);
 
   const handleManualRefresh = () => {
     clearApiCache('reviews:');
@@ -135,7 +150,7 @@ export default function UlasanOPDPage() {
     setBatchLoading(true);
     try {
       const res = await analyzeBatchByCategory({
-        instansi_id: 'dikpora',
+        instansi_id: opdId,
         sentimen_filter: 'semua_keluhan',
         kategori: selectedKategori || undefined,
       });
@@ -161,7 +176,7 @@ export default function UlasanOPDPage() {
         <div>
           <h1 className="text-2xl font-bold text-red-900">Manajemen Ulasan & Solusi AI Instansi</h1>
           <p className="text-xs text-gray-500 mt-1">
-            Dinas Pendidikan, Pemuda, dan Olahraga (Dikpora) DIY — Analisis Kolektif per Kategori Keluhan
+            {opdName} — Analisis Kolektif per Kategori Keluhan
           </p>
         </div>
         <div className="flex items-center gap-2">

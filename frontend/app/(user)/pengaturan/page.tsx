@@ -1,13 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { CurrentUser, fetchCurrentUser, peekCache } from '@/lib/api';
 
 export default function PengaturanPage() {
-  const [nama, setNama] = useState('Admin Analis Dikpora DIY');
-  const [email, setEmail] = useState('user@dikpora.go.id');
-  const [instansi, setInstansi] = useState('Dinas Pendidikan, Pemuda dan Olahraga DIY');
+  const cachedUser = peekCache<CurrentUser>('current-user');
+  const [nama, setNama] = useState(cachedUser?.name || 'Admin Analis OPD DIY');
+  const [email, setEmail] = useState(cachedUser?.email || 'user@dikpora.go.id');
+  const [instansi, setInstansi] = useState(cachedUser?.opdName || 'OPD Pemda DIY');
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetchCurrentUser().then((u) => {
+      if (u) {
+        setNama(u.name);
+        setEmail(u.email);
+        setInstansi(u.opdName);
+      }
+    });
+  }, []);
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault();

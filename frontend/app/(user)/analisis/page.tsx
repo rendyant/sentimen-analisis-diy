@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { RefreshCw } from 'lucide-react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -8,9 +9,11 @@ import {
 } from 'recharts';
 import {
   fetchDashboardAnalytics,
+  fetchCurrentUser,
   clearApiCache,
   peekCache,
   analyticsCacheKey,
+  CurrentUser,
   DashboardAnalyticsResponse,
   OPD_LIST,
   SOURCE_LIST,
@@ -28,9 +31,21 @@ function StackedBar({ parts }: { parts: number[] }) {
 }
 
 export default function AnalisisPage() {
-  const [instansiId, setInstansiId] = useState('');
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith('/admin') ?? false;
+  const cachedUser = peekCache<CurrentUser>('current-user');
+  const [instansiId, setInstansiId] = useState(isAdmin ? '' : cachedUser?.opdId || '');
   const [periode, setPeriode] = useState('all');
   const [sumber, setSumber] = useState('');
+
+  useEffect(() => {
+    if (isAdmin || cachedUser?.opdId) return;
+    fetchCurrentUser().then((u) => {
+      if (u && u.role !== 'ADMIN' && u.opdId) {
+        setInstansiId(u.opdId);
+      }
+    });
+  }, [isAdmin]);
 
   const filterParams = {
     instansi_id: instansiId || undefined,

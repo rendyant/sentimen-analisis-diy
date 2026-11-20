@@ -15,10 +15,12 @@ import AIInsight from '@/components/ai/aiinsight';
 import {
   fetchStats,
   fetchDashboardAnalytics,
+  fetchCurrentUser,
   clearApiCache,
   peekCache,
   statsCacheKey,
   analyticsCacheKey,
+  CurrentUser,
   StatItem,
   DashboardAnalyticsResponse,
   OPD_LIST,
@@ -26,10 +28,20 @@ import {
 } from '@/lib/api';
 
 export default function Home() {
+  const cachedUser = peekCache<CurrentUser>('current-user');
   const [periode, setPeriode] = useState('all');
   const [sumber, setSumber] = useState('');
-  const [instansiId, setInstansiId] = useState('dikpora');
+  const [instansiId, setInstansiId] = useState(cachedUser?.opdId || 'dikpora');
   const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (cachedUser?.opdId) return;
+    fetchCurrentUser().then((u) => {
+      if (u?.opdId) {
+        setInstansiId(u.opdId);
+      }
+    });
+  }, []);
 
   const filterParams = {
     instansi_id: instansiId || undefined,
